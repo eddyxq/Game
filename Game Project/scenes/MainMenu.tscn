@@ -1,0 +1,56 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://fonts/monogram.ttf" type="DynamicFontData" id=1]
+[ext_resource path="res://images/ui/start_button.png" type="Texture" id=2]
+
+[sub_resource type="GDScript" id=1]
+script/source = "extends Node2D
+
+# called when the node enters the scene tree for the first time
+func _ready():
+	$StartButton.grab_focus()
+
+# go to character selection screen
+func _on_StartButton_pressed():
+	var _scene = get_tree().change_scene(\"res://scenes/CharacterSelection.tscn\")
+"
+
+[sub_resource type="StreamTexture" id=2]
+flags = 4
+
+[sub_resource type="DynamicFont" id=3]
+size = 60
+font_data = ExtResource( 1 )
+
+[node name="Node2D" type="Node2D"]
+position = Vector2( 321.069, 191.664 )
+script = SubResource( 1 )
+
+[node name="Sprite" type="Sprite" parent="."]
+texture = SubResource( 2 )
+
+[node name="GameTitle" type="Label" parent="."]
+margin_left = -113.069
+margin_top = -111.664
+margin_right = 131.931
+margin_bottom = -12.664
+custom_fonts/font = SubResource( 3 )
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0, 0.00784314, 0.00392157, 1 )
+text = "SLAYER RPG
+"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="StartButton" type="TextureButton" parent="."]
+margin_left = -65.069
+margin_top = 8.336
+margin_right = 115.931
+margin_bottom = 56.336
+texture_normal = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+[connection signal="pressed" from="StartButton" to="." method="_on_StartButton_pressed"]

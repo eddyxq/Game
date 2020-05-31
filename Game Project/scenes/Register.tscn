@@ -1,0 +1,161 @@
+[gd_scene load_steps=13 format=2]
+
+[ext_resource path="res://scripts/Register.gd" type="Script" id=1]
+[ext_resource path="res://fonts/monogram.ttf" type="DynamicFontData" id=3]
+
+[sub_resource type="DynamicFont" id=1]
+size = 24
+font_data = ExtResource( 3 )
+
+[sub_resource type="DynamicFont" id=2]
+font_data = ExtResource( 3 )
+
+[sub_resource type="DynamicFont" id=3]
+font_data = ExtResource( 3 )
+
+[sub_resource type="DynamicFont" id=4]
+font_data = ExtResource( 3 )
+
+[sub_resource type="DynamicFont" id=5]
+font_data = ExtResource( 3 )
+
+[sub_resource type="DynamicFont" id=6]
+font_data = ExtResource( 3 )
+
+[sub_resource type="DynamicFont" id=7]
+font_data = ExtResource( 3 )
+
+[sub_resource type="DynamicFont" id=8]
+font_data = ExtResource( 3 )
+
+[sub_resource type="DynamicFont" id=9]
+font_data = ExtResource( 3 )
+
+[sub_resource type="DynamicFont" id=10]
+font_data = ExtResource( 3 )
+
+[node name="Register" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TitleLabel" type="Label" parent="."]
+margin_left = 256.0
+margin_top = 80.0
+margin_right = 384.0
+margin_bottom = 104.0
+custom_fonts/font = SubResource( 1 )
+text = "Registration"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="UsernameLabel" type="Label" parent="."]
+margin_left = 64.0
+margin_top = 128.0
+margin_right = 184.0
+margin_bottom = 152.0
+custom_fonts/font = SubResource( 2 )
+text = "Email:"
+align = 2
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="UsernameField" type="LineEdit" parent="."]
+margin_left = 192.0
+margin_top = 128.0
+margin_right = 448.0
+margin_bottom = 152.0
+size_flags_horizontal = 11
+custom_fonts/font = SubResource( 3 )
+max_length = 40
+caret_blink = true
+
+[node name="PasswordLabel" type="Label" parent="."]
+margin_left = 64.0
+margin_top = 160.0
+margin_right = 184.0
+margin_bottom = 184.0
+custom_fonts/font = SubResource( 4 )
+text = "Password:"
+align = 2
+valign = 1
+
+[node name="PasswordField" type="LineEdit" parent="."]
+margin_left = 192.0
+margin_top = 160.0
+margin_right = 448.0
+margin_bottom = 184.0
+size_flags_horizontal = 11
+custom_fonts/font = SubResource( 5 )
+max_length = 40
+secret = true
+caret_blink = true
+
+[node name="ConfirmLabel" type="Label" parent="."]
+margin_left = 64.0
+margin_top = 192.0
+margin_right = 184.0
+margin_bottom = 216.0
+custom_fonts/font = SubResource( 6 )
+text = "Confirm:"
+align = 2
+valign = 1
+
+[node name="ConfirmField" type="LineEdit" parent="."]
+margin_left = 192.0
+margin_top = 192.0
+margin_right = 448.0
+margin_bottom = 216.0
+size_flags_horizontal = 11
+custom_fonts/font = SubResource( 7 )
+max_length = 40
+secret = true
+caret_blink = true
+
+[node name="RegisterButton" type="Button" parent="."]
+margin_left = 248.0
+margin_top = 232.0
+margin_right = 312.0
+margin_bottom = 252.0
+size_flags_horizontal = 4
+custom_fonts/font = SubResource( 8 )
+text = "Register"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CancelButton" type="Button" parent="."]
+margin_left = 328.0
+margin_top = 232.0
+margin_right = 392.0
+margin_bottom = 252.0
+custom_fonts/font = SubResource( 9 )
+text = "Cancel"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Notification" type="Label" parent="."]
+margin_top = 264.0
+margin_right = 640.0
+margin_bottom = 278.0
+size_flags_horizontal = 3
+custom_fonts/font = SubResource( 10 )
+align = 1
+autowrap = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HTTPRequest" type="HTTPRequest" parent="."]
+[connection signal="pressed" from="RegisterButton" to="." method="_on_RegisterButton_pressed"]
+[connection signal="pressed" from="CancelButton" to="." method="_on_CancelButton_pressed"]
+[connection signal="request_completed" from="HTTPRequest" to="." method="_on_HTTPRequest_request_completed"]

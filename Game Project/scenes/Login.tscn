@@ -1,0 +1,160 @@
+[gd_scene load_steps=12 format=2]
+
+[ext_resource path="res://scripts/Login.gd" type="Script" id=1]
+[ext_resource path="res://fonts/monogram.ttf" type="DynamicFontData" id=3]
+
+[sub_resource type="DynamicFont" id=1]
+size = 24
+font_data = ExtResource( 3 )
+
+[sub_resource type="DynamicFont" id=2]
+font_data = ExtResource( 3 )
+
+[sub_resource type="DynamicFont" id=3]
+font_data = ExtResource( 3 )
+
+[sub_resource type="DynamicFont" id=4]
+font_data = ExtResource( 3 )
+
+[sub_resource type="DynamicFont" id=5]
+font_data = ExtResource( 3 )
+
+[sub_resource type="DynamicFont" id=6]
+font_data = ExtResource( 3 )
+
+[sub_resource type="DynamicFont" id=7]
+font_data = ExtResource( 3 )
+
+[sub_resource type="DynamicFont" id=8]
+font_data = ExtResource( 3 )
+
+[sub_resource type="DynamicFont" id=9]
+font_data = ExtResource( 3 )
+
+[node name="Login" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TitleLabel" type="Label" parent="."]
+margin_left = 256.0
+margin_top = 80.0
+margin_right = 384.0
+margin_bottom = 104.0
+custom_fonts/font = SubResource( 1 )
+text = "Login"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="UsernameLabel" type="Label" parent="."]
+margin_left = 64.0
+margin_top = 128.0
+margin_right = 184.0
+margin_bottom = 152.0
+size_flags_horizontal = 3
+custom_fonts/font = SubResource( 2 )
+text = "Email:"
+align = 2
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="UserNameField" type="LineEdit" parent="."]
+margin_left = 192.0
+margin_top = 128.0
+margin_right = 448.0
+margin_bottom = 152.0
+size_flags_horizontal = 11
+custom_fonts/font = SubResource( 3 )
+max_length = 40
+caret_blink = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="PasswordLabel" type="Label" parent="."]
+margin_left = 64.0
+margin_top = 160.0
+margin_right = 184.0
+margin_bottom = 184.0
+size_flags_horizontal = 3
+custom_fonts/font = SubResource( 4 )
+text = "Password:"
+align = 2
+valign = 1
+
+[node name="PasswordField" type="LineEdit" parent="."]
+margin_left = 192.0
+margin_top = 160.0
+margin_right = 448.0
+margin_bottom = 184.0
+size_flags_horizontal = 11
+custom_fonts/font = SubResource( 5 )
+max_length = 40
+secret = true
+caret_blink = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="LoginButton" type="Button" parent="."]
+margin_left = 328.0
+margin_top = 208.0
+margin_right = 391.0
+margin_bottom = 228.0
+size_flags_horizontal = 4
+custom_fonts/font = SubResource( 6 )
+text = "Sign In"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="RegisterButton" type="Button" parent="."]
+margin_left = 248.0
+margin_top = 208.0
+margin_right = 312.0
+margin_bottom = 228.0
+size_flags_horizontal = 4
+custom_fonts/font = SubResource( 7 )
+text = "Register"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ForgotPasswordButton" type="Button" parent="."]
+margin_left = 392.0
+margin_top = 188.0
+margin_right = 504.0
+margin_bottom = 207.0
+rect_scale = Vector2( 0.5, 0.5 )
+custom_fonts/font = SubResource( 8 )
+custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
+custom_colors/font_color = Color( 0.843137, 0.156863, 0.156863, 1 )
+text = "Forgot Password?"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Notification" type="Label" parent="."]
+margin_top = 240.0
+margin_right = 640.0
+margin_bottom = 254.0
+size_flags_horizontal = 3
+custom_fonts/font = SubResource( 9 )
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HTTPRequest" type="HTTPRequest" parent="."]
+[connection signal="pressed" from="LoginButton" to="." method="_on_LoginButton_pressed"]
+[connection signal="pressed" from="RegisterButton" to="." method="_on_RegisterButton_pressed"]
+[connection signal="pressed" from="ForgotPasswordButton" to="." method="_on_ForgotPasswordButton_pressed"]
+[connection signal="request_completed" from="HTTPRequest" to="." method="_on_HTTPRequest_request_completed"]

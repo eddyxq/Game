@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/dark_day.ogg-ed0286d02398cec164784fa7666545db.oggstr"
+
+[deps]
+
+source_file="res://audio/music/dark_day.ogg"
+dest_files=[ "res://.import/dark_day.ogg-ed0286d02398cec164784fa7666545db.oggstr" ]
+
+[params]
+
+loop=true
+loop_offset=0
