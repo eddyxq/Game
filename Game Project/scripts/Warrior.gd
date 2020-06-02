@@ -98,7 +98,7 @@ func movement_loop(up, left, right):
 	# translates player horizontally when left or right key is pressed
 	velocity.x = (-int(left) + int(right)) * movement_speed
 	# apply translations to the player
-	var _motion = move_and_slide(velocity, Vector2(0,-1))
+	velocity = move_and_slide(velocity, Vector2(0,-1))
 
 func hurt():
 	# If something hurts our player, we can have call the hurt function and the state_machine will 'travel' the shortest path to hurt
