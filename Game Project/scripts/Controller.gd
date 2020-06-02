@@ -43,7 +43,7 @@ func _physics_process(_delta):
 
 	# update player state
 	player.animation_loop(down, attack, skill1)
-	player.movement_loop(up, left, right)
+	player.movement_loop(attack, up, left, right)
 	
 	# apply auto mana regeneration
 	ui.mana_bar.update()

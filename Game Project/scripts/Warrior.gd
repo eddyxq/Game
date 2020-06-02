@@ -16,7 +16,8 @@ var dir = DIRECTION.E
 
 # speed stats
 const jump_speed = 320
-var movement_speed = 150
+const base_speed = 100
+var movement_speed
 
 const min_mp = 0
 const max_mp = 5
@@ -76,7 +77,7 @@ func animation_loop(down, attack, skill1):
 			apply_delay()
 
 # movement logic
-func movement_loop(up, left, right):
+func movement_loop(attack, up, left, right):
 	# pulls player downwards
 	velocity.y += GRAVITY
 	
@@ -94,7 +95,13 @@ func movement_loop(up, left, right):
 			# Jumping
 			if up:
 				velocity.y = -jump_speed
-	
+
+	# reduces movement speed during attack animation
+	if attack and is_on_floor():
+		movement_speed = base_speed * 0.5
+	else:
+		 movement_speed = base_speed * 1.5
+
 	# translates player horizontally when left or right key is pressed
 	velocity.x = (-int(left) + int(right)) * movement_speed
 	# apply translations to the player
