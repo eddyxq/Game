@@ -1,35 +1,27 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://audio/music/dark_day.ogg" type="AudioStream" id=1]
 [ext_resource path="res://scenes/Warrior.tscn" type="PackedScene" id=2]
 [ext_resource path="res://scripts/Controller.gd" type="Script" id=3]
-[ext_resource path="res://scenes/Slime.tscn" type="PackedScene" id=4]
 [ext_resource path="res://scenes/UI.tscn" type="PackedScene" id=5]
-[ext_resource path="res://scenes/StageOne.tscn" type="PackedScene" id=6]
+[ext_resource path="res://scenes/TestStage.tscn" type="PackedScene" id=6]
 
 [node name="Controller" type="Node2D"]
 script = ExtResource( 3 )
 
-[node name="StageOne" parent="." instance=ExtResource( 6 )]
-position = Vector2( 321.069, 191.664 )
+[node name="UI" parent="." instance=ExtResource( 5 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = -13.7744
+margin_top = -11.4641
+margin_right = -13.7744
+margin_bottom = -11.4641
 
-[node name="Slime" parent="." instance=ExtResource( 4 )]
-position = Vector2( 107.192, 273.617 )
-
-[node name="Slime2" parent="." instance=ExtResource( 4 )]
-position = Vector2( 227.602, 241.579 )
-
-[node name="Slime3" parent="." instance=ExtResource( 4 )]
-position = Vector2( 401.136, 273.99 )
+[node name="TestStage" parent="." instance=ExtResource( 6 )]
 
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource( 1 )
 volume_db = -20.0
 
-[node name="UI" parent="." instance=ExtResource( 5 )]
-margin_top = -8.0
-margin_bottom = -8.0
-
 [node name="Warrior" parent="." instance=ExtResource( 2 )]
-position = Vector2( 53.9318, 86.5952 )
-scale = Vector2( 1.5, 1.5 )
+position = Vector2( 56.3906, 332.605 )

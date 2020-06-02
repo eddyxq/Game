@@ -33,7 +33,6 @@ func _physics_process(_delta):
 	down = Input.is_action_pressed("ui_down")
 	left = Input.is_action_pressed("ui_left")
 	right = Input.is_action_pressed("ui_right")
-	shift = Input.is_action_pressed("ui_shift") 
 	attack = Input.is_action_pressed("ui_attack")
 
 	skill1 = Input.is_action_pressed("ui_skill_slot1")
@@ -43,8 +42,8 @@ func _physics_process(_delta):
 	skill5 = Input.is_action_pressed("ui_skill_slot5")
 
 	# update player state
-	player.animation_loop(down, shift, attack, skill1)
-	player.movement_loop(up, left, right, shift)
+	player.animation_loop(down, attack, skill1)
+	player.movement_loop(up, left, right)
 	
 	# apply auto mana regeneration
 	ui.mana_bar.update()

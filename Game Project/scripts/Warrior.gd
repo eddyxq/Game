@@ -15,10 +15,8 @@ enum DIRECTION {
 var dir = DIRECTION.E
 
 # speed stats
-const jump_speed = 320*1.3
-const base_speed = 90
-const sprint_speed = 135
-var movement_speed = base_speed
+const jump_speed = 320
+var movement_speed = 150
 
 const min_mp = 0
 const max_mp = 5
@@ -31,7 +29,7 @@ const PROJECTILE = preload("res://scenes/Projectile.tscn")
 # melee attack hit box
 const HITBOX = preload("res://scenes/HitBox.tscn")
 # world constants
-const GRAVITY = 14
+const GRAVITY = 18
 
 var velocity = Vector2()
 var timer
@@ -45,28 +43,22 @@ var skill_slot1_off_cooldown = true
 
 # called when the node enters the scene tree for the first time
 func _ready():
-	Firebase.get_document("users/%s" % Firebase.user_info.id, http)
+	# Firebase.get_document("users/%s" % Firebase.user_info.id, http)
 	setup_state_machine()
 
 # animation logic
-func animation_loop(down, shift, attack, skill1):
+func animation_loop(down, attack, skill1):
 	# disable animations while player is attacking
 	if anim_finished: 
 		# crouching state
 		if down && velocity.length() == 0 && is_on_floor():
 			play_animation("crouch")
 		# moving state
-		elif !shift && velocity.x != 0 && is_on_floor():
-			play_animation("run")
-		elif shift && velocity.x != 0 && is_on_floor():
+		elif velocity.x != 0 && is_on_floor():
 			play_animation("sprint")
 		# jumping state
 		elif velocity.y < 0 && !is_on_floor():
 			play_animation("jump")
-			# jump attack state
-			if attack && !is_on_floor():
-				play_animation("jump_attack")
-				apply_delay()
 		# falling state
 		elif velocity.y > 0 && !is_on_floor():
 			play_animation("fall")
@@ -87,7 +79,7 @@ func animation_loop(down, shift, attack, skill1):
 			apply_delay()
 
 # movement logic
-func movement_loop(up, left, right, shift):
+func movement_loop(up, left, right):
 	# pulls player downwards
 	velocity.y += GRAVITY
 	
@@ -100,16 +92,11 @@ func movement_loop(up, left, right, shift):
 		$Sprite.flip_h = true
 
 	if anim_finished:
-		movement_speed = sprint_speed if shift else base_speed
-		# all abilities available when on floor
 		if is_on_floor():
 			velocity.y = 0
 			# Jumping
 			if up:
 				velocity.y = -jump_speed
-				apply_delay()
-	else:
-		movement_speed = 0
 	
 	# translates player horizontally when left or right key is pressed
 	velocity.x = (-int(left) + int(right)) * movement_speed

@@ -4,7 +4,7 @@ extends Area2D
 # distance blade warrior skill
 ###############################################################################
 
-const SPEED = 300
+const SPEED = 400
 var audio_player 
 var velocity = Vector2()
 var projectile_dir

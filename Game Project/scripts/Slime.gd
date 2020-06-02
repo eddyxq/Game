@@ -8,7 +8,7 @@ const FLOOR = Vector2(0,-1)
 const SPEED = 30
 const GRAVITY = 14
 
-var health = 100
+var health = 50
 var velocity = Vector2()
 var is_dead = false
 var timer = null
@@ -52,12 +52,15 @@ func _physics_process(_delta):
 func apply_damage():
 	# damage formula: normal damage value can be up to the maximum strength
 	# critical hits add additional damage equal to the strength
-	var dmg = randi() % int(Global.profile.player_strength.stringValue) + 1
+	# var dmg = randi() % int(Global.profile.player_strength.stringValue) + 1
+	var dmg = randi() % int(10) + 1
 	var crit = false
 	# critical when random number rolled out of 100 is within critical value
-	if randi() % 100+1 <= int(Global.profile.player_critical.stringValue):
+	# if randi() % 100+1 <= int(Global.profile.player_critical.stringValue):
+	if randi() % 100+1 <= int(30):
 		crit = true
-		dmg += int(Global.profile.player_strength.stringValue)
+		# dmg += int(Global.profile.player_strength.stringValue)
+		dmg += int(30)
 	health -= dmg
 	health_bar.value = health
 	$FCTMgr.show_value(dmg, crit)

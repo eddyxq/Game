@@ -7,25 +7,25 @@
 
 [sub_resource type="SpriteFrames" id=1]
 animations = [ {
-"frames": [ ExtResource( 1 ) ],
-"loop": true,
-"name": "shoot_right",
-"speed": 15.0
-}, {
 "frames": [ ExtResource( 3 ) ],
 "loop": true,
 "name": "shoot_left",
 "speed": 15.0
+}, {
+"frames": [ ExtResource( 1 ) ],
+"loop": true,
+"name": "shoot_right",
+"speed": 15.0
 } ]
 
-[sub_resource type="Curve" id=3]
+[sub_resource type="Curve" id=2]
 _data = [ Vector2( 0.00619195, 0.972727 ), 0.0, 0.0, 0, 0, Vector2( 0.996904, 0.263636 ), -0.331525, 0.0, 0, 0 ]
 
-[sub_resource type="Gradient" id=4]
+[sub_resource type="Gradient" id=3]
 offsets = PoolRealArray( 0.00333333, 1 )
 colors = PoolColorArray( 1, 1, 1, 1, 0.0245667, 0.140628, 0.898438, 1 )
 
-[sub_resource type="RectangleShape2D" id=2]
+[sub_resource type="RectangleShape2D" id=4]
 extents = Vector2( 4.70899, 7.08297 )
 
 [node name="Projectile" type="Area2D"]
@@ -50,12 +50,12 @@ angular_velocity = 500.0
 angular_velocity_random = 1.0
 linear_accel = 50.0
 scale_amount = 4.0
-scale_amount_curve = SubResource( 3 )
-color_ramp = SubResource( 4 )
+scale_amount_curve = SubResource( 2 )
+color_ramp = SubResource( 3 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 scale = Vector2( 2, 2 )
-shape = SubResource( 2 )
+shape = SubResource( 4 )
 
 [node name="VisibilityNotifier2D" type="VisibilityNotifier2D" parent="."]
 
