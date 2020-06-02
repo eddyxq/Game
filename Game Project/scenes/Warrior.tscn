@@ -34,6 +34,20 @@ tracks/1/keys = {
 "method": "play_atk_sfx"
 } ]
 }
+tracks/2/type = "method"
+tracks/2/path = NodePath(".")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [  ],
+"method": "hit_enemy"
+} ]
+}
 
 [sub_resource type="Animation" id=2]
 length = 0.2
@@ -398,7 +412,7 @@ states/sprint/position = Vector2( 679, 88.9024 )
 transitions = [ "idle", "jump", SubResource( 23 ), "idle", "die", SubResource( 24 ), "fall", "idle", SubResource( 25 ), "jump", "fall", SubResource( 26 ), "idle", "sprint", SubResource( 27 ), "sprint", "idle", SubResource( 28 ), "attack3", "idle", SubResource( 29 ), "idle", "distance_blade", SubResource( 30 ), "distance_blade", "idle", SubResource( 31 ), "idle", "attack1", SubResource( 32 ), "attack1", "idle", SubResource( 33 ), "attack1", "attack2", SubResource( 34 ), "attack2", "attack3", SubResource( 35 ), "attack2", "idle", SubResource( 36 ) ]
 start_node = "idle"
 end_node = "die"
-graph_offset = Vector2( -103.077, -22.9823 )
+graph_offset = Vector2( -103.077, 7.42787 )
 
 [sub_resource type="AnimationNodeStateMachinePlayback" id=38]
 
@@ -414,6 +428,7 @@ position = Vector2( 14, 0 )
 texture = ExtResource( 1 )
 vframes = 23
 hframes = 8
+frame = 1
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 anims/attack1 = SubResource( 1 )

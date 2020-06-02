@@ -50,11 +50,8 @@ func _ready():
 func animation_loop(down, attack, skill1):
 	# disable animations while player is attacking
 	if anim_finished: 
-		# crouching state
-		if down && velocity.length() == 0 && is_on_floor():
-			play_animation("crouch")
 		# moving state
-		elif velocity.x != 0 && is_on_floor():
+		if velocity.x != 0 && is_on_floor():
 			play_animation("sprint")
 		# jumping state
 		elif velocity.y < 0 && !is_on_floor():

@@ -60,7 +60,7 @@ func apply_damage():
 	if randi() % 100+1 <= int(30):
 		crit = true
 		# dmg += int(Global.profile.player_strength.stringValue)
-		dmg += int(30)
+		dmg += int(10)
 	health -= dmg
 	health_bar.value = health
 	$FCTMgr.show_value(dmg, crit)
