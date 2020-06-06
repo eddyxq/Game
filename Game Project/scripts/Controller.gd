@@ -9,7 +9,6 @@ var up     # w / up arrow
 var down   # s / down arrrow
 var left   # a / left arrow
 var right  # d / right arrow
-var shift  # shift key
 var attack # space bar
 
 var skill1 # 1 number key
@@ -44,6 +43,11 @@ func _physics_process(_delta):
 	# update player state
 	player.animation_loop(down, attack, skill1)
 	player.movement_loop(attack, up, left, right)
+	
+	# disable controlled when player dies
+	if Global.health < 1:
+		player.play_animation("dead")
+		set_physics_process(false) 
 	
 	# apply auto mana regeneration
 	ui.mana_bar.update()

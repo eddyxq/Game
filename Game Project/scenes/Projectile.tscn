@@ -30,6 +30,8 @@ extents = Vector2( 4.70899, 7.08297 )
 
 [node name="Projectile" type="Area2D"]
 scale = Vector2( 1.5, 1.5 )
+collision_layer = 8
+collision_mask = 2
 script = ExtResource( 2 )
 
 [node name="ProjectileSprite" type="AnimatedSprite" parent="."]

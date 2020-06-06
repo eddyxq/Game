@@ -16,6 +16,7 @@ var profile = {
 } 
 
 var mana = 5
+var health = 100
 
 # overriding default quit logic
 func _ready() -> void:

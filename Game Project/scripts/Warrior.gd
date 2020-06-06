@@ -22,8 +22,10 @@ var movement_speed
 const min_mp = 0
 const max_mp = 5
 
+# references to child nodes
 onready var http : HTTPRequest = $HTTPRequest
 onready var audio_player = $AudioStreamPlayer2D
+#donready var iframe_timer = $IFrame
 
 # range attack hit box
 const PROJECTILE = preload("res://scenes/Projectile.tscn")
@@ -39,6 +41,7 @@ var state_machine
 
 # flags for player states
 var anim_finished = true # used to lock out player inputs for a short amount of time (0.3s) so prevent key spamming
+var invincible = false # true when player has invincible frames
 
 var skill_slot1_off_cooldown = true
 
@@ -107,14 +110,19 @@ func movement_loop(attack, up, left, right):
 	# apply translations to the player
 	velocity = move_and_slide(velocity, Vector2(0,-1))
 
+# applies a blinking damage effect to the player
 func hurt():
-	# If something hurts our player, we can have call the hurt function and the state_machine will 'travel' the shortest path to hurt
-	state_machine.travel("hurt")
-	
-func die():
-	# Same thing as hurt()
-	state_machine.travel("die")
-	set_physics_process(false) # When player dies, physics process ends and you can't move anymore
+	if !invincible:
+		Global.health -= 25
+		if Global.health > 0:
+			invincible = true
+			$IFrame.start()
+			# blinks 4 times in 0.1 second intervals
+			for i in 4:
+				$Sprite.set_modulate(Color(1,1,1,0.5)) 
+				yield(get_tree().create_timer(0.1), "timeout")
+				$Sprite.set_modulate(Color(1,1,1,1)) 
+				yield(get_tree().create_timer(0.1), "timeout")
 
 func play_animation(anim):
 	state_machine.travel(anim)
@@ -183,3 +191,8 @@ func _on_HTTPRequest_request_completed(_result, response_code, _headers, body):
 			return
 		200:
 			Global.profile = result_body.fields
+
+
+func _on_IFrame_timeout():
+	invincible = false
+

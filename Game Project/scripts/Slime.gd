@@ -88,3 +88,9 @@ func on_timeout_complete():
 func play_death_sfx():
 	audio_player.stream = load("res://audio/sfx/slime.ogg")
 	audio_player.play()
+	
+
+# detects if the slime collides with player
+func _on_Area2D_body_entered(body):
+	if body.name == "Warrior":
+		body.hurt()
