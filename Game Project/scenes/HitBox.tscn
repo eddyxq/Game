@@ -1,6 +1,18 @@
 [gd_scene load_steps=3 format=2]
 
-[ext_resource path="res://scripts/HitBox.gd" type="Script" id=1]
+[sub_resource type="GDScript" id=2]
+script/source = "extends Area2D
+
+###############################################################################
+# hitbox instanced by the player to detect attack collisions    
+###############################################################################
+
+# detects collision with enemies
+func _on_HitBox_body_entered(body):
+	if \"Slime\" in body.name:
+		body.apply_damage()
+	#queue_free()
+"
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 16, 18.4495 )
@@ -11,7 +23,7 @@ scale = Vector2( 1.5, 1.5 )
 [node name="HitBox" type="Area2D" parent="."]
 collision_layer = 8
 collision_mask = 2
-script = ExtResource( 1 )
+script = SubResource( 2 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HitBox"]
 position = Vector2( 0, -1.09816 )

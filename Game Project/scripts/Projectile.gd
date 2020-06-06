@@ -32,9 +32,9 @@ func _on_VisibilityNotifier2D_screen_exited():
 # detect collision with enemies
 func _on_Projectile_body_entered(body):
 	if "Slime" in body.name:
-		# double hit
-		body.apply_damage()
-		body.apply_damage()
+		var num_hits = 3
+		for _i in range(num_hits):
+			body.apply_damage()
 		play_explosion_sfx()
 		$CollisionShape2D.queue_free()
 		$ProjectileSprite.visible = false

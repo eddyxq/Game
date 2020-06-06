@@ -29,8 +29,6 @@ onready var audio_player = $AudioStreamPlayer2D
 
 # range attack hit box
 const PROJECTILE = preload("res://scenes/Projectile.tscn")
-# melee attack hit box
-const HITBOX = preload("res://scenes/HitBox.tscn")
 # world constants
 const GRAVITY = 18
 
@@ -83,7 +81,7 @@ func animation_loop(down, attack, skill1):
 func movement_loop(attack, up, left, right):
 	# pulls player downwards
 	velocity.y += GRAVITY
-	
+	update_hitbox_location()
 	# update players direction 
 	if right:
 		dir = DIRECTION.E 
@@ -124,6 +122,12 @@ func hurt():
 				$Sprite.set_modulate(Color(1,1,1,1)) 
 				yield(get_tree().create_timer(0.1), "timeout")
 
+func update_hitbox_location():
+	if $HitBox.position.x < 0 && dir == DIRECTION.E:
+		$HitBox.position.x *= -1
+	elif $HitBox.position.x > 0 && dir == DIRECTION.W:
+		$HitBox.position.x *= -1
+
 func play_animation(anim):
 	state_machine.travel(anim)
 
@@ -136,17 +140,10 @@ func play_atk_sfx():
 	audio_player.stream = load("res://audio/sfx/sword_swing.ogg")
 	audio_player.play()
 
-# creates a hit box in front of player to detect collisions
-func hit_enemy():
-	var hit_box = HITBOX.instance()
-	get_parent().add_child(hit_box)
-	if dir == DIRECTION.E:
-		if sign($Position2D.position.x)  == -1:
-			$Position2D.position.x *= -1
-	elif dir == DIRECTION.W:
-		if sign($Position2D.position.x)  == 1:
-			$Position2D.position.x *= -1
-	hit_box.position = $Position2D.global_position
+
+func toggle_hitbox():
+	$HitBox/CollisionShape2D.disabled = not $HitBox/CollisionShape2D.disabled
+
 
 # activates skill 1 shooting a ranged projectile
 func distance_blade():
@@ -195,4 +192,11 @@ func _on_HTTPRequest_request_completed(_result, response_code, _headers, body):
 
 func _on_IFrame_timeout():
 	invincible = false
+
+
+
+func _on_HitBox_body_entered(body):
+	if "Slime" in body.name:
+		body.apply_damage()
+	#queue_free()
 

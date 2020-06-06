@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://scripts/UI.gd" type="Script" id=1]
 [ext_resource path="res://scenes/HealthBar.tscn" type="PackedScene" id=2]
@@ -11,6 +11,7 @@
 [ext_resource path="res://images/ui/Player_Portrait/portrait1.png" type="Texture" id=9]
 [ext_resource path="res://images/ui/Player_Portrait/portrait2 .png" type="Texture" id=10]
 [ext_resource path="res://images/ui/Player_Portrait/portrait4.png" type="Texture" id=11]
+[ext_resource path="res://scenes/Pause.tscn" type="PackedScene" id=12]
 
 [sub_resource type="SpriteFrames" id=1]
 animations = [ {
@@ -58,7 +59,6 @@ __meta__ = {
 position = Vector2( 20, 7 )
 scale = Vector2( 2.5, 2.5 )
 frames = SubResource( 1 )
-frame = 2
 playing = true
 
 [node name="ManaBar" parent="." instance=ExtResource( 5 )]
@@ -112,4 +112,7 @@ text = "EXP"
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="Pause" parent="." instance=ExtResource( 12 )]
+visible = false
 [connection signal="pressed" from="TextureButton" to="." method="_on_TextureButton_pressed"]

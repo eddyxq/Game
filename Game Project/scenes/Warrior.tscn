@@ -1,4 +1,4 @@
-[gd_scene load_steps=41 format=2]
+[gd_scene load_steps=42 format=2]
 
 [ext_resource path="res://images/warrior_sprites/sprite_sheet.png" type="Texture" id=1]
 [ext_resource path="res://scripts/Warrior.gd" type="Script" id=2]
@@ -41,11 +41,14 @@ tracks/2/loop_wrap = true
 tracks/2/imported = false
 tracks/2/enabled = true
 tracks/2/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
+"times": PoolRealArray( 0, 0.19 ),
+"transitions": PoolRealArray( 1, 1 ),
 "values": [ {
 "args": [  ],
-"method": "hit_enemy"
+"method": "toggle_hitbox"
+}, {
+"args": [  ],
+"method": "toggle_hitbox"
 } ]
 }
 
@@ -85,11 +88,14 @@ tracks/2/loop_wrap = true
 tracks/2/imported = false
 tracks/2/enabled = true
 tracks/2/keys = {
-"times": PoolRealArray( 0.08 ),
-"transitions": PoolRealArray( 1 ),
+"times": PoolRealArray( 0.08, 0.19 ),
+"transitions": PoolRealArray( 1, 1 ),
 "values": [ {
 "args": [  ],
-"method": "hit_enemy"
+"method": "toggle_hitbox"
+}, {
+"args": [  ],
+"method": "toggle_hitbox"
 } ]
 }
 
@@ -130,11 +136,14 @@ tracks/2/loop_wrap = true
 tracks/2/imported = false
 tracks/2/enabled = true
 tracks/2/keys = {
-"times": PoolRealArray( 0.08 ),
-"transitions": PoolRealArray( 1 ),
+"times": PoolRealArray( 0.08, 0.19 ),
+"transitions": PoolRealArray( 1, 1 ),
 "values": [ {
 "args": [  ],
-"method": "hit_enemy"
+"method": "toggle_hitbox"
+}, {
+"args": [  ],
+"method": "toggle_hitbox"
 } ]
 }
 
@@ -399,6 +408,9 @@ graph_offset = Vector2( -103.077, -21.4961 )
 
 [sub_resource type="AnimationNodeStateMachinePlayback" id=37]
 
+[sub_resource type="RectangleShape2D" id=38]
+extents = Vector2( 14.1298, 14.7347 )
+
 [node name="Warrior" type="KinematicBody2D"]
 script = ExtResource( 2 )
 
@@ -411,7 +423,6 @@ position = Vector2( 14, 0 )
 texture = ExtResource( 1 )
 vframes = 23
 hframes = 8
-frame = 2
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 anims/attack1 = SubResource( 1 )
@@ -460,8 +471,23 @@ wait_time = 0.4
 one_shot = true
 
 [node name="HTTPRequest" type="HTTPRequest" parent="."]
+
+[node name="Camera2D" type="Camera2D" parent="."]
+current = true
+drag_margin_h_enabled = true
+drag_margin_v_enabled = true
+
+[node name="HitBox" type="Area2D" parent="."]
+position = Vector2( 20, 2 )
+collision_layer = 8
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HitBox"]
+shape = SubResource( 38 )
+disabled = true
 [connection signal="timeout" from="Skill1Cooldown" to="." method="_on_Skill1Cooldown_timeout"]
 [connection signal="timeout" from="ManaRecovery" to="." method="_on_ManaRecovery_timeout"]
 [connection signal="timeout" from="AnimationDelay" to="." method="_on_AnimationDelay_timeout"]
 [connection signal="timeout" from="IFrame" to="." method="_on_IFrame_timeout"]
 [connection signal="request_completed" from="HTTPRequest" to="." method="_on_HTTPRequest_request_completed"]
+[connection signal="body_entered" from="HitBox" to="." method="_on_HitBox_body_entered"]

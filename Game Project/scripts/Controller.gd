@@ -19,7 +19,7 @@ var skill5 # 5 number key
 
 # references to the player and UI
 onready var player = $Warrior
-onready var ui = $UI
+onready var ui = $HUD/UI
 
 # called every delta
 func _physics_process(_delta):
