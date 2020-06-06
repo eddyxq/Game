@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://tilemap/tiles.tres" type="TileSet" id=1]
 [ext_resource path="res://scenes/Slime.tscn" type="PackedScene" id=2]
+[ext_resource path="res://scenes/Pause.tscn" type="PackedScene" id=3]
 
 [node name="Node2D" type="Node2D"]
 
@@ -41,3 +42,8 @@ position = Vector2( 253.609, 230.086 )
 
 [node name="Node2D12" parent="." instance=ExtResource( 2 )]
 position = Vector2( 158.781, 26.4635 )
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Pause" parent="CanvasLayer" instance=ExtResource( 3 )]
+visible = false
