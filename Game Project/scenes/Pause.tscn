@@ -7,11 +7,11 @@
 size = 72
 font_data = ExtResource( 3 )
 
-[sub_resource type="DynamicFont" id=3]
+[sub_resource type="DynamicFont" id=2]
 size = 72
 font_data = ExtResource( 3 )
 
-[sub_resource type="DynamicFont" id=2]
+[sub_resource type="DynamicFont" id=3]
 size = 72
 font_data = ExtResource( 3 )
 
@@ -34,6 +34,7 @@ __meta__ = {
 }
 
 [node name="ResumeButton" type="Button" parent="."]
+pause_mode = 2
 margin_left = 232.0
 margin_top = 80.0
 margin_right = 406.0
@@ -46,11 +47,12 @@ __meta__ = {
 }
 
 [node name="RestartButton" type="Button" parent="."]
+pause_mode = 2
 margin_left = 232.0
 margin_top = 136.0
 margin_right = 433.0
 margin_bottom = 199.0
-custom_fonts/font = SubResource( 3 )
+custom_fonts/font = SubResource( 2 )
 text = "Restart"
 flat = true
 __meta__ = {
@@ -58,11 +60,12 @@ __meta__ = {
 }
 
 [node name="MenuButton" type="Button" parent="."]
+pause_mode = 2
 margin_left = 232.0
 margin_top = 200.0
 margin_right = 406.0
 margin_bottom = 263.0
-custom_fonts/font = SubResource( 2 )
+custom_fonts/font = SubResource( 3 )
 text = "Quit  "
 flat = true
 [connection signal="pressed" from="ResumeButton" to="." method="_on_ResumeButton_pressed"]
