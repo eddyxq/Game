@@ -59,6 +59,7 @@ __meta__ = {
 position = Vector2( 20, 7 )
 scale = Vector2( 2.5, 2.5 )
 frames = SubResource( 1 )
+frame = 2
 playing = true
 
 [node name="ManaBar" parent="." instance=ExtResource( 5 )]
