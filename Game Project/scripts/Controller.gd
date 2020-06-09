@@ -23,9 +23,6 @@ onready var ui = $HUD/UI
 
 # called every delta
 func _physics_process(_delta):
-	# esc key - reloads the scene for testing and debugging purposes
-#	if Input.is_action_pressed("ui_cancel"):
-#		var _scene = get_tree().reload_current_scene()
 	
 	# detect keyboard input
 	up = Input.is_action_pressed("ui_up")
@@ -55,3 +52,4 @@ func _physics_process(_delta):
 	# apply cooldown upon skill activation
 	if skill1:
 		ui.start_skill1_cooldown()
+

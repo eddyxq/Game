@@ -25,7 +25,6 @@ const max_mp = 5
 # references to child nodes
 onready var http : HTTPRequest = $HTTPRequest
 onready var audio_player = $AudioStreamPlayer2D
-#donready var iframe_timer = $IFrame
 
 # range attack hit box
 const PROJECTILE = preload("res://scenes/Projectile.tscn")
@@ -173,12 +172,13 @@ func _on_ManaRecovery_timeout():
 	if Global.mana < max_mp:
 		Global.mana += 1
 
+
 func _on_Skill1Cooldown_timeout():
 	skill_slot1_off_cooldown = true
 
+
 func _on_AnimationDelay_timeout():
 	anim_finished = true
-
 
 
 func _on_HTTPRequest_request_completed(_result, response_code, _headers, body):
@@ -194,9 +194,7 @@ func _on_IFrame_timeout():
 	invincible = false
 
 
-
 func _on_HitBox_body_entered(body):
 	if "Slime" in body.name:
 		body.apply_damage()
 	#queue_free()
-

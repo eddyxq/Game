@@ -93,4 +93,5 @@ func play_death_sfx():
 # detects if the slime collides with player
 func _on_Area2D_body_entered(body):
 	if body.name == "Warrior":
-		body.hurt()
+		pass
+		#body.hurt()
