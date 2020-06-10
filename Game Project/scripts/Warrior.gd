@@ -41,6 +41,7 @@ var anim_finished = true # used to lock out player inputs for a short amount of 
 var invincible = false # true when player has invincible frames
 
 var skill_slot1_off_cooldown = true
+var skill_slot2_off_cooldown = true
 
 # called when the node enters the scene tree for the first time
 func _ready():
@@ -48,7 +49,7 @@ func _ready():
 	setup_state_machine()
 
 # animation logic
-func animation_loop(down, attack, skill1):
+func animation_loop(down, attack, skill1, skill2):
 	# disable animations while player is attacking
 	if anim_finished: 
 		# moving state
@@ -75,6 +76,15 @@ func animation_loop(down, attack, skill1):
 			$Skill1Cooldown.start()
 			play_animation("distance_blade")
 			apply_delay()
+		elif skill2 && skill_slot2_off_cooldown:
+			anim_finished = false
+			skill_slot2_off_cooldown = false
+			$Skill2Cooldown.start()
+			$GhostInterval.start()
+			movement_speed = base_speed * 2.5
+			play_animation("buff")
+			apply_delay()
+
 
 # movement logic
 func movement_loop(attack, up, left, right):
@@ -97,10 +107,11 @@ func movement_loop(attack, up, left, right):
 				velocity.y = -jump_speed
 
 	# reduces movement speed during attack animation
-	if attack and is_on_floor():
-		movement_speed = base_speed * 0.5
-	else:
-		 movement_speed = base_speed * 1.5
+	if skill_slot2_off_cooldown:
+		if attack and is_on_floor():
+			movement_speed = base_speed * 0.2
+		else:
+			 movement_speed = base_speed * 1.4
 
 	# translates player horizontally when left or right key is pressed
 	velocity.x = (-int(left) + int(right)) * movement_speed
@@ -176,6 +187,9 @@ func _on_ManaRecovery_timeout():
 func _on_Skill1Cooldown_timeout():
 	skill_slot1_off_cooldown = true
 
+func _on_Skill2Cooldown_timeout():
+	skill_slot2_off_cooldown = true
+	$GhostInterval.stop()
 
 func _on_AnimationDelay_timeout():
 	anim_finished = true
@@ -198,3 +212,11 @@ func _on_HitBox_body_entered(body):
 	if "Slime" in body.name:
 		body.apply_damage()
 	#queue_free()
+
+
+func _on_ghost_timer_timeout():
+	var this_ghost = preload("res://scenes/PlayerGhost.tscn").instance()
+	get_parent().add_child(this_ghost)
+	this_ghost.position = position
+	this_ghost.frame = $Sprite.frame
+	this_ghost.flip_h = $Sprite.flip_h

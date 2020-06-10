@@ -38,7 +38,7 @@ func _physics_process(_delta):
 	skill5 = Input.is_action_pressed("ui_skill_slot5")
 
 	# update player state
-	player.animation_loop(down, attack, skill1)
+	player.animation_loop(down, attack, skill1, skill2)
 	player.movement_loop(attack, up, left, right)
 	
 	# disable controlled when player dies
@@ -52,4 +52,7 @@ func _physics_process(_delta):
 	# apply cooldown upon skill activation
 	if skill1:
 		ui.start_skill1_cooldown()
+
+	if skill2:
+		ui.start_skill2_cooldown()
 
