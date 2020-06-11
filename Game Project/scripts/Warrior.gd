@@ -42,6 +42,10 @@ var invincible = false # true when player has invincible frames
 
 var skill_slot1_off_cooldown = true
 var skill_slot2_off_cooldown = true
+var skill_slot3_off_cooldown = true
+var skill_slot4_off_cooldown = true
+var skill_slot5_off_cooldown = true
+
 
 # called when the node enters the scene tree for the first time
 func _ready():
@@ -49,7 +53,7 @@ func _ready():
 	setup_state_machine()
 
 # animation logic
-func animation_loop(down, attack, skill1, skill2):
+func animation_loop(attack, skill1, skill2, skill3, skill4, skill5):
 	# disable animations while player is attacking
 	if anim_finished: 
 		# moving state
@@ -62,7 +66,7 @@ func animation_loop(down, attack, skill1, skill2):
 		elif velocity.y > 0 && !is_on_floor():
 			play_animation("fall")
 		# idle state
-		elif !down && velocity.length() == 0: 
+		elif velocity.length() == 0: 
 			play_animation("idle")
 
 		# attacking state
@@ -84,6 +88,12 @@ func animation_loop(down, attack, skill1, skill2):
 			movement_speed = base_speed * 2.5
 			play_animation("buff")
 			apply_delay()
+		elif skill3 && skill_slot3_off_cooldown:
+			pass
+		elif skill4 && skill_slot4_off_cooldown:
+			pass
+		elif skill5 && skill_slot5_off_cooldown:
+			pass
 
 
 # movement logic
@@ -184,15 +194,28 @@ func _on_ManaRecovery_timeout():
 		Global.mana += 1
 
 
+func _on_AnimationDelay_timeout():
+	anim_finished = true
+
+
 func _on_Skill1Cooldown_timeout():
 	skill_slot1_off_cooldown = true
+
 
 func _on_Skill2Cooldown_timeout():
 	skill_slot2_off_cooldown = true
 	$GhostInterval.stop()
 
-func _on_AnimationDelay_timeout():
-	anim_finished = true
+func _on_Skill3Cooldown_timeout():
+	skill_slot3_off_cooldown = true
+
+
+func _on_Skill4Cooldown_timeout():
+	skill_slot4_off_cooldown = true
+
+
+func _on_Skill5Cooldown_timeout():
+	skill_slot5_off_cooldown = true
 
 
 func _on_HTTPRequest_request_completed(_result, response_code, _headers, body):
@@ -220,3 +243,6 @@ func _on_ghost_timer_timeout():
 	this_ghost.position = position
 	this_ghost.frame = $Sprite.frame
 	this_ghost.flip_h = $Sprite.flip_h
+
+
+

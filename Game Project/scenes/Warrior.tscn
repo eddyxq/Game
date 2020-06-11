@@ -304,7 +304,7 @@ tracks/2/keys = {
 "times": PoolRealArray( 0.08 ),
 "transitions": PoolRealArray( 1 ),
 "values": [ {
-"args": [ 2 ],
+"args": [ 1 ],
 "method": "consume_mp"
 } ]
 }
@@ -514,7 +514,6 @@ script = ExtResource( 2 )
 texture = ExtResource( 1 )
 vframes = 23
 hframes = 8
-frame = 2
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 anims/attack1 = SubResource( 1 )
@@ -556,6 +555,12 @@ one_shot = true
 wait_time = 2.0
 one_shot = true
 
+[node name="Skill3Cooldown" type="Timer" parent="."]
+
+[node name="Skill4Cooldown" type="Timer" parent="."]
+
+[node name="Skill5Cooldown" type="Timer" parent="."]
+
 [node name="ManaRecovery" type="Timer" parent="."]
 wait_time = 5.0
 autostart = true
@@ -589,6 +594,9 @@ disabled = true
 wait_time = 0.1
 [connection signal="timeout" from="Skill1Cooldown" to="." method="_on_Skill1Cooldown_timeout"]
 [connection signal="timeout" from="Skill2Cooldown" to="." method="_on_Skill2Cooldown_timeout"]
+[connection signal="timeout" from="Skill3Cooldown" to="." method="_on_Skill3Cooldown_timeout"]
+[connection signal="timeout" from="Skill4Cooldown" to="." method="_on_Skill4Cooldown_timeout"]
+[connection signal="timeout" from="Skill5Cooldown" to="." method="_on_Skill5Cooldown_timeout"]
 [connection signal="timeout" from="ManaRecovery" to="." method="_on_ManaRecovery_timeout"]
 [connection signal="timeout" from="AnimationDelay" to="." method="_on_AnimationDelay_timeout"]
 [connection signal="timeout" from="IFrame" to="." method="_on_IFrame_timeout"]

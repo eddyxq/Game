@@ -15,6 +15,7 @@ func _ready():
 	# set skill texture
 	$Skill_Slot1.set_texture_from_path("res://images/skill_icons/icon1.png")
 	$Skill_Slot2.set_texture_from_path("res://images/skill_icons/icon2.png")
+	$Skill_Slot3.set_texture_from_path("res://images/skill_icons/icon3.png")
 
 func _process(_delta):
 	health_bar.value = Global.health
@@ -25,6 +26,15 @@ func start_skill1_cooldown():
 	
 func start_skill2_cooldown():
 	$Skill_Slot2.start_cooldown()
+	
+func start_skill3_cooldown():
+	$Skill_Slot3.start_cooldown()
+	
+func start_skill4_cooldown():
+	$Skill_Slot4.start_cooldown()
+	
+func start_skill5_cooldown():
+	$Skill_Slot5.start_cooldown()
 
 # opens up the user profile 
 func _on_TextureButton_pressed():

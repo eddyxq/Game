@@ -31,14 +31,14 @@ func _physics_process(_delta):
 	right = Input.is_action_pressed("ui_right")
 	attack = Input.is_action_pressed("ui_attack")
 
-	skill1 = Input.is_action_pressed("ui_skill_slot1")
-	skill2 = Input.is_action_pressed("ui_skill_slot2")
+	skill1 = Input.is_action_pressed("ui_skill_slot1") && Global.mana >= 1
+	skill2 = Input.is_action_pressed("ui_skill_slot2") && Global.mana >= 2
 	skill3 = Input.is_action_pressed("ui_skill_slot3")
 	skill4 = Input.is_action_pressed("ui_skill_slot4")
 	skill5 = Input.is_action_pressed("ui_skill_slot5")
 
 	# update player state
-	player.animation_loop(down, attack, skill1, skill2)
+	player.animation_loop(attack, skill1, skill2, skill3, skill4, skill5)
 	player.movement_loop(attack, up, left, right)
 	
 	# disable controlled when player dies
