@@ -6,7 +6,7 @@ extends TextureButton
 
 onready var time_label = $Value
 
-var cooldown = 2.0
+export var cooldown = 1.0
 var on_cooldown = false
 
 func _ready():

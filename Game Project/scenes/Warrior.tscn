@@ -514,6 +514,7 @@ script = ExtResource( 2 )
 texture = ExtResource( 1 )
 vframes = 23
 hframes = 8
+frame = 2
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 anims/attack1 = SubResource( 1 )
@@ -552,6 +553,10 @@ wait_time = 2.0
 one_shot = true
 
 [node name="Skill2Cooldown" type="Timer" parent="."]
+wait_time = 5.0
+one_shot = true
+
+[node name="Skill2Duration" type="Timer" parent="Skill2Cooldown"]
 wait_time = 2.0
 one_shot = true
 
@@ -576,7 +581,9 @@ one_shot = true
 [node name="HTTPRequest" type="HTTPRequest" parent="."]
 
 [node name="Camera2D" type="Camera2D" parent="."]
+offset = Vector2( 0, -30 )
 current = true
+zoom = Vector2( 0.6, 0.6 )
 drag_margin_h_enabled = true
 drag_margin_v_enabled = true
 
@@ -594,6 +601,7 @@ disabled = true
 wait_time = 0.1
 [connection signal="timeout" from="Skill1Cooldown" to="." method="_on_Skill1Cooldown_timeout"]
 [connection signal="timeout" from="Skill2Cooldown" to="." method="_on_Skill2Cooldown_timeout"]
+[connection signal="timeout" from="Skill2Cooldown/Skill2Duration" to="." method="_on_Skill2Duration_timeout"]
 [connection signal="timeout" from="Skill3Cooldown" to="." method="_on_Skill3Cooldown_timeout"]
 [connection signal="timeout" from="Skill4Cooldown" to="." method="_on_Skill4Cooldown_timeout"]
 [connection signal="timeout" from="Skill5Cooldown" to="." method="_on_Skill5Cooldown_timeout"]

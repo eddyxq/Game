@@ -17,6 +17,10 @@ var dir = DIRECTION.E
 # speed stats
 const jump_speed = 320
 const base_speed = 100
+const run_speed_modifier = 1.4
+const boost_speed_modifier = 2.5
+const atkmove_speed_modifier = 0.3
+
 var movement_speed
 
 const min_mp = 0
@@ -37,7 +41,7 @@ var player_sprite
 var state_machine
 
 # flags for player states
-var anim_finished = true # used to lock out player inputs for a short amount of time (0.3s) so prevent key spamming
+var anim_finished = true # used to lock out player inputs for a short amount of time (0.2s) so prevent key spamming
 var invincible = false # true when player has invincible frames
 
 var skill_slot1_off_cooldown = true
@@ -84,8 +88,9 @@ func animation_loop(attack, skill1, skill2, skill3, skill4, skill5):
 			anim_finished = false
 			skill_slot2_off_cooldown = false
 			$Skill2Cooldown.start()
+			$Skill2Cooldown/Skill2Duration.start()
 			$GhostInterval.start()
-			movement_speed = base_speed * 2.5
+			movement_speed = base_speed * boost_speed_modifier
 			play_animation("buff")
 			apply_delay()
 		elif skill3 && skill_slot3_off_cooldown:
@@ -119,9 +124,9 @@ func movement_loop(attack, up, left, right):
 	# reduces movement speed during attack animation
 	if skill_slot2_off_cooldown:
 		if attack and is_on_floor():
-			movement_speed = base_speed * 0.2
+			movement_speed = base_speed * atkmove_speed_modifier
 		else:
-			 movement_speed = base_speed * 1.4
+			 movement_speed = base_speed * run_speed_modifier
 
 	# translates player horizontally when left or right key is pressed
 	velocity.x = (-int(left) + int(right)) * movement_speed
@@ -204,7 +209,12 @@ func _on_Skill1Cooldown_timeout():
 
 func _on_Skill2Cooldown_timeout():
 	skill_slot2_off_cooldown = true
+
+
+func _on_Skill2Duration_timeout():
 	$GhostInterval.stop()
+	movement_speed = base_speed * run_speed_modifier
+
 
 func _on_Skill3Cooldown_timeout():
 	skill_slot3_off_cooldown = true
@@ -238,11 +248,10 @@ func _on_HitBox_body_entered(body):
 
 
 func _on_ghost_timer_timeout():
-	var this_ghost = preload("res://scenes/PlayerGhost.tscn").instance()
-	get_parent().add_child(this_ghost)
-	this_ghost.position = position
-	this_ghost.frame = $Sprite.frame
-	this_ghost.flip_h = $Sprite.flip_h
-
+	var ghost_sprite = preload("res://scenes/PlayerGhost.tscn").instance()
+	get_parent().add_child(ghost_sprite)
+	ghost_sprite.position = position
+	ghost_sprite.frame = $Sprite.frame
+	ghost_sprite.flip_h = $Sprite.flip_h
 
 

@@ -76,12 +76,14 @@ margin_left = 149.781
 margin_top = 41.1491
 margin_right = 181.781
 margin_bottom = 73.1491
+cooldown = 2.0
 
 [node name="Skill_Slot2" parent="." instance=ExtResource( 6 )]
 margin_left = 173.781
 margin_top = 41.1491
 margin_right = 205.781
 margin_bottom = 73.1491
+cooldown = 5.0
 
 [node name="Skill_Slot3" parent="." instance=ExtResource( 6 )]
 margin_left = 197.781
