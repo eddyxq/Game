@@ -506,6 +506,7 @@ graph_offset = Vector2( -103.077, -21.4961 )
 extents = Vector2( 12.1624, 14.7347 )
 
 [node name="Warrior" type="KinematicBody2D"]
+collision_mask = 5
 script = ExtResource( 2 )
 
 [node name="PositionCenter" type="Position2D" parent="."]
@@ -514,7 +515,7 @@ script = ExtResource( 2 )
 texture = ExtResource( 1 )
 vframes = 23
 hframes = 8
-frame = 2
+frame = 3
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 anims/attack1 = SubResource( 1 )
