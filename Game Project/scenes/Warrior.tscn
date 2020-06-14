@@ -506,7 +506,6 @@ graph_offset = Vector2( -103.077, -21.4961 )
 extents = Vector2( 12.1624, 14.7347 )
 
 [node name="Warrior" type="KinematicBody2D"]
-collision_mask = 5
 script = ExtResource( 2 )
 
 [node name="PositionCenter" type="Position2D" parent="."]
@@ -584,7 +583,7 @@ one_shot = true
 [node name="Camera2D" type="Camera2D" parent="."]
 offset = Vector2( 0, -30 )
 current = true
-zoom = Vector2( 0.6, 0.6 )
+zoom = Vector2( 0.7, 0.7 )
 drag_margin_h_enabled = true
 drag_margin_v_enabled = true
 
