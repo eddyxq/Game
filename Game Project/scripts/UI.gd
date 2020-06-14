@@ -16,6 +16,8 @@ func _ready():
 	$Skill_Slot1.set_texture_from_path("res://images/skill_icons/icon1.png")
 	$Skill_Slot2.set_texture_from_path("res://images/skill_icons/icon2.png")
 	$Skill_Slot3.set_texture_from_path("res://images/skill_icons/icon3.png")
+	$Skill_Slot4.set_texture_from_path("res://images/skill_icons/icon4.png")
+	$Skill_Slot5.set_texture_from_path("res://images/skill_icons/icon5.png")
 
 func _process(_delta):
 	health_bar.value = Global.health
