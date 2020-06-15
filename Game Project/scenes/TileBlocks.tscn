@@ -2,7 +2,7 @@
 
 [ext_resource path="res://images/tileset/tileset_unsplit.png" type="Texture" id=1]
 
-[sub_resource type="RectangleShape2D" id=2]
+[sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 8, 8 )
 
 [node name="Node2D" type="Node2D"]
@@ -23,7 +23,7 @@ collision_mask = 7
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile00/StaticBody2D"]
 visible = false
-shape = SubResource( 2 )
+shape = SubResource( 1 )
 one_way_collision = true
 
 [node name="Tile01" type="Sprite" parent="."]
@@ -41,7 +41,7 @@ collision_mask = 7
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile01/StaticBody2D"]
 visible = false
-shape = SubResource( 2 )
+shape = SubResource( 1 )
 one_way_collision = true
 
 [node name="Tile02" type="Sprite" parent="."]
@@ -60,7 +60,7 @@ collision_mask = 7
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile02/StaticBody2D"]
 visible = false
-shape = SubResource( 2 )
+shape = SubResource( 1 )
 one_way_collision = true
 
 [node name="Tile03" type="Sprite" parent="."]
@@ -79,7 +79,7 @@ collision_mask = 7
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile03/StaticBody2D"]
 visible = false
-shape = SubResource( 2 )
+shape = SubResource( 1 )
 one_way_collision = true
 
 [node name="Tile04" type="Sprite" parent="."]
@@ -98,7 +98,7 @@ collision_mask = 7
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile04/StaticBody2D"]
 visible = false
-shape = SubResource( 2 )
+shape = SubResource( 1 )
 
 [node name="Tile05" type="Sprite" parent="."]
 position = Vector2( 32, 16 )
@@ -116,7 +116,7 @@ collision_mask = 7
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile05/StaticBody2D"]
 visible = false
-shape = SubResource( 2 )
+shape = SubResource( 1 )
 
 [node name="Tile06" type="Sprite" parent="."]
 position = Vector2( -32, 32 )
@@ -134,7 +134,7 @@ collision_mask = 7
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile06/StaticBody2D"]
 visible = false
-shape = SubResource( 2 )
+shape = SubResource( 1 )
 
 [node name="Tile07" type="Sprite" parent="."]
 position = Vector2( -16, 32 )
@@ -152,7 +152,7 @@ collision_mask = 7
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile07/StaticBody2D"]
 visible = false
-shape = SubResource( 2 )
+shape = SubResource( 1 )
 
 [node name="Tile08" type="Sprite" parent="."]
 position = Vector2( 0, 32 )
@@ -170,7 +170,7 @@ collision_mask = 7
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile08/StaticBody2D"]
 visible = false
-shape = SubResource( 2 )
+shape = SubResource( 1 )
 
 [node name="Tile09" type="Sprite" parent="."]
 position = Vector2( 16, 32 )
@@ -188,7 +188,7 @@ collision_mask = 7
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile09/StaticBody2D"]
 visible = false
-shape = SubResource( 2 )
+shape = SubResource( 1 )
 
 [node name="Tile10" type="Sprite" parent="."]
 position = Vector2( 32, 32 )
@@ -206,7 +206,7 @@ collision_mask = 7
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile10/StaticBody2D"]
 visible = false
-shape = SubResource( 2 )
+shape = SubResource( 1 )
 
 [node name="Tile11" type="Sprite" parent="."]
 position = Vector2( -32, 48 )
@@ -224,7 +224,7 @@ collision_mask = 7
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile11/StaticBody2D"]
 visible = false
-shape = SubResource( 2 )
+shape = SubResource( 1 )
 
 [node name="Tile12" type="Sprite" parent="."]
 position = Vector2( -16, 48 )
@@ -242,7 +242,7 @@ collision_mask = 7
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile12/StaticBody2D"]
 visible = false
-shape = SubResource( 2 )
+shape = SubResource( 1 )
 
 [node name="Tile13" type="Sprite" parent="."]
 position = Vector2( 0, 48 )
@@ -260,7 +260,7 @@ collision_mask = 7
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile13/StaticBody2D"]
 visible = false
-shape = SubResource( 2 )
+shape = SubResource( 1 )
 
 [node name="Tile14" type="Sprite" parent="."]
 position = Vector2( 16, 48 )
@@ -278,7 +278,7 @@ collision_mask = 7
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile14/StaticBody2D"]
 visible = false
-shape = SubResource( 2 )
+shape = SubResource( 1 )
 
 [node name="Tile15" type="Sprite" parent="."]
 position = Vector2( 32, 48 )
@@ -296,7 +296,7 @@ collision_mask = 7
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile15/StaticBody2D"]
 visible = false
-shape = SubResource( 2 )
+shape = SubResource( 1 )
 
 [node name="Tile16" type="Sprite" parent="."]
 position = Vector2( -32, 64 )
@@ -314,7 +314,7 @@ collision_mask = 7
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile16/StaticBody2D"]
 visible = false
-shape = SubResource( 2 )
+shape = SubResource( 1 )
 
 [node name="Tile17" type="Sprite" parent="."]
 position = Vector2( -16, 64 )
@@ -332,7 +332,7 @@ collision_mask = 7
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile17/StaticBody2D"]
 visible = false
-shape = SubResource( 2 )
+shape = SubResource( 1 )
 
 [node name="Tile18" type="Sprite" parent="."]
 position = Vector2( 0, 64 )
@@ -350,7 +350,7 @@ collision_mask = 7
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile18/StaticBody2D"]
 visible = false
-shape = SubResource( 2 )
+shape = SubResource( 1 )
 
 [node name="Tile19" type="Sprite" parent="."]
 position = Vector2( 16, 64 )
@@ -368,7 +368,7 @@ collision_mask = 7
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile19/StaticBody2D"]
 visible = false
-shape = SubResource( 2 )
+shape = SubResource( 1 )
 
 [node name="Tile20" type="Sprite" parent="."]
 position = Vector2( 32, 64 )
@@ -386,7 +386,7 @@ collision_mask = 7
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile20/StaticBody2D"]
 visible = false
-shape = SubResource( 2 )
+shape = SubResource( 1 )
 
 [node name="Tile21" type="Sprite" parent="."]
 position = Vector2( -32, 80 )
@@ -404,7 +404,7 @@ collision_mask = 7
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile21/StaticBody2D"]
 visible = false
-shape = SubResource( 2 )
+shape = SubResource( 1 )
 
 [node name="Tile22" type="Sprite" parent="."]
 position = Vector2( -16, 80 )
@@ -422,7 +422,7 @@ collision_mask = 7
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile22/StaticBody2D"]
 visible = false
-shape = SubResource( 2 )
+shape = SubResource( 1 )
 
 [node name="Tile23" type="Sprite" parent="."]
 position = Vector2( 0, 80 )
@@ -440,7 +440,7 @@ collision_mask = 7
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile23/StaticBody2D"]
 visible = false
-shape = SubResource( 2 )
+shape = SubResource( 1 )
 
 [node name="Tile24" type="Sprite" parent="."]
 position = Vector2( 16, 80 )
@@ -458,7 +458,7 @@ collision_mask = 7
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile24/StaticBody2D"]
 visible = false
-shape = SubResource( 2 )
+shape = SubResource( 1 )
 
 [node name="Tile25" type="Sprite" parent="."]
 position = Vector2( 32, 80 )
@@ -476,7 +476,7 @@ collision_mask = 7
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile25/StaticBody2D"]
 visible = false
-shape = SubResource( 2 )
+shape = SubResource( 1 )
 
 [node name="Tile26" type="Sprite" parent="."]
 position = Vector2( -16, 96 )
@@ -494,7 +494,7 @@ collision_mask = 7
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile26/StaticBody2D"]
 visible = false
-shape = SubResource( 2 )
+shape = SubResource( 1 )
 
 [node name="Tile27" type="Sprite" parent="."]
 position = Vector2( 0, 96 )
@@ -512,7 +512,7 @@ collision_mask = 7
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile27/StaticBody2D"]
 visible = false
-shape = SubResource( 2 )
+shape = SubResource( 1 )
 
 [node name="Tile28" type="Sprite" parent="."]
 position = Vector2( 16, 96 )
@@ -530,7 +530,7 @@ collision_mask = 7
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile28/StaticBody2D"]
 visible = false
-shape = SubResource( 2 )
+shape = SubResource( 1 )
 
 [node name="Tile29" type="Sprite" parent="."]
 position = Vector2( -16, 112 )
@@ -548,7 +548,7 @@ collision_mask = 7
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile29/StaticBody2D"]
 visible = false
-shape = SubResource( 2 )
+shape = SubResource( 1 )
 
 [node name="Tile30" type="Sprite" parent="."]
 position = Vector2( 16, 112 )
@@ -566,7 +566,7 @@ collision_mask = 7
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile30/StaticBody2D"]
 visible = false
-shape = SubResource( 2 )
+shape = SubResource( 1 )
 
 [node name="Tile31" type="Sprite" parent="."]
 position = Vector2( -16, 128 )
@@ -584,7 +584,7 @@ collision_mask = 7
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile31/StaticBody2D"]
 visible = false
-shape = SubResource( 2 )
+shape = SubResource( 1 )
 
 [node name="Tile32" type="Sprite" parent="."]
 position = Vector2( 16, 128 )
@@ -602,7 +602,7 @@ collision_mask = 7
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile32/StaticBody2D"]
 visible = false
-shape = SubResource( 2 )
+shape = SubResource( 1 )
 
 [node name="Tile33" type="Sprite" parent="."]
 position = Vector2( -16, 160 )
@@ -620,7 +620,7 @@ collision_mask = 7
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile33/StaticBody2D"]
 visible = false
-shape = SubResource( 2 )
+shape = SubResource( 1 )
 
 [node name="Tile34" type="Sprite" parent="."]
 position = Vector2( 0, 160 )
@@ -638,7 +638,7 @@ collision_mask = 7
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile34/StaticBody2D"]
 visible = false
-shape = SubResource( 2 )
+shape = SubResource( 1 )
 
 [node name="Tile35" type="Sprite" parent="."]
 position = Vector2( 16, 160 )
@@ -656,4 +656,166 @@ collision_mask = 7
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile35/StaticBody2D"]
 visible = false
-shape = SubResource( 2 )
+shape = SubResource( 1 )
+
+[node name="Tile36" type="Sprite" parent="."]
+position = Vector2( 96, 0 )
+texture = ExtResource( 1 )
+region_enabled = true
+region_rect = Rect2( 656, 16, 16, 16 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Tile36"]
+visible = false
+collision_layer = 4
+collision_mask = 7
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Tile36/StaticBody2D"]
+visible = false
+shape = SubResource( 1 )
+
+[node name="Tile37" type="Sprite" parent="."]
+position = Vector2( 112, 0 )
+texture = ExtResource( 1 )
+region_enabled = true
+region_rect = Rect2( 672, 16, 16, 16 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Tile37"]
+visible = false
+collision_layer = 4
+collision_mask = 7
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Tile37/StaticBody2D"]
+visible = false
+shape = SubResource( 1 )
+
+[node name="Tile38" type="Sprite" parent="."]
+position = Vector2( 128, 0 )
+texture = ExtResource( 1 )
+region_enabled = true
+region_rect = Rect2( 688, 16, 16, 16 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Tile38"]
+visible = false
+collision_layer = 4
+collision_mask = 7
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Tile38/StaticBody2D"]
+visible = false
+shape = SubResource( 1 )
+
+[node name="Tile39" type="Sprite" parent="."]
+position = Vector2( 96, 16 )
+texture = ExtResource( 1 )
+region_enabled = true
+region_rect = Rect2( 656, 32, 16, 16 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Tile39"]
+visible = false
+collision_layer = 4
+collision_mask = 7
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Tile39/StaticBody2D"]
+visible = false
+shape = SubResource( 1 )
+
+[node name="Tile40" type="Sprite" parent="."]
+position = Vector2( 112, 16 )
+texture = ExtResource( 1 )
+region_enabled = true
+region_rect = Rect2( 672, 32, 16, 16 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Tile40"]
+visible = false
+collision_layer = 4
+collision_mask = 7
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Tile40/StaticBody2D"]
+visible = false
+shape = SubResource( 1 )
+
+[node name="Tile41" type="Sprite" parent="."]
+position = Vector2( 128, 16 )
+texture = ExtResource( 1 )
+region_enabled = true
+region_rect = Rect2( 688, 32, 16, 16 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Tile41"]
+visible = false
+collision_layer = 4
+collision_mask = 7
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Tile41/StaticBody2D"]
+visible = false
+shape = SubResource( 1 )
+
+[node name="Tile42" type="Sprite" parent="."]
+position = Vector2( 96, 32 )
+texture = ExtResource( 1 )
+region_enabled = true
+region_rect = Rect2( 656, 48, 16, 16 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Tile42"]
+visible = false
+collision_layer = 4
+collision_mask = 7
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Tile42/StaticBody2D"]
+visible = false
+shape = SubResource( 1 )
+
+[node name="Tile43" type="Sprite" parent="."]
+position = Vector2( 112, 32 )
+texture = ExtResource( 1 )
+region_enabled = true
+region_rect = Rect2( 672, 48, 16, 16 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Tile43"]
+visible = false
+collision_layer = 4
+collision_mask = 7
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Tile43/StaticBody2D"]
+visible = false
+shape = SubResource( 1 )
+
+[node name="Tile44" type="Sprite" parent="."]
+position = Vector2( 128, 32 )
+texture = ExtResource( 1 )
+region_enabled = true
+region_rect = Rect2( 688, 48, 16, 16 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Tile44"]
+visible = false
+collision_layer = 4
+collision_mask = 7
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Tile44/StaticBody2D"]
+visible = false
+shape = SubResource( 1 )

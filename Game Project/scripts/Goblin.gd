@@ -44,7 +44,7 @@ func _ready():
 	setup_timer() 
 	set_process(true)
 	setup_state_machine()
-	
+
 # called every delta
 func _physics_process(_delta):
 	if is_dead:
@@ -52,17 +52,15 @@ func _physics_process(_delta):
 	else:
 		animation_loop()
 		movement_loop()
-
 func animation_loop():
 	if anim_finished:
-	
-		if player.position.x < position.x - target_player_dist and sees_player():
+		if player.get_global_position().x < $Position2D.get_global_position().x - target_player_dist and sees_player():
 			set_dir(-1)
 			$Sprite.flip_h = false
 			$Sprite.position.x = -17.5
 			direction_facing = DIRECTION.W
 			state_machine.travel("run")
-		elif player.position.x > position.x + target_player_dist and sees_player():
+		elif player.get_global_position().x > $Position2D.get_global_position().x + target_player_dist and sees_player():
 			set_dir(1)
 			$Sprite.flip_h = true
 			$Sprite.position.x = 17.5
@@ -72,7 +70,9 @@ func animation_loop():
 			set_dir(0)
 			state_machine.travel("idle")
 	
-		if velocity.x == 0 && (abs(position.x - player.get_global_position().x) < 25):
+		if velocity.x == 0 && (abs(position.x - player.get_global_position().x) < 35):
+#			if (abs($HitBox.get_global_position().x - player.get_global_position().x) > 17.5):
+#				turn_around()
 			state_machine.travel("attack")
 			anim_finished = false
 			$AnimationDelay.start()
@@ -103,15 +103,6 @@ func movement_loop():
 	velocity.y += gravity 
 
 	velocity = move_and_slide(velocity, Vector2(0, -1))
-
-	# reverses the direction when you reach an wall or ledge
-#	if is_on_wall():
-#		direction *= -1
-#		$RayCast2D.position.x *= -1
-#
-#	if $RayCast2D.is_colliding() == false:
-#		direction *= -1 
-#		$RayCast2D.position.x *= -1
 
 # update health bar
 func apply_damage():
@@ -159,7 +150,8 @@ func play_death_sfx():
 # detects if the enemy collides with player
 func _on_Area2D_body_entered(body):
 	if body.name == "Warrior":
-		pass
+		print("back")
+		turn_around()
 		#body.hurt()
 
 # set direction for enemy to move to horizontally
@@ -214,5 +206,20 @@ func toggle_hitbox():
 func update_hitbox_location():
 	if $HitBox.position.x < 0 && direction_facing == DIRECTION.E:
 		$HitBox.position.x *= -1
+		$Area2D.position.x *= -1
 	elif $HitBox.position.x > 0 && direction_facing == DIRECTION.W:
 		$HitBox.position.x *= -1
+		$Area2D.position.x *= -1
+
+func turn_around():
+	$Sprite.flip_h = not $Sprite.flip_h
+	$Sprite.position.x *= -1
+	if direction_facing == DIRECTION.W:
+		direction_facing = DIRECTION.E
+		$HitBox.position.x *= -1
+		$Area2D.position.x *= -1
+	elif direction_facing == DIRECTION.E:
+		direction_facing = DIRECTION.W
+		$HitBox.position.x *= -1
+		$Area2D.position.x *= -1
+
