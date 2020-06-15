@@ -177,7 +177,7 @@ func distance_blade():
 	projectile.position = $PositionCenter.global_position
 	projectile.set_projectile_direction(dir)
 
-# initializes the state machine for managing animation state changes
+# initializes the state machine for managing animation state transitions
 func setup_state_machine():
 	state_machine = $AnimationTree.get("parameters/playback")
 
@@ -242,7 +242,7 @@ func _on_IFrame_timeout():
 
 
 func _on_HitBox_body_entered(body):
-	if "Slime" in body.name:
+	if "Enemy" in body.name:
 		body.apply_damage()
 	#queue_free()
 
