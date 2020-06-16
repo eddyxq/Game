@@ -28,7 +28,6 @@ const max_mp = 5
 
 # references to child nodes
 onready var http : HTTPRequest = $HTTPRequest
-onready var audio_player = $AudioStreamPlayer2D
 
 # range attack hit box
 const PROJECTILE = preload("res://scenes/Projectile.tscn")
@@ -162,9 +161,7 @@ func apply_delay():
 
 # plays a sword swing sfx
 func play_atk_sfx():
-	audio_player.stream = load("res://audio/sfx/sword_swing.ogg")
-	audio_player.play()
-
+	SoundManager.play_sfx(load("res://audio/sfx/sword_swing.ogg"), 0)
 
 func toggle_hitbox():
 	$HitBox/CollisionShape2D.disabled = not $HitBox/CollisionShape2D.disabled

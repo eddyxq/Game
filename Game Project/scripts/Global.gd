@@ -18,9 +18,17 @@ var profile = {
 var mana = 5
 var health = 100
 
+
+var music_clip : AudioStream = load("res://audio/music/dark_day.ogg")
+
 # overriding default quit logic
-func _ready() -> void:
+func _ready():
 	get_tree().set_auto_accept_quit(false)
+	#SoundManager.play_music(music_clip)
+	
+	
+	
+	
 	
 # handles what happens when player exits game using the x button
 # located  on the top right of the game window

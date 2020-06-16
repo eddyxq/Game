@@ -143,16 +143,12 @@ func on_timeout_complete():
 
 # plays a enemy dying sfx
 func play_death_sfx():
-	audio_player.stream = load("res://audio/sfx/slime.ogg")
-	audio_player.play()
-	
+	SoundManager.play_sfx(load("res://audio/sfx/slime.ogg"), 1)
 
 # detects if the enemy collides with player
 func _on_Area2D_body_entered(body):
 	if body.name == "Warrior":
-		print("back")
 		turn_around()
-		#body.hurt()
 
 # set direction for enemy to move to horizontally
 func set_dir(target_dir):

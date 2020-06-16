@@ -5,7 +5,6 @@ extends Area2D
 ###############################################################################
 
 const SPEED = 400
-var audio_player 
 var velocity = Vector2()
 var projectile_dir
 
@@ -15,9 +14,6 @@ enum DIRECTION{
 	W,
 	E,
 }
-
-func _ready():
-	audio_player = $AudioStreamPlayer2D
 
 func set_projectile_direction(dir):
 	projectile_dir = dir
@@ -52,5 +48,4 @@ func shoot_projectile(delta, dir):
 		
 # plays a explosion sfx
 func play_explosion_sfx():
-	audio_player.stream = load("res://audio/sfx/explosion.ogg")
-	audio_player.play()
+	SoundManager.play_sfx(load("res://audio/sfx/explosion.ogg"), 1)
