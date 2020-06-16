@@ -1,5 +1,9 @@
 extends Node2D
 
+###############################################################################
+# managing the playback of music and sfx
+###############################################################################
+
 var dic: Dictionary = {}
 
 func play_sfx(audio_clip: AudioStream, priority: int = 0):

@@ -49,7 +49,6 @@ var skill_slot3_off_cooldown = true
 var skill_slot4_off_cooldown = true
 var skill_slot5_off_cooldown = true
 
-
 # called when the node enters the scene tree for the first time
 func _ready():
 	# Firebase.get_document("users/%s" % Firebase.user_info.id, http)
@@ -99,7 +98,6 @@ func animation_loop(attack, skill1, skill2, skill3, skill4, skill5):
 		elif skill5 && skill_slot5_off_cooldown:
 			pass
 
-
 # movement logic
 func movement_loop(attack, up, left, right):
 	# pulls player downwards
@@ -146,6 +144,7 @@ func hurt():
 				$Sprite.set_modulate(Color(1,1,1,1)) 
 				yield(get_tree().create_timer(0.1), "timeout")
 
+# ensures the hitbox is always in front
 func update_hitbox_location():
 	if $HitBox.position.x < 0 && dir == DIRECTION.E:
 		$HitBox.position.x *= -1
@@ -195,36 +194,36 @@ func _on_ManaRecovery_timeout():
 	if Global.mana < max_mp:
 		Global.mana += 1
 
-
+# timer used to manage attaking state, preventing animation overlap
 func _on_AnimationDelay_timeout():
 	anim_finished = true
 
-
+# timer used to countdown until skill1 is availiable
 func _on_Skill1Cooldown_timeout():
 	skill_slot1_off_cooldown = true
 
-
+# timer used to countdown until skill2 is availiable
 func _on_Skill2Cooldown_timeout():
 	skill_slot2_off_cooldown = true
 
-
+# timer used to countdown the effects of skill2 buff
 func _on_Skill2Duration_timeout():
 	$GhostInterval.stop()
 	movement_speed = base_speed * run_speed_modifier
 
-
+# timer used to countdown until skill3 is availiable
 func _on_Skill3Cooldown_timeout():
 	skill_slot3_off_cooldown = true
 
-
+# timer used to countdown until skill4 is availiable
 func _on_Skill4Cooldown_timeout():
 	skill_slot4_off_cooldown = true
 
-
+# timer used to countdown until skill5 is availiable
 func _on_Skill5Cooldown_timeout():
 	skill_slot5_off_cooldown = true
 
-
+# loads player profile from database
 func _on_HTTPRequest_request_completed(_result, response_code, _headers, body):
 	var result_body := JSON.parse(body.get_string_from_ascii()).result as Dictionary
 	match response_code:
@@ -233,22 +232,19 @@ func _on_HTTPRequest_request_completed(_result, response_code, _headers, body):
 		200:
 			Global.profile = result_body.fields
 
-
+# player becomes invicible for a moment after getting hurt
 func _on_IFrame_timeout():
 	invincible = false
 
-
+# applies damage when hitbox collide with enemies
 func _on_HitBox_body_entered(body):
 	if "Enemy" in body.name:
 		body.apply_damage()
-	#queue_free()
 
-
+# time used to countdown the animation of skill2 buff
 func _on_ghost_timer_timeout():
 	var ghost_sprite = preload("res://scenes/PlayerGhost.tscn").instance()
 	get_parent().add_child(ghost_sprite)
 	ghost_sprite.position = position
 	ghost_sprite.frame = $Sprite.frame
 	ghost_sprite.flip_h = $Sprite.flip_h
-
-

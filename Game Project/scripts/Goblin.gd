@@ -52,6 +52,8 @@ func _physics_process(_delta):
 	else:
 		animation_loop()
 		movement_loop()
+
+# animation logic
 func animation_loop():
 	if anim_finished:
 		if player.get_global_position().x < $Position2D.get_global_position().x - target_player_dist and sees_player():
@@ -70,15 +72,12 @@ func animation_loop():
 			set_dir(0)
 			state_machine.travel("idle")
 	
-		if velocity.x == 0 && (abs(position.x - player.get_global_position().x) < 35):
-#			if (abs($HitBox.get_global_position().x - player.get_global_position().x) > 17.5):
-#				turn_around()
+		if velocity.x == 0 && (abs(position.x - player.get_global_position().x) < 35) && (abs(position.y - player.get_global_position().y) < 35):
 			state_machine.travel("attack")
 			anim_finished = false
 			$AnimationDelay.start()
 
-
-
+# movement logic
 func movement_loop():
 	update_hitbox_location()
 	
@@ -95,7 +94,7 @@ func movement_loop():
 
 	if is_on_floor() and velocity.y > 0:
 		velocity.y = 0
-		
+
 	# horizontal movement speed of enemy
 	if anim_finished:
 		velocity.x = dir * base_speed
@@ -187,18 +186,20 @@ func sees_player():
 func setup_state_machine():
 	state_machine = $AnimationTree.get("parameters/playback")
 
-
+# timer use to manage attaking state, preventing animation overlap
 func _on_AnimationDelay_timeout():
 	anim_finished = true
 
-
+# deal damage to player when attacking hitbox collides with player
 func _on_HitBox_body_entered(body):
 	if "Warrior" in body.name:
 		body.hurt()
 
+# called when attacking, toggles the hitbox on/off
 func toggle_hitbox():
 	$HitBox/CollisionShape2D.disabled = not $HitBox/CollisionShape2D.disabled
 
+# ensures the hitbox is always in front and back area is behind
 func update_hitbox_location():
 	if $HitBox.position.x < 0 && direction_facing == DIRECTION.E:
 		$HitBox.position.x *= -1
@@ -207,6 +208,7 @@ func update_hitbox_location():
 		$HitBox.position.x *= -1
 		$Area2D.position.x *= -1
 
+# turns the enemy around if move player moves behind
 func turn_around():
 	$Sprite.flip_h = not $Sprite.flip_h
 	$Sprite.position.x *= -1
@@ -218,4 +220,3 @@ func turn_around():
 		direction_facing = DIRECTION.W
 		$HitBox.position.x *= -1
 		$Area2D.position.x *= -1
-
