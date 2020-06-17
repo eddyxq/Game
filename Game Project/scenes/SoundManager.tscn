@@ -21,14 +21,19 @@ script = ExtResource( 1 )
 [node name="SFX" type="Node2D" parent="."]
 
 [node name="sfxPlayer1" type="AudioStreamPlayer2D" parent="SFX"]
+volume_db = -15.0
 
 [node name="sfxPlayer2" type="AudioStreamPlayer2D" parent="SFX"]
+volume_db = -15.0
 
 [node name="sfxPlayer3" type="AudioStreamPlayer2D" parent="SFX"]
+volume_db = -15.0
 
 [node name="sfxPlayer4" type="AudioStreamPlayer2D" parent="SFX"]
+volume_db = -15.0
 
 [node name="sfxPlayer5" type="AudioStreamPlayer2D" parent="SFX"]
+volume_db = -15.0
 
 [node name="Preload" type="Node2D" parent="."]
 
