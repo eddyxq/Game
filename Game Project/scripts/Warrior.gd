@@ -24,7 +24,9 @@ const atkmove_speed_modifier = 0.3
 var movement_speed
 
 const min_mp = 0
-const max_mp = 5
+const max_mp = 6
+const min_hp = 0
+const max_hp = 6
 
 # references to child nodes
 onready var http : HTTPRequest = $HTTPRequest
@@ -133,7 +135,8 @@ func movement_loop(attack, up, left, right):
 # applies a blinking damage effect to the player
 func hurt():
 	if !invincible:
-		Global.health -= 25
+		play_hurt_sfx()
+		Global.health -= 2
 		if Global.health > 0:
 			invincible = true
 			$IFrame.start()
@@ -161,7 +164,27 @@ func apply_delay():
 # plays a sword swing sfx
 func play_atk_sfx():
 	SoundManager.play_sfx(load("res://audio/sfx/sword_swing.ogg"), 0)
+	
+# plays a swoosh sfx
+func play_swoosh_sfx():
+	SoundManager.play_sfx(load("res://audio/sfx/swoosh.ogg"), 0)
+	
+# plays a footstep sfx
+func play_footstep_sfx():
+	SoundManager.play_sfx(load("res://audio/sfx/footstep.ogg"), 0)
 
+# plays a hurt sfx
+func play_hurt_sfx():
+	SoundManager.play_sfx(load("res://audio/sfx/hurt.ogg"), 0)
+	
+# plays a invalid sfx
+func play_invalid_sfx():
+	SoundManager.play_sfx(load("res://audio/sfx/invalid.ogg"), 0)
+	
+# plays a invalid sfx
+func play_death_sfx():
+	SoundManager.play_sfx(load("res://audio/sfx/death.ogg"), 0)
+	
 func toggle_hitbox():
 	$HitBox/CollisionShape2D.disabled = not $HitBox/CollisionShape2D.disabled
 
@@ -189,10 +212,15 @@ func restore_mp(amount):
 	if Global.mana > max_mp:
 		Global.mana = max_mp
 
+func _on_HealthRecovery_timeout():
+	if Global.health < max_hp && Global.health > -1:
+		Global.health += 1
+
 # auto mana recovery over time
 func _on_ManaRecovery_timeout():
-	if Global.mana < max_mp:
+	if Global.mana < max_mp && Global.health > -1:
 		Global.mana += 1
+
 
 # timer used to manage attaking state, preventing animation overlap
 func _on_AnimationDelay_timeout():
@@ -248,3 +276,5 @@ func _on_ghost_timer_timeout():
 	ghost_sprite.position = position
 	ghost_sprite.frame = $Sprite.frame
 	ghost_sprite.flip_h = $Sprite.flip_h
+
+

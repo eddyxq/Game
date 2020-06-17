@@ -34,6 +34,13 @@ func update():
 		$orb3.visible = true
 		$orb4.visible = true
 		$orb5.visible = true
+	elif Global.mana == 6:
+		$orb1.visible = true
+		$orb2.visible = true
+		$orb3.visible = true
+		$orb4.visible = true
+		$orb5.visible = true
+		$orb6.visible = true
 	else:
 		hide_all()
 
@@ -44,3 +51,4 @@ func hide_all():
 	$orb3.visible = false
 	$orb4.visible = false
 	$orb5.visible = false
+	$orb6.visible = false

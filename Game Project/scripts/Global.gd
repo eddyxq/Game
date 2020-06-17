@@ -15,8 +15,8 @@ var profile = {
 	"player_exp": {}
 } 
 
-var mana = 5
-var health = 100
+var mana = 6
+var health = 6
 
 # overriding default quit logic
 func _ready():

@@ -13,6 +13,7 @@ font_data = SubResource( 1 )
 [node name="Skill_Slot" type="TextureButton"]
 margin_right = 32.0
 margin_bottom = 32.0
+rect_scale = Vector2( 1.5, 1.5 )
 texture_normal = ExtResource( 2 )
 script = ExtResource( 1 )
 __meta__ = {

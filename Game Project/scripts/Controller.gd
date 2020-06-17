@@ -43,11 +43,13 @@ func _physics_process(_delta):
 	
 	# disable controlled when player dies
 	if Global.health < 1:
+		player.play_death_sfx()
 		player.play_animation("dead")
 		set_physics_process(false) 
 	
 	# apply auto mana regeneration
 	ui.mana_bar.update()
+	ui.health_bar.update()
 	
 	# apply cooldown upon skill activation
 	if skill1:

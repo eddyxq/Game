@@ -290,7 +290,7 @@ tracks/1/keys = {
 "transitions": PoolRealArray( 1 ),
 "values": [ {
 "args": [  ],
-"method": "play_atk_sfx"
+"method": "play_swoosh_sfx"
 } ]
 }
 tracks/2/type = "method"
@@ -403,6 +403,23 @@ tracks/0/keys = {
 "update": 1,
 "values": [ 167, 168, 169, 170, 171, 172 ]
 }
+tracks/1/type = "method"
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.3 ),
+"transitions": PoolRealArray( 1, 1 ),
+"values": [ {
+"args": [  ],
+"method": "play_footstep_sfx"
+}, {
+"args": [  ],
+"method": "play_footstep_sfx"
+} ]
+}
 
 [sub_resource type="RectangleShape2D" id=14]
 extents = Vector2( 5.24972, 15 )
@@ -513,7 +530,6 @@ script = ExtResource( 2 )
 texture = ExtResource( 1 )
 vframes = 23
 hframes = 8
-frame = 1
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 anims/attack1 = SubResource( 1 )
@@ -561,8 +577,12 @@ one_shot = true
 
 [node name="Skill5Cooldown" type="Timer" parent="."]
 
-[node name="ManaRecovery" type="Timer" parent="."]
+[node name="HealthRecovery" type="Timer" parent="."]
 wait_time = 5.0
+autostart = true
+
+[node name="ManaRecovery" type="Timer" parent="."]
+wait_time = 4.0
 autostart = true
 
 [node name="AnimationDelay" type="Timer" parent="."]
@@ -576,7 +596,7 @@ one_shot = true
 [node name="HTTPRequest" type="HTTPRequest" parent="."]
 
 [node name="Camera2D" type="Camera2D" parent="."]
-offset = Vector2( 0, -80 )
+offset = Vector2( 0, -60 )
 current = true
 zoom = Vector2( 0.7, 0.7 )
 drag_margin_h_enabled = true
@@ -602,6 +622,7 @@ wait_time = 0.1
 [connection signal="timeout" from="Skill3Cooldown" to="." method="_on_Skill3Cooldown_timeout"]
 [connection signal="timeout" from="Skill4Cooldown" to="." method="_on_Skill4Cooldown_timeout"]
 [connection signal="timeout" from="Skill5Cooldown" to="." method="_on_Skill5Cooldown_timeout"]
+[connection signal="timeout" from="HealthRecovery" to="." method="_on_HealthRecovery_timeout"]
 [connection signal="timeout" from="ManaRecovery" to="." method="_on_ManaRecovery_timeout"]
 [connection signal="timeout" from="AnimationDelay" to="." method="_on_AnimationDelay_timeout"]
 [connection signal="timeout" from="IFrame" to="." method="_on_IFrame_timeout"]

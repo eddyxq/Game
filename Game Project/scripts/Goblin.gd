@@ -72,7 +72,7 @@ func animation_loop():
 			set_dir(0)
 			state_machine.travel("idle")
 	
-		if velocity.x == 0 && (abs(position.x - player.get_global_position().x) < 35) && (abs(position.y - player.get_global_position().y) < 35):
+		if velocity.x == 0 && (abs(position.x - player.get_global_position().x) < 35) && (abs(position.y - player.get_global_position().y) < 35)  && Global.health > -1:
 			state_machine.travel("attack")
 			anim_finished = false
 			$AnimationDelay.start()
@@ -105,6 +105,7 @@ func movement_loop():
 
 # update health bar
 func apply_damage():
+	play_hurt_sfx()
 	# damage formula: normal damage value can be up to the maximum strength
 	# critical hits add additional damage equal to the strength
 	# var dmg = randi() % int(Global.profile.player_strength.stringValue) + 1
@@ -220,3 +221,7 @@ func turn_around():
 		direction_facing = DIRECTION.W
 		$HitBox.position.x *= -1
 		$Area2D.position.x *= -1
+
+# plays a hurt sfx
+func play_hurt_sfx():
+	SoundManager.play_sfx(load("res://audio/sfx/hit.ogg"), 0)
