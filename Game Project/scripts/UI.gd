@@ -6,22 +6,18 @@ extends Control
 
 onready var health_bar = $HealthBar
 onready var mana_bar = $ManaBar
-onready var exp_bar = $ExpBar
 
 # called when the node enters the scene tree for the first time
 func _ready():
-	#health_bar.value = Global.health
-	#exp_bar.value = 50
 	# set skill texture
 	$Skill_Slot1.set_texture_from_path("res://images/skill_icons/icon1.png")
 	$Skill_Slot2.set_texture_from_path("res://images/skill_icons/icon2.png")
 	$Skill_Slot3.set_texture_from_path("res://images/skill_icons/icon3.png")
 	$Skill_Slot4.set_texture_from_path("res://images/skill_icons/icon4.png")
 	$Skill_Slot5.set_texture_from_path("res://images/skill_icons/icon5.png")
+	$Item_Slot1.set_texture_from_path("res://images/items/hp_pot_small.png")
+	$Item_Slot2.set_texture_from_path("res://images/items/mp_pot_small.png")
 
-func _process(_delta):
-	pass
-	#health_bar.value = Global.health
 
 # applies cooldown animations to skill
 func start_skill1_cooldown():
@@ -39,6 +35,11 @@ func start_skill4_cooldown():
 func start_skill5_cooldown():
 	$Skill_Slot5.start_cooldown()
 
+func start_item1_cooldown():
+	$Item_Slot1.start_cooldown()
+	
+func start_item2_cooldown():
+	$Item_Slot2.start_cooldown()
 # opens up the user profile 
 func _on_TextureButton_pressed():
 	var _scene = get_tree().change_scene("res://scenes/UserProfile.tscn")
