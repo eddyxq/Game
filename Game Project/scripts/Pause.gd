@@ -23,5 +23,5 @@ func _on_RestartButton_pressed():
 	var _scene = get_tree().reload_current_scene()
 	get_tree().paused = not get_tree().paused
 	visible = not visible
-	Global.health = 100
-	Global.mana = 5
+	Global.health = 6
+	Global.mana = 6
