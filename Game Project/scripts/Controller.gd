@@ -58,3 +58,9 @@ func _physics_process(_delta):
 	if skill2:
 		ui.start_skill2_cooldown()
 
+	# turn on light if player is underground
+	if(player.get_global_position().y > 445):
+		player.set_light_enabled(true)
+	else:
+		player.set_light_enabled(false)
+

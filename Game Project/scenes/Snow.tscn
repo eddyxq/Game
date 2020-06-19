@@ -9,8 +9,8 @@ _data = [ Vector2( 0, 1 ), 0.0, 0.0, 0, 0, Vector2( 0.0678408, 21 ), 0.0, 0.0, 0
 
 [node name="CPUParticles2D" type="CPUParticles2D" parent="."]
 amount = 500
-lifetime = 9.0
-preprocess = 9.0
+lifetime = 7.5
+preprocess = 7.5
 randomness = 1.0
 emission_shape = 2
 emission_rect_extents = Vector2( 1280, 1 )

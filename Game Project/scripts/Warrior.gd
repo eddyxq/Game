@@ -277,4 +277,5 @@ func _on_ghost_timer_timeout():
 	ghost_sprite.frame = $Sprite.frame
 	ghost_sprite.flip_h = $Sprite.flip_h
 
-
+func set_light_enabled(status):
+	$Light2D.set_enabled(status)
