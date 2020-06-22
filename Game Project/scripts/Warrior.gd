@@ -33,7 +33,7 @@ onready var http : HTTPRequest = $HTTPRequest
 
 # skill scenes
 const PROJECTILE = preload("res://scenes/Projectile.tscn")
-const ROCK_STRIKE = preload("res://scenes/Rock_Strike.tscn")
+const ROCK_STRIKE = preload("res://scenes/RockStrike.tscn")
 # world constants
 const GRAVITY = 18
 
@@ -51,6 +51,8 @@ var skill_slot2_off_cooldown = true
 var skill_slot3_off_cooldown = true
 var skill_slot4_off_cooldown = true
 var skill_slot5_off_cooldown = true
+var item_slot1_off_cooldown = true
+var item_slot2_off_cooldown = true
 
 # called when the node enters the scene tree for the first time
 func _ready():
@@ -58,7 +60,7 @@ func _ready():
 	setup_state_machine()
 
 # animation logic
-func animation_loop(attack, skill1, skill2, skill3, skill4, skill5):
+func animation_loop(attack, skill1, skill2, skill3, skill4, skill5, item1, item2):
 	# disable animations while player is attacking
 	if anim_finished: 
 		# moving state
@@ -104,6 +106,17 @@ func animation_loop(attack, skill1, skill2, skill3, skill4, skill5):
 			pass
 		elif skill5 && skill_slot5_off_cooldown:
 			pass
+		elif item1 && item_slot1_off_cooldown:
+			item_slot1_off_cooldown = false
+			$Item1Cooldown.start()
+			play_potion_sfx()
+			Global.health = max_hp
+			
+		elif item2 && item_slot2_off_cooldown:
+			item_slot2_off_cooldown = false
+			$Item2Cooldown.start()
+			play_potion_sfx()
+			Global.mana = max_mp
 
 # movement logic
 func movement_loop(attack, up, left, right):
@@ -194,6 +207,10 @@ func play_invalid_sfx():
 func play_death_sfx():
 	SoundManager.play_sfx(load("res://audio/sfx/death.ogg"), 0)
 	
+# plays a potion sfx
+func play_potion_sfx():
+	SoundManager.play_sfx(load("res://audio/sfx/potion.ogg"), 0)
+	
 func toggle_hitbox():
 	$HitBox/CollisionShape2D.disabled = not $HitBox/CollisionShape2D.disabled
 
@@ -209,9 +226,9 @@ func rock_strike():
 	var projectile = ROCK_STRIKE.instance()
 	get_parent().add_child(projectile)
 	if dir == DIRECTION.E:
-		projectile.position.x = $PositionCenter.global_position.x + 28
+		projectile.position.x = $PositionCenter.global_position.x + 64
 	else: 
-		projectile.position.x = $PositionCenter.global_position.x - 28
+		projectile.position.x = $PositionCenter.global_position.x - 64
 	projectile.position.y = $PositionCenter.global_position.y + 36
 	projectile.set_projectile_direction(dir) 
 

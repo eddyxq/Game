@@ -11,24 +11,11 @@ collision_mask = 2
 script = ExtResource( 2 )
 
 [node name="ProjectileSprite" type="Sprite" parent="."]
-position = Vector2( 0, 40 )
 texture = ExtResource( 1 )
-hframes = 2
-
-[node name="ProjectileSprite2" type="Sprite" parent="."]
-position = Vector2( 0, 20 )
-texture = ExtResource( 1 )
-offset = Vector2( 50, 0 )
-hframes = 2
-
-[node name="ProjectileSprite3" type="Sprite" parent="."]
-texture = ExtResource( 1 )
-offset = Vector2( 100, 0 )
-hframes = 2
+vframes = 2
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
-scale = Vector2( 1, 1 )
-polygon = PoolVector2Array( 0, 0, -20, 80, 20, 80, 20, 60, 80, 60, 80, 40, 120, 40, 120, -40, 80, 0, 80, -20, 60, -20, 40, 20, 20, 0 )
+polygon = PoolVector2Array( -79.1837, 21.6057, -95.4479, 37.139, 123.845, 35.8598, 128.962, -37.0551, 91.5637, 6.25051, 76.3316, -23.8976, 40.0773, 16.4459, 25.5287, -8.7298, 1.4908, 19.8328, -27.6498, 6.9862, -51.4671, 35.9709 )
 
 [node name="Timer" type="Timer" parent="."]
 wait_time = 0.17

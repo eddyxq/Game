@@ -17,6 +17,9 @@ var skill3 # 3 number key
 var skill4 # 4 number key
 var skill5 # 5 number key
 
+var item1  # q / x
+var item2  # e / c
+
 # references to the player and UI
 onready var player = $Warrior
 onready var ui = $HUD/UI
@@ -36,9 +39,11 @@ func _physics_process(_delta):
 	skill3 = Input.is_action_pressed("ui_skill_slot3")
 	skill4 = Input.is_action_pressed("ui_skill_slot4")
 	skill5 = Input.is_action_pressed("ui_skill_slot5")
+	item1 = Input.is_action_pressed("ui_item_slot1")
+	item2 = Input.is_action_pressed("ui_item_slot2")
 
 	# update player state
-	player.animation_loop(attack, skill1, skill2, skill3, skill4, skill5)
+	player.animation_loop(attack, skill1, skill2, skill3, skill4, skill5, item1, item2)
 	player.movement_loop(attack, up, left, right)
 	
 	# disable controlled when player dies
@@ -58,6 +63,11 @@ func _physics_process(_delta):
 		ui.start_skill2_cooldown()
 	if skill3:
 		ui.start_skill3_cooldown()
+	if item1:
+		ui.start_item1_cooldown()
+	if item2:
+		ui.start_item2_cooldown()
+		
 
 	# turn on light if player is underground
 	if(player.get_global_position().y > 445):
