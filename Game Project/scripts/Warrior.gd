@@ -172,6 +172,7 @@ func update_hitbox_location():
 	elif $HitBox.position.x > 0 && dir == DIRECTION.W:
 		$HitBox.position.x *= -1
 
+# travel to input state in animation tree
 func play_animation(anim):
 	state_machine.travel(anim)
 
@@ -211,9 +212,9 @@ func play_death_sfx():
 func play_potion_sfx():
 	SoundManager.play_sfx(load("res://audio/sfx/potion.ogg"), 0)
 	
+# hitbox for detecting normal attack collisions with enemies
 func toggle_hitbox():
 	$HitBox/CollisionShape2D.disabled = not $HitBox/CollisionShape2D.disabled
-
 
 # activates skill 1 shooting a ranged projectile
 func distance_blade():
@@ -222,6 +223,7 @@ func distance_blade():
 	projectile.position = $PositionCenter.global_position
 	projectile.set_projectile_direction(dir)
 
+# activates skill 3 summoning rock pillars from below
 func rock_strike():
 	var projectile = ROCK_STRIKE.instance()
 	get_parent().add_child(projectile)
@@ -248,6 +250,7 @@ func restore_mp(amount):
 	if Global.mana > max_mp:
 		Global.mana = max_mp
 
+# auto health recovery over time
 func _on_HealthRecovery_timeout():
 	if Global.health < max_hp && Global.health > -1:
 		Global.health += 1
@@ -256,7 +259,6 @@ func _on_HealthRecovery_timeout():
 func _on_ManaRecovery_timeout():
 	if Global.mana < max_mp && Global.health > -1:
 		Global.mana += 1
-
 
 # timer used to manage attaking state, preventing animation overlap
 func _on_AnimationDelay_timeout():
@@ -313,5 +315,6 @@ func _on_ghost_timer_timeout():
 	ghost_sprite.frame = $Sprite.frame
 	ghost_sprite.flip_h = $Sprite.flip_h
 
+# toggles a circular lighting effect around the player
 func set_light_enabled(status):
 	$Light2D.set_enabled(status)
