@@ -26,7 +26,12 @@ var movement_speed
 const min_mp = 0
 const max_mp = 6
 const min_hp = 0
-const max_hp = 6
+const max_hp = 100
+
+var health = max_hp
+var mana = max_mp
+
+onready var UI = get_tree().get_root().get_node("/root/Controller/HUD/UI")
 
 # references to child nodes
 onready var http : HTTPRequest = $HTTPRequest
@@ -61,6 +66,7 @@ func _ready():
 
 # animation logic
 func animation_loop(attack, skill1, skill2, skill3, skill4, skill5, item1, item2):
+	print(mana)
 	# disable animations while player is attacking
 	if anim_finished: 
 		# moving state
@@ -110,13 +116,15 @@ func animation_loop(attack, skill1, skill2, skill3, skill4, skill5, item1, item2
 			item_slot1_off_cooldown = false
 			$Item1Cooldown.start()
 			play_potion_sfx()
-			Global.health = max_hp
-			
+			# potion fully heals the player
+			UI.health_bar.increase(health, max_hp - health)
+			health = max_hp
 		elif item2 && item_slot2_off_cooldown:
 			item_slot2_off_cooldown = false
 			$Item2Cooldown.start()
 			play_potion_sfx()
-			Global.mana = max_mp
+			mana = max_mp
+			UI.mana_bar.update_bar(mana)
 
 # movement logic
 func movement_loop(attack, up, left, right):
@@ -151,11 +159,12 @@ func movement_loop(attack, up, left, right):
 	velocity = move_and_slide(velocity, Vector2(0,-1))
 
 # applies a blinking damage effect to the player
-func hurt():
+func hurt(dmg):
 	if !invincible:
 		play_hurt_sfx()
-		Global.health -= 2
-		if Global.health > 0:
+		UI.health_bar.decrease(health, dmg)
+		health -= dmg
+		if health > 0:
 			invincible = true
 			$IFrame.start()
 			# blinks 4 times in 0.1 second intervals
@@ -240,25 +249,28 @@ func setup_state_machine():
 
 # decreases player mp by integer amount passed in as amount
 func consume_mp(amount):
-	Global.mana -= amount
-	if Global.mana < min_mp:
-		Global.mana = min_mp
+	mana -= amount
+	if mana < min_mp:
+		mana = min_mp
+	UI.mana_bar.update_bar(mana)
 
 # increases player mp by integer amount passed in as amount
 func restore_mp(amount):
-	Global.mana += amount
-	if Global.mana > max_mp:
-		Global.mana = max_mp
+	mana += amount
+	if mana > max_mp:
+		mana = max_mp
 
 # auto health recovery over time
 func _on_HealthRecovery_timeout():
-	if Global.health < max_hp && Global.health > -1:
-		Global.health += 1
+	if health < max_hp && health > -1:
+		UI.health_bar.increase(health, 1)
+		health += 1
 
 # auto mana recovery over time
 func _on_ManaRecovery_timeout():
-	if Global.mana < max_mp && Global.health > -1:
-		Global.mana += 1
+	if mana < max_mp && health > -1:
+		mana += 1
+		UI.mana_bar.update_bar(mana)
 
 # timer used to manage attaking state, preventing animation overlap
 func _on_AnimationDelay_timeout():

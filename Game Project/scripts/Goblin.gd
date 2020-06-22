@@ -72,7 +72,7 @@ func animation_loop():
 			set_dir(0)
 			state_machine.travel("idle")
 	
-		if velocity.x == 0 && (abs(position.x - player.get_global_position().x) < 35) && (abs(position.y - player.get_global_position().y) < 35)  && Global.health > -1:
+		if velocity.x == 0 && (abs(position.x - player.get_global_position().x) < 35) && (abs(position.y - player.get_global_position().y) < 35)  && health > -1:
 			state_machine.travel("attack")
 			anim_finished = false
 			$AnimationDelay.start()
@@ -194,7 +194,7 @@ func _on_AnimationDelay_timeout():
 # deal damage to player when attacking hitbox collides with player
 func _on_HitBox_body_entered(body):
 	if "Warrior" in body.name:
-		body.hurt()
+		body.hurt(20)
 
 # called when attacking, toggles the hitbox on/off
 func toggle_hitbox():
