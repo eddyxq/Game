@@ -104,7 +104,7 @@ func movement_loop():
 	velocity = move_and_slide(velocity, Vector2(0, -1))
 
 # update health bar
-func apply_damage():
+func apply_damage(damage_multiplier):
 	play_hurt_sfx()
 	# damage formula: normal damage value can be up to the maximum strength
 	# critical hits add additional damage equal to the strength
@@ -116,7 +116,7 @@ func apply_damage():
 	if randi() % 100+1 <= int(30):
 		crit = true
 		# dmg += int(Global.profile.player_strength.stringValue)
-		dmg += int(10)
+		dmg += int(10) * damage_multiplier
 	health -= dmg
 	health_bar.value = health
 	$FCTMgr.show_value(dmg, crit)

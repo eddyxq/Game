@@ -31,8 +31,9 @@ const max_hp = 6
 # references to child nodes
 onready var http : HTTPRequest = $HTTPRequest
 
-# range attack hit box
+# skill scenes
 const PROJECTILE = preload("res://scenes/Projectile.tscn")
+const ROCK_STRIKE = preload("res://scenes/Rock_Strike.tscn")
 # world constants
 const GRAVITY = 18
 
@@ -93,8 +94,12 @@ func animation_loop(attack, skill1, skill2, skill3, skill4, skill5):
 			movement_speed = base_speed * boost_speed_modifier
 			play_animation("buff")
 			apply_delay()
-		elif skill3 && skill_slot3_off_cooldown:
-			pass
+		elif skill3 && skill_slot3_off_cooldown && is_on_floor():
+			anim_finished = false
+			skill_slot3_off_cooldown = false
+			$Skill3Cooldown.start()
+			play_animation("rock_strike")
+			apply_delay()
 		elif skill4 && skill_slot4_off_cooldown:
 			pass
 		elif skill5 && skill_slot5_off_cooldown:
@@ -169,6 +174,10 @@ func play_atk_sfx():
 func play_swoosh_sfx():
 	SoundManager.play_sfx(load("res://audio/sfx/swoosh.ogg"), 0)
 	
+# plays a rock sfx
+func play_rock_sfx():
+	SoundManager.play_sfx(load("res://audio/sfx/rock.ogg"), 0)
+	
 # plays a footstep sfx
 func play_footstep_sfx():
 	SoundManager.play_sfx(load("res://audio/sfx/footstep.ogg"), 0)
@@ -195,6 +204,16 @@ func distance_blade():
 	get_parent().add_child(projectile)
 	projectile.position = $PositionCenter.global_position
 	projectile.set_projectile_direction(dir)
+
+func rock_strike():
+	var projectile = ROCK_STRIKE.instance()
+	get_parent().add_child(projectile)
+	if dir == DIRECTION.E:
+		projectile.position.x = $PositionCenter.global_position.x + 28
+	else: 
+		projectile.position.x = $PositionCenter.global_position.x - 28
+	projectile.position.y = $PositionCenter.global_position.y + 36
+	projectile.set_projectile_direction(dir) 
 
 # initializes the state machine for managing animation state transitions
 func setup_state_machine():
@@ -267,7 +286,7 @@ func _on_IFrame_timeout():
 # applies damage when hitbox collide with enemies
 func _on_HitBox_body_entered(body):
 	if "Enemy" in body.name:
-		body.apply_damage()
+		body.apply_damage(1)
 
 # time used to countdown the animation of skill2 buff
 func _on_ghost_timer_timeout():
