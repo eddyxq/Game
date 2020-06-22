@@ -66,7 +66,6 @@ func _ready():
 
 # animation logic
 func animation_loop(attack, skill1, skill2, skill3, skill4, skill5, item1, item2):
-	print(mana)
 	# disable animations while player is attacking
 	if anim_finished: 
 		# moving state
