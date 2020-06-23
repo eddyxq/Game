@@ -643,6 +643,7 @@ script = ExtResource( 2 )
 [node name="PositionCenter" type="Position2D" parent="."]
 
 [node name="Sprite" type="Sprite" parent="."]
+light_mask = 0
 material = SubResource( 2 )
 texture = ExtResource( 1 )
 vframes = 23
@@ -688,7 +689,7 @@ wait_time = 5.0
 one_shot = true
 
 [node name="Skill2Duration" type="Timer" parent="Skill2Cooldown"]
-wait_time = 2.0
+wait_time = 3.0
 one_shot = true
 
 [node name="Skill3Cooldown" type="Timer" parent="."]
@@ -701,11 +702,11 @@ one_shot = true
 one_shot = true
 
 [node name="Item1Cooldown" type="Timer" parent="."]
-wait_time = 30.0
+wait_time = 10.0
 one_shot = true
 
 [node name="Item2Cooldown" type="Timer" parent="."]
-wait_time = 30.0
+wait_time = 10.0
 one_shot = true
 
 [node name="HealthRecovery" type="Timer" parent="."]
@@ -756,7 +757,6 @@ environment = SubResource( 51 )
 [node name="Light2D" type="Light2D" parent="."]
 texture = ExtResource( 4 )
 texture_scale = 0.2
-energy = 0.5
 shadow_enabled = true
 [connection signal="timeout" from="Skill1Cooldown" to="." method="_on_Skill1Cooldown_timeout"]
 [connection signal="timeout" from="Skill2Cooldown" to="." method="_on_Skill2Cooldown_timeout"]
@@ -764,6 +764,8 @@ shadow_enabled = true
 [connection signal="timeout" from="Skill3Cooldown" to="." method="_on_Skill3Cooldown_timeout"]
 [connection signal="timeout" from="Skill4Cooldown" to="." method="_on_Skill4Cooldown_timeout"]
 [connection signal="timeout" from="Skill5Cooldown" to="." method="_on_Skill5Cooldown_timeout"]
+[connection signal="timeout" from="Item1Cooldown" to="." method="_on_Item1Cooldown_timeout"]
+[connection signal="timeout" from="Item2Cooldown" to="." method="_on_Item2Cooldown_timeout"]
 [connection signal="timeout" from="HealthRecovery" to="." method="_on_HealthRecovery_timeout"]
 [connection signal="timeout" from="ManaRecovery" to="." method="_on_ManaRecovery_timeout"]
 [connection signal="timeout" from="AnimationDelay" to="." method="_on_AnimationDelay_timeout"]

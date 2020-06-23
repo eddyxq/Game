@@ -38,7 +38,6 @@ tile_data = PoolIntArray( 458766, 15, 0, 458767, 10, 0, 458768, 11, 0, 458769, 1
 
 [node name="Portal" parent="." instance=ExtResource( 4 )]
 position = Vector2( 120, 336 )
-target_scene = "\"\""
 
 [node name="Portal2" parent="." instance=ExtResource( 4 )]
 position = Vector2( 768, 288 )

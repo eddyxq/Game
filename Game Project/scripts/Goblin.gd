@@ -38,6 +38,8 @@ var anim_finished = true
 
 var direction_facing = DIRECTION.W
 
+var knockback = Vector2.ZERO
+
 # called when the node enters the scene tree for the first time
 func _ready():
 	health_bar.value = 100
@@ -86,7 +88,7 @@ func movement_loop():
 
 	if OS.get_ticks_msec() > next_jump_time and next_jump_time != -1 and is_on_floor():
 		if player.position.y < position.y - 64 and sees_player():
-			velocity.y = -550
+			velocity.y = -500
 		next_jump_time = -1
 
 	if player.position.y < position.y - 64 and next_jump_time == -1 and sees_player():
@@ -102,21 +104,25 @@ func movement_loop():
 	velocity.y += gravity 
 
 	velocity = move_and_slide(velocity, Vector2(0, -1))
+	
+	# not sure how to add vectors
+#	knockback = knockback.move_toward(Vector2.ZERO, 1000 * delta)
+#	knockback = move_and_slide(knockback)
 
 # update health bar
-func apply_damage(damage_multiplier):
+func hurt(skill_multiplier, intensity):
 	play_hurt_sfx()
 	# damage formula: normal damage value can be up to the maximum strength
 	# critical hits add additional damage equal to the strength
 	# var dmg = randi() % int(Global.profile.player_strength.stringValue) + 1
-	var dmg = (randi() % int(10) + 1) * damage_multiplier
+	var dmg = (randi() % int(10) + 1) * skill_multiplier
 	var crit = false
 	# critical when random number rolled out of 100 is within critical value
 	# if randi() % 100+1 <= int(Global.profile.player_critical.stringValue):
 	if randi() % 100+1 <= int(30):
 		crit = true
 		# dmg += int(Global.profile.player_strength.stringValue)
-		dmg += int(10) * damage_multiplier
+		dmg += int(10) * skill_multiplier
 	health -= dmg
 	health_bar.value = health
 	$FCTMgr.show_value(dmg, crit)
@@ -124,12 +130,21 @@ func apply_damage(damage_multiplier):
 	if health < 1:
 		is_dead = true
 		timer.start()
-		#sprite.play("dead")
 		state_machine.travel("dead")
 		play_death_sfx()
 		$CollisionShape2D.queue_free()
 		$HealthBar.queue_free()
 
+	# currently not active
+	knock_back(intensity)
+
+# knocks back the enemy a certain distance based on intensities
+func knock_back(intensity):
+	if direction_facing == DIRECTION.W:
+		knockback = Vector2(1,-1) * intensity
+	elif direction_facing == DIRECTION.E:
+		knockback = Vector2(-1,-1) * intensity
+	
 # init timer 
 func setup_timer():
 	timer = Timer.new()

@@ -11,6 +11,17 @@ enum DIRECTION {
 	E, # east/right
 }
 
+# user profile sstructure
+var profile = {
+	"player_name": {},
+	"player_lv": {},
+	"player_health": {},
+	"player_strength": {},
+	"player_defense": {},
+	"player_critical": {},
+	"player_exp": {}
+} 
+
 # default player direction
 var dir = DIRECTION.E
 
@@ -19,7 +30,7 @@ const jump_speed = 320
 const base_speed = 100
 const run_speed_modifier = 1.4
 const boost_speed_modifier = 2.5
-const atkmove_speed_modifier = 0.3
+const atkmove_speed_modifier = 0.2
 
 var movement_speed
 
@@ -300,6 +311,14 @@ func _on_Skill4Cooldown_timeout():
 func _on_Skill5Cooldown_timeout():
 	skill_slot5_off_cooldown = true
 
+# timer used to countdown until item1 is availiable
+func _on_Item1Cooldown_timeout():
+	item_slot1_off_cooldown = true
+
+# timer used to countdown until item2 is availiable
+func _on_Item2Cooldown_timeout():
+	item_slot2_off_cooldown = true
+
 # loads player profile from database
 func _on_HTTPRequest_request_completed(_result, response_code, _headers, body):
 	var result_body := JSON.parse(body.get_string_from_ascii()).result as Dictionary
@@ -316,7 +335,7 @@ func _on_IFrame_timeout():
 # applies damage when hitbox collide with enemies
 func _on_HitBox_body_entered(body):
 	if "Enemy" in body.name:
-		body.apply_damage(1)
+		body.hurt(1, 65)
 
 # time used to countdown the animation of skill2 buff
 func _on_ghost_timer_timeout():
@@ -329,3 +348,6 @@ func _on_ghost_timer_timeout():
 # toggles a circular lighting effect around the player
 func set_light_enabled(status):
 	$Light2D.set_enabled(status)
+
+
+
