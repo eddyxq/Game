@@ -1,4 +1,4 @@
-extends Area2D
+extends RigidBody2D
 
 # determines the drop rate
 # range: 0.00 - 1.00
@@ -23,11 +23,12 @@ func drop(calling_node):
 		
 	return false 
 
-# opens chest when player is nearby
+# opens chest when player is presses 'e' near it
 # TODO: add loot, pause player movement?
 func _input(event):
 	if (Input.is_action_just_pressed("ui_interact")):
-		var bodies = get_overlapping_bodies()
+		var bodies = $Area2D.get_overlapping_bodies()
+		#print(bodies)
 		for body in bodies:
 			if body.name == "Warrior":
 				$AnimatedSprite.play("open")

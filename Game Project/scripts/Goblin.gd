@@ -154,7 +154,7 @@ func spawn_chest():
 func drop_loot():
 	spawn_chest()
 	var coin_amount = COIN_DROPPER.drop(self)
-	print(coin_amount)
+	#print(coin_amount)
 	emit_signal("loot_done")
 	
 # wait_time: in seconds
@@ -169,7 +169,7 @@ func wait_and_execute(wait_time, function):
 # despawns and removes sprite
 func on_timeout_complete():
 	$Sprite.visible = false
-	# wait 0.5 seconds then try to spawn chest
+	# wait 0.5 seconds then try to spawn loot
 	wait_and_execute(0.5, "drop_loot")
 	# wait until loot is done then queue_free
 	yield(self, "loot_done")

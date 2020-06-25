@@ -15,22 +15,41 @@ animations = [ {
 } ]
 
 [sub_resource type="RectangleShape2D" id=2]
-extents = Vector2( 10.4201, 9.71273 )
+extents = Vector2( 12.3957, 9.6465 )
 
-[node name="Area2D" type="Area2D"]
-position = Vector2( 52.062, -5.54589 )
+[node name="RigidBody2D" type="RigidBody2D"]
+position = Vector2( 0.6959, -3.13152 )
+z_as_relative = false
+collision_layer = 0
+collision_mask = 4
+mode = 2
+gravity_scale = 5.0
 script = ExtResource( 5 )
 __meta__ = {
 "_edit_group_": true
 }
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
-position = Vector2( 0, 0.214638 )
 frames = SubResource( 1 )
 animation = "open"
+__meta__ = {
+"_edit_group_": true
+}
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2( -0.573395, 7.10401 )
+position = Vector2( -0.579918, 7.1909 )
+shape = SubResource( 2 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="Area2D" type="Area2D" parent="."]
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Area2D"]
+position = Vector2( -0.579918, 7.1909 )
 shape = SubResource( 2 )
 __meta__ = {
 "_edit_group_": true
