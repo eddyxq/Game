@@ -20,9 +20,13 @@ var skill5 # 5 number key
 var item1  # q / x
 var item2  # e / c
 
-# references to the player and UI
+# references to child nodes
 onready var player = $Warrior
 onready var ui = $HUD/UI
+onready var scene_changer = $HUD/SceneChanger/AnimationPlayer
+
+func _ready():
+	scene_changer.play_backwards("fade")
 
 # called every delta
 func _physics_process(_delta):
@@ -69,3 +73,4 @@ func _physics_process(_delta):
 		player.set_light_enabled(true)
 	else:
 		player.set_light_enabled(false)
+

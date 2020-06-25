@@ -1,13 +1,13 @@
 [gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://scripts/Controller.gd" type="Script" id=1]
-[ext_resource path="res://audio/music/dark_day.ogg" type="AudioStream" id=2]
 [ext_resource path="res://scenes/Goblin.tscn" type="PackedScene" id=3]
 [ext_resource path="res://scenes/UI.tscn" type="PackedScene" id=4]
 [ext_resource path="res://scenes/Pause.tscn" type="PackedScene" id=5]
 [ext_resource path="res://scenes/Warrior.tscn" type="PackedScene" id=6]
 [ext_resource path="res://scenes/FPSMonitor.tscn" type="PackedScene" id=7]
 [ext_resource path="res://scenes/ForestStage.tscn" type="PackedScene" id=8]
+[ext_resource path="res://scenes/SceneChanger.tscn" type="PackedScene" id=9]
 
 [node name="Controller" type="Node2D"]
 position = Vector2( 1, 0 )
@@ -24,11 +24,9 @@ position = Vector2( 450.208, 257.034 )
 [node name="Warrior" parent="." instance=ExtResource( 6 )]
 position = Vector2( 13.9219, 221.904 )
 
-[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
-stream = ExtResource( 2 )
-volume_db = -20.0
-
 [node name="HUD" type="CanvasLayer" parent="."]
+
+[node name="SceneChanger" parent="HUD" instance=ExtResource( 9 )]
 
 [node name="UI" parent="HUD" instance=ExtResource( 4 )]
 anchor_right = 0.0
