@@ -571,6 +571,7 @@ glow_enabled = true
 glow_intensity = 0.12
 
 [node name="Warrior" type="KinematicBody2D"]
+z_index = 1
 script = ExtResource( 2 )
 
 [node name="PositionCenter" type="Position2D" parent="."]
@@ -580,7 +581,7 @@ material = SubResource( 2 )
 texture = ExtResource( 1 )
 vframes = 23
 hframes = 8
-frame = 41
+frame = 39
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 anims/attack1 = SubResource( 3 )

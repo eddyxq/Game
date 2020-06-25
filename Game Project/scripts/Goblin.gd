@@ -3,6 +3,8 @@ extends KinematicBody2D
 ###############################################################################
 # goblin enemy class
 ###############################################################################
+const CHEST = preload("res://scenes/chest.tscn")
+var COIN_DROPPER = preload("res://scenes/coin_dropper.tscn").instance()
 
 enum DIRECTION {
 	N, # north/up
@@ -37,6 +39,8 @@ var state_machine
 var anim_finished = true
 
 var direction_facing = DIRECTION.W
+
+signal loot_done
 
 # called when the node enters the scene tree for the first time
 func _ready():
@@ -117,7 +121,8 @@ func apply_damage():
 		crit = true
 		# dmg += int(Global.profile.player_strength.stringValue)
 		dmg += int(10)
-	health -= dmg
+	# REMOVE 5x MULTIPLIER!!
+	health -= dmg*5
 	health_bar.value = health
 	$FCTMgr.show_value(dmg, crit)
 	
@@ -129,6 +134,7 @@ func apply_damage():
 		play_death_sfx()
 		$CollisionShape2D.queue_free()
 		$HealthBar.queue_free()
+		
 
 # init timer 
 func setup_timer():
@@ -137,8 +143,36 @@ func setup_timer():
 	timer.connect("timeout", self, "on_timeout_complete")
 	add_child(timer)
 
+# spawns chest with respect to drop rate
+func spawn_chest():
+	# spawn chest
+	var chest = CHEST.instance()
+	# drop chest with respect to DROPRATE
+	chest.drop(self)
+
+# drops loot which can be a chest and/or coins
+func drop_loot():
+	spawn_chest()
+	var coin_amount = COIN_DROPPER.drop(self)
+	print(coin_amount)
+	emit_signal("loot_done")
+	
+# wait_time: in seconds
+# function: function to execute
+func wait_and_execute(wait_time, function):
+	var my_timer = Timer.new()
+	my_timer.set_wait_time(wait_time)
+	my_timer.connect("timeout", self, function)
+	add_child(my_timer)
+	my_timer.start()
+	
 # despawns and removes sprite
 func on_timeout_complete():
+	$Sprite.visible = false
+	# wait 0.5 seconds then try to spawn chest
+	wait_and_execute(0.5, "drop_loot")
+	# wait until loot is done then queue_free
+	yield(self, "loot_done")
 	queue_free()
 
 # plays a enemy dying sfx
