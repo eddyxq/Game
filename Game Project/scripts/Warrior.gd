@@ -51,11 +51,15 @@ var skill_slot3_off_cooldown = true
 var skill_slot4_off_cooldown = true
 var skill_slot5_off_cooldown = true
 
+var magnet = false
 # called when the node enters the scene tree for the first time
 func _ready():
 	# Firebase.get_document("users/%s" % Firebase.user_info.id, http)
 	setup_state_machine()
-
+	# coin magnet
+	enable_item_magnet()
+	
+	
 # animation logic
 func animation_loop(attack, skill1, skill2, skill3, skill4, skill5):
 	# disable animations while player is attacking
@@ -268,6 +272,8 @@ func _on_IFrame_timeout():
 func _on_HitBox_body_entered(body):
 	if "Enemy" in body.name:
 		body.apply_damage()
+		
+	
 
 # time used to countdown the animation of skill2 buff
 func _on_ghost_timer_timeout():
@@ -279,3 +285,14 @@ func _on_ghost_timer_timeout():
 
 func set_light_enabled(status):
 	$Light2D.set_enabled(status)
+
+
+# changes center of gravity to player so coins will be attracted to it
+func enable_item_magnet():
+	$Area2D.set_space_override_mode(3)
+	$Area2D.set_gravity_is_point(true)
+	$Area2D.set_gravity_vector(Vector2(0, 0))
+
+		
+
+	
