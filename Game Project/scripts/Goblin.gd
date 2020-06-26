@@ -4,6 +4,9 @@ extends KinematicBody2D
 # goblin enemy class
 ###############################################################################
 
+const CHEST = preload("res://scenes/chest.tscn")
+var COIN_DROPPER = preload("res://scenes/coin_dropper.tscn").instance()
+
 enum DIRECTION {
 	N, # north/up
 	S, # south/down
@@ -37,6 +40,8 @@ var state_machine
 var anim_finished = true
 
 var direction_facing = DIRECTION.W
+
+signal loot_done
 
 var knockback = Vector2.ZERO
 
@@ -154,6 +159,11 @@ func setup_timer():
 
 # despawns and removes sprite
 func on_timeout_complete():
+	$Sprite.visible = false
+	# wait 0.5 seconds then try to spawn loot
+	wait_and_execute(0.5, "drop_loot")
+	# wait until loot is done then queue_free
+	yield(self, "loot_done")
 	queue_free()
 
 # plays a enemy dying sfx
@@ -240,3 +250,26 @@ func turn_around():
 # plays a hurt sfx
 func play_hurt_sfx():
 	SoundManager.play_sfx(load("res://audio/sfx/hit.ogg"), 0)
+
+# spawns chest with respect to drop rate
+func spawn_chest():
+	# spawn chest
+	var chest = CHEST.instance()
+	# drop chest with respect to DROPRATE
+	chest.drop(self)
+
+# drops loot which can be a chest and/or coins
+func drop_loot():
+	spawn_chest()
+	var coin_amount = COIN_DROPPER.drop(self)
+	#print(coin_amount)
+	emit_signal("loot_done")
+	
+# wait_time: in seconds
+# function: function to execute
+func wait_and_execute(wait_time, function):
+	var my_timer = Timer.new()
+	my_timer.set_wait_time(wait_time)
+	my_timer.connect("timeout", self, function)
+	add_child(my_timer)
+	my_timer.start()
