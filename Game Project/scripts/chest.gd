@@ -20,16 +20,18 @@ func drop(calling_node):
 		calling_node.get_parent().add_child(self)
 		position = calling_node.get_global_position()
 		return true
-		
 	return false 
 
-# opens chest when player is presses 'e' near it
+# opens chest when player is presses 'f' near it
 # TODO: add loot, pause player movement?
 func _input(_event):
 	if (Input.is_action_just_pressed("ui_interact")):
 		var bodies = $Area2D.get_overlapping_bodies()
-		#print(bodies)
 		for body in bodies:
 			if body.name == "Warrior":
+				play_chest_sfx()
 				$AnimatedSprite.play("open")
-				# give loot
+
+# plays a chest opening sfx
+func play_chest_sfx():
+	SoundManager.play_sfx(load("res://audio/sfx/chest.ogg"), 1)

@@ -120,7 +120,7 @@ func hurt(skill_multiplier, intensity):
 	# damage formula: normal damage value can be up to the maximum strength
 	# critical hits add additional damage equal to the strength
 	# var dmg = randi() % int(Global.profile.player_strength.stringValue) + 1
-	var dmg = (randi() % int(10) + 1) * skill_multiplier
+	var dmg = (randi() % int(10) + 4) * skill_multiplier 
 	var crit = false
 	# critical when random number rolled out of 100 is within critical value
 	# if randi() % 100+1 <= int(Global.profile.player_critical.stringValue):
