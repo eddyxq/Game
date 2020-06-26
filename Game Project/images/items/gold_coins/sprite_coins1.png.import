@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/mp_pot_large.png-3b404431cf53f9db93d396ed279c641e.stex"
+path="res://.import/sprite_coins1.png-634a098af4ca60a6913ebcbf1307b833.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://images/items/mp_pot_large.png"
-dest_files=[ "res://.import/mp_pot_large.png-3b404431cf53f9db93d396ed279c641e.stex" ]
+source_file="res://images/items/gold_coins/sprite_coins1.png"
+dest_files=[ "res://.import/sprite_coins1.png-634a098af4ca60a6913ebcbf1307b833.stex" ]
 
 [params]
 

@@ -1,6 +1,6 @@
 extends Node2D
 
-const COIN = preload("res://scenes/coin.tscn")
+const COIN = preload("res://scenes/Coin.tscn")
 # maximum number of coins to drop
 var max_drop = 5
 # some RNG functions seem to be broken
@@ -15,7 +15,7 @@ func _ready():
 # Return: number of coins dropped
 func drop(calling_node):
 	var coin_amount = (randi() % max_drop) + 1
-	for i in range(coin_amount):
+	for _i in range(coin_amount):
 		var a_coin = COIN.instance()
 		#a_coin.apply_scale(Vector2(0.5, 0.5))
 		calling_node.get_parent().add_child(a_coin)

@@ -25,7 +25,7 @@ func drop(calling_node):
 
 # opens chest when player is presses 'e' near it
 # TODO: add loot, pause player movement?
-func _input(event):
+func _input(_event):
 	if (Input.is_action_just_pressed("ui_interact")):
 		var bodies = $Area2D.get_overlapping_bodies()
 		#print(bodies)

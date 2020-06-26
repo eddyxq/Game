@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/sprite_coins2.png-991ea83bf56c23a5a6240498ad254037.stex"
+path="res://.import/sprite_coins0.png-ffc2203b11b62a98f6f607f7abdcbc1d.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://images/items/coin_sprites/sprite_coins2.png"
-dest_files=[ "res://.import/sprite_coins2.png-991ea83bf56c23a5a6240498ad254037.stex" ]
+source_file="res://images/items/gold_coins/sprite_coins0.png"
+dest_files=[ "res://.import/sprite_coins0.png-ffc2203b11b62a98f6f607f7abdcbc1d.stex" ]
 
 [params]
 
@@ -20,7 +20,7 @@ compress/hdr_mode=0
 compress/bptc_ldr=0
 compress/normal_map=0
 flags/repeat=0
-flags/filter=true
+flags/filter=false
 flags/mipmaps=false
 flags/anisotropic=false
 flags/srgb=2

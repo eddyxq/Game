@@ -15,8 +15,8 @@ func _ready():
 	$Skill_Slot3.set_texture_from_path("res://images/skill_icons/icon3.png")
 	$Skill_Slot4.set_texture_from_path("res://images/skill_icons/icon4.png")
 	$Skill_Slot5.set_texture_from_path("res://images/skill_icons/icon5.png")
-	$Item_Slot1.set_texture_from_path("res://images/items/hp_pot_small.png")
-	$Item_Slot2.set_texture_from_path("res://images/items/mp_pot_small.png")
+	$Item_Slot1.set_texture_from_path("res://images/items/potions/hp_pot_small.png")
+	$Item_Slot2.set_texture_from_path("res://images/items/potions/mp_pot_small.png")
 
 
 # applies cooldown animations to skill

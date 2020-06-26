@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/mp_pot_small.png-fce9e93920b1f956d1689bc268992259.stex"
+path="res://.import/hp_pot_small.png-799ebe8df11bde3fcaaef54b32079134.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://images/items/mp_pot_small.png"
-dest_files=[ "res://.import/mp_pot_small.png-fce9e93920b1f956d1689bc268992259.stex" ]
+source_file="res://images/items/potions/hp_pot_small.png"
+dest_files=[ "res://.import/hp_pot_small.png-799ebe8df11bde3fcaaef54b32079134.stex" ]
 
 [params]
 

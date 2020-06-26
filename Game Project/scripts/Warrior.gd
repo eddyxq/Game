@@ -350,7 +350,7 @@ func set_light_enabled(status):
 	$Light2D.set_enabled(status)
 
 # changes center of gravity to player so coins will be attracted to it
-func _on_Area2D_body_entered(body):
+func _on_Area2D_body_entered(_body):
 	$Area2D.set_space_override_mode(3)
 	$Area2D.set_gravity_is_point(true)
 	$Area2D.set_gravity_vector(Vector2(0, 0))

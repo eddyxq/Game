@@ -4,8 +4,8 @@ extends KinematicBody2D
 # goblin enemy class
 ###############################################################################
 
-const CHEST = preload("res://scenes/chest.tscn")
-var COIN_DROPPER = preload("res://scenes/coin_dropper.tscn").instance()
+const CHEST = preload("res://scenes/Chest.tscn")
+var COIN_DROPPER = preload("res://scenes/CoinDropper.tscn").instance()
 
 enum DIRECTION {
 	N, # north/up
@@ -261,7 +261,7 @@ func spawn_chest():
 # drops loot which can be a chest and/or coins
 func drop_loot():
 	spawn_chest()
-	var coin_amount = COIN_DROPPER.drop(self)
+	var _coin_amount = COIN_DROPPER.drop(self)
 	#print(coin_amount)
 	emit_signal("loot_done")
 	
