@@ -3,6 +3,7 @@ extends KinematicBody2D
 ###############################################################################
 # goblin enemy class
 ###############################################################################
+
 const CHEST = preload("res://scenes/chest.tscn")
 var COIN_DROPPER = preload("res://scenes/coin_dropper.tscn").instance()
 
@@ -13,7 +14,7 @@ enum DIRECTION {
 	E, # east/right
 }
 
-const base_speed = 135
+const base_speed = 100
 var gravity = 18
 
 var health = 100
@@ -41,6 +42,8 @@ var anim_finished = true
 var direction_facing = DIRECTION.W
 
 signal loot_done
+
+var knockback = Vector2.ZERO
 
 # called when the node enters the scene tree for the first time
 func _ready():
@@ -76,7 +79,7 @@ func animation_loop():
 			set_dir(0)
 			state_machine.travel("idle")
 	
-		if velocity.x == 0 && (abs(position.x - player.get_global_position().x) < 35) && (abs(position.y - player.get_global_position().y) < 35)  && Global.health > -1:
+		if velocity.x == 0 && (abs(position.x - player.get_global_position().x) < 35) && (abs(position.y - player.get_global_position().y) < 35)  && health > -1:
 			state_machine.travel("attack")
 			anim_finished = false
 			$AnimationDelay.start()
@@ -90,7 +93,7 @@ func movement_loop():
 
 	if OS.get_ticks_msec() > next_jump_time and next_jump_time != -1 and is_on_floor():
 		if player.position.y < position.y - 64 and sees_player():
-			velocity.y = -550
+			velocity.y = -500
 		next_jump_time = -1
 
 	if player.position.y < position.y - 64 and next_jump_time == -1 and sees_player():
@@ -106,36 +109,47 @@ func movement_loop():
 	velocity.y += gravity 
 
 	velocity = move_and_slide(velocity, Vector2(0, -1))
+	
+	# not sure how to add vectors
+#	knockback = knockback.move_toward(Vector2.ZERO, 1000 * delta)
+#	knockback = move_and_slide(knockback)
 
 # update health bar
-func apply_damage():
+func hurt(skill_multiplier, intensity):
 	play_hurt_sfx()
 	# damage formula: normal damage value can be up to the maximum strength
 	# critical hits add additional damage equal to the strength
 	# var dmg = randi() % int(Global.profile.player_strength.stringValue) + 1
-	var dmg = randi() % int(10) + 1
+	var dmg = (randi() % int(10) + 1) * skill_multiplier
 	var crit = false
 	# critical when random number rolled out of 100 is within critical value
 	# if randi() % 100+1 <= int(Global.profile.player_critical.stringValue):
 	if randi() % 100+1 <= int(30):
 		crit = true
 		# dmg += int(Global.profile.player_strength.stringValue)
-		dmg += int(10)
-	# REMOVE 5x MULTIPLIER!!
-	health -= dmg*5
+		dmg += int(10) * skill_multiplier
+	health -= dmg
 	health_bar.value = health
 	$FCTMgr.show_value(dmg, crit)
 	
 	if health < 1:
 		is_dead = true
 		timer.start()
-		#sprite.play("dead")
 		state_machine.travel("dead")
 		play_death_sfx()
 		$CollisionShape2D.queue_free()
 		$HealthBar.queue_free()
-		
 
+	# currently not active
+	knock_back(intensity)
+
+# knocks back the enemy a certain distance based on intensities
+func knock_back(intensity):
+	if direction_facing == DIRECTION.W:
+		knockback = Vector2(1,-1) * intensity
+	elif direction_facing == DIRECTION.E:
+		knockback = Vector2(-1,-1) * intensity
+	
 # init timer 
 func setup_timer():
 	timer = Timer.new()
@@ -143,29 +157,6 @@ func setup_timer():
 	timer.connect("timeout", self, "on_timeout_complete")
 	add_child(timer)
 
-# spawns chest with respect to drop rate
-func spawn_chest():
-	# spawn chest
-	var chest = CHEST.instance()
-	# drop chest with respect to DROPRATE
-	chest.drop(self)
-
-# drops loot which can be a chest and/or coins
-func drop_loot():
-	spawn_chest()
-	var coin_amount = COIN_DROPPER.drop(self)
-	#print(coin_amount)
-	emit_signal("loot_done")
-	
-# wait_time: in seconds
-# function: function to execute
-func wait_and_execute(wait_time, function):
-	var my_timer = Timer.new()
-	my_timer.set_wait_time(wait_time)
-	my_timer.connect("timeout", self, function)
-	add_child(my_timer)
-	my_timer.start()
-	
 # despawns and removes sprite
 func on_timeout_complete():
 	$Sprite.visible = false
@@ -228,7 +219,7 @@ func _on_AnimationDelay_timeout():
 # deal damage to player when attacking hitbox collides with player
 func _on_HitBox_body_entered(body):
 	if "Warrior" in body.name:
-		body.hurt()
+		body.hurt(20)
 
 # called when attacking, toggles the hitbox on/off
 func toggle_hitbox():
@@ -259,3 +250,26 @@ func turn_around():
 # plays a hurt sfx
 func play_hurt_sfx():
 	SoundManager.play_sfx(load("res://audio/sfx/hit.ogg"), 0)
+
+# spawns chest with respect to drop rate
+func spawn_chest():
+	# spawn chest
+	var chest = CHEST.instance()
+	# drop chest with respect to DROPRATE
+	chest.drop(self)
+
+# drops loot which can be a chest and/or coins
+func drop_loot():
+	spawn_chest()
+	var coin_amount = COIN_DROPPER.drop(self)
+	#print(coin_amount)
+	emit_signal("loot_done")
+	
+# wait_time: in seconds
+# function: function to execute
+func wait_and_execute(wait_time, function):
+	var my_timer = Timer.new()
+	my_timer.set_wait_time(wait_time)
+	my_timer.connect("timeout", self, function)
+	add_child(my_timer)
+	my_timer.start()

@@ -1,45 +1,61 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=11 format=2]
 
-[ext_resource path="res://images/skill_sprites/distance_blade_right.png" type="Texture" id=1]
+[ext_resource path="res://images/skill_sprites/distance_blade.png" type="Texture" id=1]
 [ext_resource path="res://scripts/Projectile.gd" type="Script" id=2]
-[ext_resource path="res://images/skill_sprites/distance_blade_left.png" type="Texture" id=3]
+
+[sub_resource type="AtlasTexture" id=5]
+atlas = ExtResource( 1 )
+region = Rect2( 0, 0, 63, 45 )
+
+[sub_resource type="AtlasTexture" id=6]
+atlas = ExtResource( 1 )
+region = Rect2( 63, 0, 63, 45 )
+
+[sub_resource type="AtlasTexture" id=7]
+atlas = ExtResource( 1 )
+region = Rect2( 0, 45, 63, 45 )
+
+[sub_resource type="AtlasTexture" id=8]
+atlas = ExtResource( 1 )
+region = Rect2( 63, 45, 63, 45 )
 
 [sub_resource type="SpriteFrames" id=1]
 animations = [ {
-"frames": [ ExtResource( 1 ) ],
+"frames": [ SubResource( 5 ), SubResource( 6 ) ],
 "loop": true,
 "name": "shoot_right",
-"speed": 15.0
+"speed": 5.0
 }, {
-"frames": [ ExtResource( 3 ) ],
+"frames": [ SubResource( 7 ), SubResource( 8 ) ],
 "loop": true,
 "name": "shoot_left",
-"speed": 15.0
+"speed": 5.0
 } ]
 
 [sub_resource type="Curve" id=2]
 _data = [ Vector2( 0.00619195, 0.972727 ), 0.0, 0.0, 0, 0, Vector2( 0.996904, 0.263636 ), -0.331525, 0.0, 0, 0 ]
 
 [sub_resource type="Gradient" id=3]
-offsets = PoolRealArray( 0.00333333, 1 )
-colors = PoolColorArray( 1, 1, 1, 1, 0.0245667, 0.140628, 0.898438, 1 )
+offsets = PoolRealArray( 0.0041841, 0.0125523, 1 )
+colors = PoolColorArray( 1, 1, 1, 1, 1, 1, 1, 1, 0.792969, 0.198242, 0.198242, 1 )
 
 [sub_resource type="RectangleShape2D" id=4]
-extents = Vector2( 4.70899, 7.08297 )
+extents = Vector2( 8, 8 )
 
 [node name="Projectile" type="Area2D"]
-scale = Vector2( 1.5, 1.5 )
 collision_layer = 8
 collision_mask = 2
 script = ExtResource( 2 )
 
 [node name="ProjectileSprite" type="AnimatedSprite" parent="."]
+position = Vector2( -5.33333, 0 )
+scale = Vector2( 0.5, 0.75 )
 z_index = 4
 frames = SubResource( 1 )
-frame = 2
+animation = "shoot_right"
 playing = true
 
-[node name="CPUParticles2D" type="CPUParticles2D" parent="ProjectileSprite"]
+[node name="CPUParticles2D" type="CPUParticles2D" parent="."]
 show_behind_parent = true
 amount = 30
 lifetime = 0.5
@@ -55,9 +71,15 @@ scale_amount_curve = SubResource( 2 )
 color_ramp = SubResource( 3 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2( -5.33333, 0 )
 scale = Vector2( 2, 2 )
 shape = SubResource( 4 )
 
-[node name="VisibilityNotifier2D" type="VisibilityNotifier2D" parent="."]
+[node name="Sprite" type="Sprite" parent="."]
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 0.4
+one_shot = true
+autostart = true
 [connection signal="body_entered" from="." to="." method="_on_Projectile_body_entered"]
-[connection signal="screen_exited" from="VisibilityNotifier2D" to="." method="_on_VisibilityNotifier2D_screen_exited"]
+[connection signal="timeout" from="Timer" to="." method="_on_Timer_timeout"]

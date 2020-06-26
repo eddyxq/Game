@@ -35,6 +35,21 @@ volume_db = -15.0
 [node name="sfxPlayer5" type="AudioStreamPlayer2D" parent="SFX"]
 volume_db = -15.0
 
+[node name="sfxPlayer6" type="AudioStreamPlayer2D" parent="SFX"]
+volume_db = -15.0
+
+[node name="sfxPlayer7" type="AudioStreamPlayer2D" parent="SFX"]
+volume_db = -15.0
+
+[node name="sfxPlayer8" type="AudioStreamPlayer2D" parent="SFX"]
+volume_db = -15.0
+
+[node name="sfxPlayer9" type="AudioStreamPlayer2D" parent="SFX"]
+volume_db = -15.0
+
+[node name="sfxPlayer10" type="AudioStreamPlayer2D" parent="SFX"]
+volume_db = -15.0
+
 [node name="Preload" type="Node2D" parent="."]
 
 [node name="Crash" type="AudioStreamPlayer2D" parent="Preload"]

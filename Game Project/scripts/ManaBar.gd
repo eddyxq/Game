@@ -9,32 +9,32 @@ func _ready():
 
 # updates the amount of filled mana orbs to the amount of mana player has
 # consider re-writting this logic with a loop
-func update():
-	if Global.mana == 1:
+func update_bar(mana):
+	if mana == 1:
 		hide_all()
 		$orb1.visible = true
-	elif Global.mana == 2:
+	elif mana == 2:
 		hide_all()
 		$orb1.visible = true
 		$orb2.visible = true
-	elif Global.mana == 3:
+	elif mana == 3:
 		hide_all()
 		$orb1.visible = true
 		$orb2.visible = true
 		$orb3.visible = true
-	elif Global.mana == 4:
+	elif mana == 4:
 		hide_all()
 		$orb1.visible = true
 		$orb2.visible = true
 		$orb3.visible = true
 		$orb4.visible = true
-	elif Global.mana == 5:
+	elif mana == 5:
 		$orb1.visible = true
 		$orb2.visible = true
 		$orb3.visible = true
 		$orb4.visible = true
 		$orb5.visible = true
-	elif Global.mana == 6:
+	elif mana == 6:
 		$orb1.visible = true
 		$orb2.visible = true
 		$orb3.visible = true

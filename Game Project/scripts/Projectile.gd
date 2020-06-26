@@ -20,32 +20,30 @@ func set_projectile_direction(dir):
 
 func _physics_process(delta):
 	shoot_projectile(delta, projectile_dir)
-
-# remove projectile when it leaves the screen
-func _on_VisibilityNotifier2D_screen_exited():
-	queue_free()
 	
 # detect collision with enemies
 func _on_Projectile_body_entered(body):
 	if "Enemy" in body.name:
-		var num_hits = 3
-		for _i in range(num_hits):
-			body.apply_damage()
+		body.hurt(2, 400)
 		play_explosion_sfx()
 		$CollisionShape2D.queue_free()
+		$CPUParticles2D.queue_free()
 		$ProjectileSprite.visible = false
 
 # shoots the projectile
 func shoot_projectile(delta, dir):
 	if dir == DIRECTION.W:
 		velocity.x = -(SPEED * delta)
-		translate(velocity)
 		$ProjectileSprite.play("shoot_left")
 	elif dir == DIRECTION.E:
 		velocity.x = SPEED * delta 
-		translate(velocity)
 		$ProjectileSprite.play("shoot_right")
-		
+	translate(velocity)
+	
 # plays a explosion sfx
 func play_explosion_sfx():
 	SoundManager.play_sfx(load("res://audio/sfx/explosion.ogg"), 1)
+
+# despawn timer
+func _on_Timer_timeout():
+	queue_free()
