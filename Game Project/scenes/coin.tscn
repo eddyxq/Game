@@ -6,7 +6,7 @@
 [ext_resource path="res://images/items/gold_coins/sprite_coins5.png" type="Texture" id=4]
 [ext_resource path="res://images/items/gold_coins/sprite_coins1.png" type="Texture" id=5]
 [ext_resource path="res://images/items/gold_coins/sprite_coins2.png" type="Texture" id=6]
-[ext_resource path="res://scripts/coin.gd" type="Script" id=7]
+[ext_resource path="res://scripts/Coin.gd" type="Script" id=7]
 
 [sub_resource type="SpriteFrames" id=1]
 animations = [ {
@@ -19,7 +19,7 @@ animations = [ {
 [sub_resource type="RectangleShape2D" id=2]
 extents = Vector2( 5.62166, 5.72647 )
 
-[node name="RigidBody2D" type="RigidBody2D"]
+[node name="Coin" type="RigidBody2D"]
 position = Vector2( 9.64569, 6.86137 )
 mode = 2
 gravity_scale = 5.0
@@ -32,7 +32,6 @@ __meta__ = {
 scale = Vector2( 0.5, 0.5 )
 frames = SubResource( 1 )
 animation = "spin"
-frame = 1
 playing = true
 __meta__ = {
 "_edit_group_": true

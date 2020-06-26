@@ -2,7 +2,7 @@ extends RigidBody2D
 
 # determines the drop rate
 # range: 0.00 - 1.00
-var drop_rate = 0.25
+var drop_rate = 1
 
 
 # Called when the node enters the scene tree for the first time.

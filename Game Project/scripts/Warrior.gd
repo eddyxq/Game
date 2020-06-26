@@ -231,6 +231,10 @@ func play_death_sfx():
 func play_potion_sfx():
 	SoundManager.play_sfx(load("res://audio/sfx/potion.ogg"), 0)
 	
+# plays a coin sfx
+func play_coin_sfx():
+	SoundManager.play_sfx(load("res://audio/sfx/coin.ogg"), 0)
+	
 # hitbox for detecting normal attack collisions with enemies
 func toggle_hitbox():
 	$HitBox/CollisionShape2D.disabled = not $HitBox/CollisionShape2D.disabled
@@ -350,7 +354,9 @@ func set_light_enabled(status):
 	$Light2D.set_enabled(status)
 
 # changes center of gravity to player so coins will be attracted to it
-func _on_Area2D_body_entered(_body):
-	$Area2D.set_space_override_mode(3)
-	$Area2D.set_gravity_is_point(true)
-	$Area2D.set_gravity_vector(Vector2(0, 0))
+func _on_Area2D_body_entered(body):
+	if body.name == "Coin":
+		$Area2D.set_space_override_mode(3)
+		$Area2D.set_gravity_is_point(true)
+		$Area2D.set_gravity_vector(Vector2(0, 0))
+		play_coin_sfx()

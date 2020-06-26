@@ -1,15 +1,6 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=2 format=2]
 
 [ext_resource path="res://scripts/SoundManager.gd" type="Script" id=1]
-[ext_resource path="res://audio/sfx/invalid.ogg" type="AudioStream" id=2]
-[ext_resource path="res://audio/sfx/explosion.ogg" type="AudioStream" id=3]
-[ext_resource path="res://audio/sfx/sword_swing.ogg" type="AudioStream" id=4]
-[ext_resource path="res://audio/sfx/slime.ogg" type="AudioStream" id=5]
-[ext_resource path="res://audio/sfx/select.ogg" type="AudioStream" id=6]
-[ext_resource path="res://audio/sfx/projectile.ogg" type="AudioStream" id=7]
-[ext_resource path="res://audio/sfx/crash.ogg" type="AudioStream" id=8]
-[ext_resource path="res://audio/sfx/potion.ogg" type="AudioStream" id=9]
-[ext_resource path="res://audio/sfx/hurt.ogg" type="AudioStream" id=10]
 
 [node name="SoundManager" type="Node2D"]
 script = ExtResource( 1 )
@@ -50,31 +41,32 @@ volume_db = -15.0
 [node name="sfxPlayer10" type="AudioStreamPlayer2D" parent="SFX"]
 volume_db = -15.0
 
-[node name="Preload" type="Node2D" parent="."]
+[node name="sfxPlayer11" type="AudioStreamPlayer2D" parent="SFX"]
+volume_db = -15.0
 
-[node name="Crash" type="AudioStreamPlayer2D" parent="Preload"]
-stream = ExtResource( 8 )
+[node name="sfxPlayer12" type="AudioStreamPlayer2D" parent="SFX"]
+volume_db = -15.0
 
-[node name="Explosion" type="AudioStreamPlayer2D" parent="Preload"]
-stream = ExtResource( 3 )
+[node name="sfxPlayer13" type="AudioStreamPlayer2D" parent="SFX"]
+volume_db = -15.0
 
-[node name="Hurt" type="AudioStreamPlayer2D" parent="Preload"]
-stream = ExtResource( 10 )
+[node name="sfxPlayer14" type="AudioStreamPlayer2D" parent="SFX"]
+volume_db = -15.0
 
-[node name="Invalid" type="AudioStreamPlayer2D" parent="Preload"]
-stream = ExtResource( 2 )
+[node name="sfxPlayer15" type="AudioStreamPlayer2D" parent="SFX"]
+volume_db = -15.0
 
-[node name="Potion" type="AudioStreamPlayer2D" parent="Preload"]
-stream = ExtResource( 9 )
+[node name="sfxPlayer16" type="AudioStreamPlayer2D" parent="SFX"]
+volume_db = -15.0
 
-[node name="Projectile" type="AudioStreamPlayer2D" parent="Preload"]
-stream = ExtResource( 7 )
+[node name="sfxPlayer17" type="AudioStreamPlayer2D" parent="SFX"]
+volume_db = -15.0
 
-[node name="Select" type="AudioStreamPlayer2D" parent="Preload"]
-stream = ExtResource( 6 )
+[node name="sfxPlayer18" type="AudioStreamPlayer2D" parent="SFX"]
+volume_db = -15.0
 
-[node name="Slime" type="AudioStreamPlayer2D" parent="Preload"]
-stream = ExtResource( 5 )
+[node name="sfxPlayer19" type="AudioStreamPlayer2D" parent="SFX"]
+volume_db = -15.0
 
-[node name="Sword" type="AudioStreamPlayer2D" parent="Preload"]
-stream = ExtResource( 4 )
+[node name="sfxPlayer20" type="AudioStreamPlayer2D" parent="SFX"]
+volume_db = -15.0
