@@ -1,0 +1,88 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://images/ui/dialog-background.png" type="Texture" id=1]
+[ext_resource path="res://images/ui/next-indicator.png" type="Texture" id=2]
+[ext_resource path="res://fonts/monogram.ttf" type="DynamicFontData" id=3]
+[ext_resource path="res://scenes/DialogBox.gd" type="Script" id=4]
+
+[sub_resource type="DynamicFont" id=1]
+size = 15
+font_data = ExtResource( 3 )
+
+[sub_resource type="Animation" id=2]
+resource_name = "IDLE"
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.6 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector2( 467.04, 306.511 ), Vector2( 467.04, 308.5 ) ]
+}
+
+[node name="Control" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = -640.0
+margin_bottom = -360.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="DialogBox" type="Control" parent="."]
+margin_right = 296.0
+margin_bottom = 67.0
+script = ExtResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TextureRect" type="TextureRect" parent="DialogBox"]
+anchor_left = 1.102
+anchor_top = 5.31
+anchor_right = 1.102
+anchor_bottom = 5.31
+margin_left = -163.675
+margin_top = -109.855
+margin_right = 160.325
+margin_bottom = -37.8553
+texture = ExtResource( 1 )
+expand = true
+stretch_mode = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="RichTextLabel" type="RichTextLabel" parent="DialogBox"]
+anchor_left = 1.097
+anchor_top = 5.323
+anchor_right = 1.097
+anchor_bottom = 5.323
+margin_left = -149.712
+margin_top = -104.641
+margin_right = 152.288
+margin_bottom = -45.641
+custom_fonts/normal_font = SubResource( 1 )
+custom_colors/default_color = Color( 0.541176, 0.25098, 0.0784314, 1 )
+bbcode_text = "You wake up in an odd but somewha familiar land."
+text = "You wake up in an odd but somewha familiar land."
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="next-indicator" type="Sprite" parent="DialogBox"]
+position = Vector2( 467.04, 306.552 )
+scale = Vector2( 0.2, 0.15 )
+texture = ExtResource( 2 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="DialogBox/next-indicator"]
+autoplay = "IDLE"
+anims/IDLE = SubResource( 2 )
+
+[node name="Tween" type="Tween" parent="DialogBox"]
+[connection signal="tween_completed" from="DialogBox/Tween" to="DialogBox" method="_on_Tween_tween_completed"]
