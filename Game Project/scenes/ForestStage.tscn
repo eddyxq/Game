@@ -38,4 +38,8 @@ tile_data = PoolIntArray( 327681, 9, 0, 327682, 10, 0, 327683, 11, 0, 327684, 12
 
 [node name="Portal" parent="." instance=ExtResource( 5 )]
 position = Vector2( 456, 240 )
+target_scene = "res://scenes/Map3_Desert.tscn"
+
+[node name="Portal2" parent="." instance=ExtResource( 5 )]
+position = Vector2( 504, 80 )
 target_scene = "res://scenes/Map2_Snowing_Winterland.tscn"

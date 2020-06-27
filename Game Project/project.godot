@@ -16,7 +16,7 @@ _global_script_class_icons={
 [application]
 
 config/name="Prototype"
-run/main_scene="res://scenes/Map2_Snowing_Winterland.tscn"
+run/main_scene="res://scenes/Map1_Tutorial.tscn"
 config/icon="res://images/thumbnail/icon.png"
 
 [autoload]
