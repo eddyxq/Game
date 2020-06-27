@@ -50,11 +50,17 @@ func _physics_process(_delta):
 	player.animation_loop(attack, skill1, skill2, skill3, skill4, skill5, item1, item2)
 	player.movement_loop(attack, up, left, right)
 	
+	# player dies when he falls down
+	if player.get_global_position().y > 440:
+		player.health = 0
+	
 	# disable controlled when player dies
 	if player.health < 1:
 		player.play_death_sfx()
 		player.play_animation("dead")
 		set_physics_process(false) 
+		yield(get_tree().create_timer(2.0), "timeout")
+		var _scene = get_tree().reload_current_scene()
 
 	# apply cooldown upon skill activation
 	if skill1:
@@ -68,9 +74,9 @@ func _physics_process(_delta):
 	if item2:
 		ui.start_item2_cooldown()
 
-	# turn on light if player is underground
-	if(player.get_global_position().y > 445):
-		player.set_light_enabled(true)
-	else:
-		player.set_light_enabled(false)
+#	# turn on light if player is underground
+#	if(player.get_global_position().y > 445):
+#		player.set_light_enabled(true)
+#	else:
+#		player.set_light_enabled(false)
 

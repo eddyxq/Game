@@ -38,3 +38,7 @@ anchor_bottom = 0.0
 visible = false
 
 [node name="Snow" parent="." instance=ExtResource( 5 )]
+position = Vector2( -400, 0 )
+
+[node name="Snow2" parent="." instance=ExtResource( 5 )]
+position = Vector2( 2000, -125 )

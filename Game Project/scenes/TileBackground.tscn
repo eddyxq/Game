@@ -1,0 +1,95 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://images/tileset/tileset_unsplit.png" type="Texture" id=1]
+
+[node name="Node2D" type="Node2D"]
+
+[node name="Tile36" type="Sprite" parent="."]
+position = Vector2( 88, 0 )
+texture = ExtResource( 1 )
+region_enabled = true
+region_rect = Rect2( 656, 16, 16, 16 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="Tile37" type="Sprite" parent="."]
+position = Vector2( 104, 0 )
+texture = ExtResource( 1 )
+region_enabled = true
+region_rect = Rect2( 672, 16, 16, 16 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="Tile38" type="Sprite" parent="."]
+position = Vector2( 120, 0 )
+texture = ExtResource( 1 )
+region_enabled = true
+region_rect = Rect2( 688, 16, 16, 16 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="Tile39" type="Sprite" parent="."]
+position = Vector2( 88, 16 )
+texture = ExtResource( 1 )
+region_enabled = true
+region_rect = Rect2( 656, 32, 16, 16 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="Tile40" type="Sprite" parent="."]
+position = Vector2( 104, 16 )
+texture = ExtResource( 1 )
+region_enabled = true
+region_rect = Rect2( 672, 32, 16, 16 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="Tile41" type="Sprite" parent="."]
+position = Vector2( 120, 16 )
+texture = ExtResource( 1 )
+region_enabled = true
+region_rect = Rect2( 688, 32, 16, 16 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="Tile42" type="Sprite" parent="."]
+position = Vector2( 88, 32 )
+texture = ExtResource( 1 )
+region_enabled = true
+region_rect = Rect2( 656, 48, 16, 16 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="Tile43" type="Sprite" parent="."]
+position = Vector2( 104, 32 )
+texture = ExtResource( 1 )
+region_enabled = true
+region_rect = Rect2( 672, 48, 16, 16 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="Tile44" type="Sprite" parent="."]
+position = Vector2( 120, 32 )
+texture = ExtResource( 1 )
+region_enabled = true
+region_rect = Rect2( 688, 48, 16, 16 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="Tile45" type="Sprite" parent="."]
+position = Vector2( 104, -16 )
+texture = ExtResource( 1 )
+region_enabled = true
+region_rect = Rect2( 672, 0, 16, 16 )
+__meta__ = {
+"_edit_group_": true
+}
