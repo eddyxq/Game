@@ -17,14 +17,12 @@ __meta__ = {
 }
 
 [node name="StaticBody2D" type="StaticBody2D" parent="Tile00"]
-visible = false
 collision_layer = 4
 collision_mask = 7
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Tile00/StaticBody2D"]
-visible = false
-shape = SubResource( 1 )
-one_way_collision = true
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Tile00/StaticBody2D"]
+build_mode = 1
+polygon = PoolVector2Array( -8, -8, -8, 0, 0, 8, 8, 8, 8, -8 )
 
 [node name="Tile01" type="Sprite" parent="."]
 texture = ExtResource( 1 )
@@ -35,14 +33,11 @@ __meta__ = {
 }
 
 [node name="StaticBody2D" type="StaticBody2D" parent="Tile01"]
-visible = false
 collision_layer = 4
 collision_mask = 7
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile01/StaticBody2D"]
-visible = false
 shape = SubResource( 1 )
-one_way_collision = true
 
 [node name="Tile02" type="Sprite" parent="."]
 position = Vector2( 16, 0 )
@@ -54,14 +49,12 @@ __meta__ = {
 }
 
 [node name="StaticBody2D" type="StaticBody2D" parent="Tile02"]
-visible = false
 collision_layer = 4
 collision_mask = 7
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Tile02/StaticBody2D"]
-visible = false
-shape = SubResource( 1 )
-one_way_collision = true
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Tile02/StaticBody2D"]
+build_mode = 1
+polygon = PoolVector2Array( -8, -8, -8, 8, 0, 8, 8, 0, 8, -8, -8, -8 )
 
 [node name="Tile03" type="Sprite" parent="."]
 position = Vector2( 48, 0 )
@@ -73,14 +66,11 @@ __meta__ = {
 }
 
 [node name="StaticBody2D" type="StaticBody2D" parent="Tile03"]
-visible = false
 collision_layer = 4
 collision_mask = 7
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile03/StaticBody2D"]
-visible = false
 shape = SubResource( 1 )
-one_way_collision = true
 
 [node name="Tile04" type="Sprite" parent="."]
 position = Vector2( -32, 16 )
@@ -855,7 +845,6 @@ collision_mask = 7
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile46/StaticBody2D"]
 visible = false
 shape = SubResource( 1 )
-one_way_collision = true
 
 [node name="Tile47" type="Sprite" parent="."]
 position = Vector2( 192, 0 )
@@ -874,7 +863,6 @@ collision_mask = 7
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile47/StaticBody2D"]
 visible = false
 shape = SubResource( 1 )
-one_way_collision = true
 
 [node name="Tile48" type="Sprite" parent="."]
 position = Vector2( 208, 0 )
@@ -893,7 +881,6 @@ collision_mask = 7
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile48/StaticBody2D"]
 visible = false
 shape = SubResource( 1 )
-one_way_collision = true
 
 [node name="Tile49" type="Sprite" parent="."]
 position = Vector2( 240, 0 )
@@ -2605,6 +2592,7 @@ collision_mask = 7
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile143/StaticBody2D"]
 visible = false
 shape = SubResource( 1 )
+one_way_collision = true
 
 [node name="Tile144" type="Sprite" parent="."]
 position = Vector2( -259.546, -24 )

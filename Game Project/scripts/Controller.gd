@@ -30,7 +30,6 @@ func _ready():
 
 # called every delta
 func _physics_process(_delta):
-	
 	# detect keyboard input
 	up = Input.is_action_pressed("ui_up")
 	down = Input.is_action_pressed("ui_down")

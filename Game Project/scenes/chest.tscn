@@ -15,7 +15,7 @@ animations = [ {
 } ]
 
 [sub_resource type="RectangleShape2D" id=2]
-extents = Vector2( 12.3957, 9.6465 )
+extents = Vector2( 17.0511, 9.89113 )
 
 [node name="RigidBody2D" type="RigidBody2D"]
 z_as_relative = false
@@ -36,7 +36,8 @@ __meta__ = {
 }
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2( -0.579918, 7.1909 )
+position = Vector2( 0, 7 )
+scale = Vector2( 1.2, 1 )
 shape = SubResource( 2 )
 __meta__ = {
 "_edit_group_": true
@@ -48,7 +49,8 @@ __meta__ = {
 }
 
 [node name="CollisionShape2D2" type="CollisionShape2D" parent="Area2D"]
-position = Vector2( -0.579918, 7.1909 )
+position = Vector2( 0, 7 )
+scale = Vector2( 1.2, 1 )
 shape = SubResource( 2 )
 __meta__ = {
 "_edit_group_": true

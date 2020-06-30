@@ -27,10 +27,14 @@ var dir = DIRECTION.E
 
 # speed stats
 const jump_speed = 320
-const base_speed = 100
+var base_speed = 50
 const run_speed_modifier = 1.4
 const boost_speed_modifier = 2.5
 const atkmove_speed_modifier = 0.2
+
+var max_speed = 100
+var min_speed = 0
+var acceleration_rate = 15
 
 var movement_speed
 
@@ -109,7 +113,7 @@ func animation_loop(attack, skill1, skill2, skill3, skill4, skill5, item1, item2
 			$Skill2Cooldown.start()
 			$Skill2Cooldown/Skill2Duration.start()
 			$GhostInterval.start()
-			movement_speed = base_speed * boost_speed_modifier
+			movement_speed = max_speed * boost_speed_modifier
 			play_animation("buff")
 			apply_delay()
 		elif skill3 && skill_slot3_off_cooldown && is_on_floor():
@@ -162,6 +166,16 @@ func movement_loop(attack, up, left, right):
 			movement_speed = base_speed * atkmove_speed_modifier
 		else:
 			 movement_speed = base_speed * run_speed_modifier
+			
+	# acceleration effect
+	if !left && !right:
+		base_speed -= acceleration_rate *2
+		if base_speed < min_speed:
+			base_speed = min_speed
+	else:
+		base_speed += acceleration_rate
+		if base_speed > max_speed:
+			base_speed = max_speed
 
 	# translates player horizontally when left or right key is pressed
 	velocity.x = (-int(left) + int(right)) * movement_speed
@@ -301,7 +315,7 @@ func _on_Skill2Cooldown_timeout():
 # timer used to countdown the effects of skill2 buff
 func _on_Skill2Duration_timeout():
 	$GhostInterval.stop()
-	movement_speed = base_speed * run_speed_modifier
+	movement_speed = max_speed * run_speed_modifier
 
 # timer used to countdown until skill3 is availiable
 func _on_Skill3Cooldown_timeout():
