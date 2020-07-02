@@ -43,7 +43,11 @@ var direction_facing = DIRECTION.W
 
 signal loot_done
 
+# knockback variables
+# TODO: change knockback_direction to local
 var knockback = Vector2.ZERO
+var knockback_frames = 0
+var knockback_direction = Vector2(0, 0)
 
 # called when the node enters the scene tree for the first time
 func _ready():
@@ -102,17 +106,23 @@ func movement_loop():
 	if is_on_floor() and velocity.y > 0:
 		velocity.y = 0
 
+		
 	# horizontal movement speed of enemy
-	if anim_finished:
+	# apply knockback when knockback_frames available
+	if (knockback_frames > 0):
+		# apply knockback
+		velocity = knockback_direction.normalized() * base_speed * 3
+		knockback_frames -= 1
+		
+	elif (anim_finished):
+		# apply regular horizontal movement
 		velocity.x = dir * base_speed
+	
 	# apply gravity
 	velocity.y += gravity 
-
+	
 	velocity = move_and_slide(velocity, Vector2(0, -1))
 	
-	# not sure how to add vectors
-#	knockback = knockback.move_toward(Vector2.ZERO, 1000 * delta)
-#	knockback = move_and_slide(knockback)
 
 # update health bar
 func hurt(skill_multiplier, intensity):
@@ -140,15 +150,20 @@ func hurt(skill_multiplier, intensity):
 		$CollisionShape2D.queue_free()
 		$HealthBar.queue_free()
 
-	# currently not active
-	knock_back(intensity)
 
-# knocks back the enemy a certain distance based on intensities
-func knock_back(intensity):
-	if direction_facing == DIRECTION.W:
-		knockback = Vector2(1,-1) * intensity
-	elif direction_facing == DIRECTION.E:
-		knockback = Vector2(-1,-1) * intensity
+# set some knockback_frames
+# sets knockback_direction relative to 'other_body_origin'
+func knockback(other_body_origin):
+	knockback_frames = 10
+	knockback_direction = transform.origin - other_body_origin	
+
+# general hit reaction
+# applies damage and knockback
+func react_to_hit(other_body_origin, skill_multiplier, intensity):
+	hurt(skill_multiplier, intensity)
+	if (knockback_frames <= 0):
+		knockback(other_body_origin)
+	
 	
 # init timer 
 func setup_timer():
