@@ -5,7 +5,9 @@ extends TextureButton
 ###############################################################################
 
 onready var time_label = $Value
+onready var player = get_tree().get_root().get_node("/root/Controller/Warrior")
 
+export var skill_slot_num = 1
 export var cooldown = 1.0
 var on_cooldown = false
 
@@ -26,6 +28,7 @@ func _on_Timer_timeout():
 	time_label.hide()
 	set_process(false)
 	on_cooldown = false
+	player.reset_skill_cooldown(skill_slot_num)
 
 func start_cooldown():
 	if !on_cooldown:

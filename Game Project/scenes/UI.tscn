@@ -71,7 +71,7 @@ __meta__ = {
 position = Vector2( 20, 7 )
 scale = Vector2( 2.5, 2.5 )
 frames = SubResource( 1 )
-frame = 3
+frame = 2
 playing = true
 __meta__ = {
 "_edit_lock_": true
@@ -89,13 +89,15 @@ margin_left = 48.0002
 margin_top = 68.0
 margin_right = 80.0002
 margin_bottom = 100.0
-cooldown = 5.0
+skill_slot_num = 2
+cooldown = 3.0
 
 [node name="Skill_Slot3" parent="." instance=ExtResource( 6 )]
 margin_left = 80.0002
 margin_top = 68.0
 margin_right = 112.0
 margin_bottom = 100.0
+skill_slot_num = 3
 cooldown = 2.0
 
 [node name="Skill_Slot4" parent="." instance=ExtResource( 6 )]
@@ -103,6 +105,7 @@ margin_left = 112.0
 margin_top = 68.0
 margin_right = 144.0
 margin_bottom = 100.0
+skill_slot_num = 4
 cooldown = 5.0
 
 [node name="Skill_Slot5" parent="." instance=ExtResource( 6 )]
@@ -110,12 +113,14 @@ margin_left = 144.0
 margin_top = 68.0
 margin_right = 176.0
 margin_bottom = 100.0
+skill_slot_num = 5
 
 [node name="Item_Slot1" parent="." instance=ExtResource( 6 )]
 margin_left = 188.0
 margin_top = 68.0
 margin_right = 220.0
 margin_bottom = 100.0
+skill_slot_num = 6
 cooldown = 10.0
 
 [node name="Item_Slot2" parent="." instance=ExtResource( 6 )]
@@ -123,5 +128,6 @@ margin_left = 220.0
 margin_top = 68.0
 margin_right = 252.0
 margin_bottom = 100.0
+skill_slot_num = 7
 cooldown = 10.0
 [connection signal="pressed" from="TextureButton" to="." method="_on_TextureButton_pressed"]

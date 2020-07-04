@@ -703,7 +703,7 @@ material = SubResource( 2 )
 texture = ExtResource( 1 )
 vframes = 26
 hframes = 8
-frame = 38
+frame = 40
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 anims/attack1 = SubResource( 3 )
@@ -736,37 +736,6 @@ tree_root = SubResource( 53 )
 anim_player = NodePath("../AnimationPlayer")
 active = true
 parameters/playback = SubResource( 54 )
-
-[node name="Skill1Cooldown" type="Timer" parent="."]
-wait_time = 2.0
-one_shot = true
-
-[node name="Skill2Cooldown" type="Timer" parent="."]
-wait_time = 5.0
-one_shot = true
-
-[node name="Skill2Duration" type="Timer" parent="Skill2Cooldown"]
-wait_time = 3.0
-one_shot = true
-
-[node name="Skill3Cooldown" type="Timer" parent="."]
-wait_time = 2.0
-one_shot = true
-
-[node name="Skill4Cooldown" type="Timer" parent="."]
-wait_time = 5.0
-one_shot = true
-
-[node name="Skill5Cooldown" type="Timer" parent="."]
-one_shot = true
-
-[node name="Item1Cooldown" type="Timer" parent="."]
-wait_time = 10.0
-one_shot = true
-
-[node name="Item2Cooldown" type="Timer" parent="."]
-wait_time = 10.0
-one_shot = true
 
 [node name="HealthRecovery" type="Timer" parent="."]
 wait_time = 0.5
@@ -825,14 +794,6 @@ visible = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 shape = SubResource( 57 )
-[connection signal="timeout" from="Skill1Cooldown" to="." method="_on_Skill1Cooldown_timeout"]
-[connection signal="timeout" from="Skill2Cooldown" to="." method="_on_Skill2Cooldown_timeout"]
-[connection signal="timeout" from="Skill2Cooldown/Skill2Duration" to="." method="_on_Skill2Duration_timeout"]
-[connection signal="timeout" from="Skill3Cooldown" to="." method="_on_Skill3Cooldown_timeout"]
-[connection signal="timeout" from="Skill4Cooldown" to="." method="_on_Skill4Cooldown_timeout"]
-[connection signal="timeout" from="Skill5Cooldown" to="." method="_on_Skill5Cooldown_timeout"]
-[connection signal="timeout" from="Item1Cooldown" to="." method="_on_Item1Cooldown_timeout"]
-[connection signal="timeout" from="Item2Cooldown" to="." method="_on_Item2Cooldown_timeout"]
 [connection signal="timeout" from="HealthRecovery" to="." method="_on_HealthRecovery_timeout"]
 [connection signal="timeout" from="ManaRecovery" to="." method="_on_ManaRecovery_timeout"]
 [connection signal="timeout" from="AnimationDelay" to="." method="_on_AnimationDelay_timeout"]

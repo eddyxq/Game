@@ -4,6 +4,9 @@ extends KinematicBody2D
 # warrior class
 ###############################################################################
 
+onready var UI = get_tree().get_root().get_node("/root/Controller/HUD/UI")
+onready var http : HTTPRequest = $HTTPRequest
+
 enum DIRECTION {
 	N, # north/up
 	S, # south/down
@@ -22,50 +25,39 @@ var profile = {
 	"player_exp": {}
 } 
 
-# default player direction
-var dir = DIRECTION.E
-
-# speed stats
-const jump_speed = 320
-var base_speed = 50
-const run_speed_modifier = 1.4
-const boost_speed_modifier = 2.5
-const atkmove_speed_modifier = 0.2
-
-var max_speed = 100
-var min_speed = 0
-var acceleration_rate = 15
-
-var movement_speed
-
-const min_mp = 0
-const max_mp = 6
-const min_hp = 0
+# combat stats
 const max_hp = 100
-
+const min_hp = 0
+const max_mp = 6
+const min_mp = 0
 var health = max_hp
 var mana = max_mp
 
-onready var UI = get_tree().get_root().get_node("/root/Controller/HUD/UI")
+# speed stats
+const jump_speed = 320
+const run_speed_modifier = 1.4
+const boost_speed_modifier = 2.5
+const atkmove_speed_modifier = 0
+var base_speed = 50
+var max_speed = 100
+var min_speed = 0
+var acceleration_rate = 14
+var movement_speed # final actual speed after calculations
 
-# references to child nodes
-onready var http : HTTPRequest = $HTTPRequest
+# player orientation
+var dir = DIRECTION.E # default right facing 
 
-# skill scenes
-const PROJECTILE = preload("res://scenes/Projectile.tscn")
-const ROCK_STRIKE = preload("res://scenes/RockStrike.tscn")
 # world constants
 const GRAVITY = 18
 
 var velocity = Vector2()
-var timer
-var player_sprite
 var state_machine
 
 # flags for player states
 var anim_finished = true # used to lock out player inputs for a short amount of time (0.2s) so prevent key spamming
 var invincible = false # true when player has invincible frames
 
+# flags that restrict usage of skills and items
 var skill_slot1_off_cooldown = true
 var skill_slot2_off_cooldown = true
 var skill_slot3_off_cooldown = true
@@ -95,7 +87,6 @@ func animation_loop(attack, skill1, skill2, skill3, skill4, skill5, item1, item2
 		# idle state
 		elif velocity.length() == 0: 
 			play_animation("idle")
-
 		# attacking state
 		if !attack:
 			toggle_hitbox_off()
@@ -107,15 +98,12 @@ func animation_loop(attack, skill1, skill2, skill3, skill4, skill5, item1, item2
 			UI.skill_slot1.start_cooldown()
 			anim_finished = false
 			skill_slot1_off_cooldown = false
-			$Skill1Cooldown.start()
 			play_animation("distance_blade")
 			apply_delay()
 		elif skill2 && skill_slot2_off_cooldown:
 			UI.skill_slot2.start_cooldown()
 			anim_finished = false
 			skill_slot2_off_cooldown = false
-			$Skill2Cooldown.start()
-			$Skill2Cooldown/Skill2Duration.start()
 			$GhostInterval.start()
 			movement_speed = max_speed * boost_speed_modifier
 			play_animation("buff")
@@ -124,7 +112,6 @@ func animation_loop(attack, skill1, skill2, skill3, skill4, skill5, item1, item2
 			UI.skill_slot3.start_cooldown()
 			anim_finished = false
 			skill_slot3_off_cooldown = false
-			$Skill3Cooldown.start()
 			play_animation("rock_strike")
 			apply_delay()
 		elif skill4 && skill_slot4_off_cooldown:
@@ -133,26 +120,20 @@ func animation_loop(attack, skill1, skill2, skill3, skill4, skill5, item1, item2
 			play_animation("bow_attack")
 			apply_delay()
 		elif skill5 && skill_slot5_off_cooldown:
+			# not yet implemented
 			pass
 		elif item1 && item_slot1_off_cooldown:
 			item_slot1_off_cooldown = false
-			$Item1Cooldown.start()
 			play_potion_sfx()
-			# potion fully heals the player
+			# potion fully heals the player's health
 			UI.health_bar.increase(health, max_hp - health)
 			health = max_hp
 		elif item2 && item_slot2_off_cooldown:
 			item_slot2_off_cooldown = false
-			$Item2Cooldown.start()
 			play_potion_sfx()
+			# potion fully heals the player's mana
 			mana = max_mp
 			UI.mana_bar.update_bar(mana)
-			
-		# bow draw: work in progress, not fully implemented
-		if Input.is_action_pressed("ui_bow"):
-			anim_finished = false
-			play_animation("bow_attack")
-			apply_delay()
 
 # movement logic
 func movement_loop(attack, up, left, right):
@@ -263,22 +244,24 @@ func play_potion_sfx():
 func play_coin_sfx():
 	SoundManager.play_sfx(load("res://audio/sfx/coin.ogg"), 0)
 	
-# hitbox for detecting normal attack collisions with enemies
+# enables normal attack hitbox
 func toggle_hitbox_on():
 	$HitBox/CollisionShape2D.disabled = false
+
+# disables normal attack hitbox
 func toggle_hitbox_off():
 	$HitBox/CollisionShape2D.disabled = true
 
 # activates skill 1 shooting a ranged projectile
 func distance_blade():
-	var projectile = PROJECTILE.instance()
+	var projectile = preload("res://scenes/Projectile.tscn").instance()
 	get_parent().add_child(projectile)
 	projectile.position = $PositionCenter.global_position
 	projectile.set_projectile_direction(dir)
 
 # activates skill 3 summoning rock pillars from below
 func rock_strike():
-	var projectile = ROCK_STRIKE.instance()
+	var projectile = preload("res://scenes/RockStrike.tscn").instance()
 	get_parent().add_child(projectile)
 	if dir == DIRECTION.E:
 		projectile.position.x = $PositionCenter.global_position.x + 64
@@ -289,7 +272,7 @@ func rock_strike():
 	
 # activates skill 4 shooting a ranged projectile
 func piercing_arrow():
-	var projectile = PROJECTILE.instance()
+	var projectile = preload("res://scenes/Projectile.tscn").instance()
 	get_parent().add_child(projectile)
 	projectile.position = $PositionCenter.global_position
 	projectile.set_projectile_direction(dir)
@@ -326,39 +309,6 @@ func _on_ManaRecovery_timeout():
 # timer used to manage attaking state, preventing animation overlap
 func _on_AnimationDelay_timeout():
 	anim_finished = true
-
-# timer used to countdown until skill1 is availiable
-func _on_Skill1Cooldown_timeout():
-	skill_slot1_off_cooldown = true
-
-# timer used to countdown until skill2 is availiable
-func _on_Skill2Cooldown_timeout():
-	skill_slot2_off_cooldown = true
-
-# timer used to countdown the effects of skill2 buff
-func _on_Skill2Duration_timeout():
-	$GhostInterval.stop()
-	movement_speed = max_speed * run_speed_modifier
-
-# timer used to countdown until skill3 is availiable
-func _on_Skill3Cooldown_timeout():
-	skill_slot3_off_cooldown = true
-
-# timer used to countdown until skill4 is availiable
-func _on_Skill4Cooldown_timeout():
-	skill_slot4_off_cooldown = true
-
-# timer used to countdown until skill5 is availiable
-func _on_Skill5Cooldown_timeout():
-	skill_slot5_off_cooldown = true
-
-# timer used to countdown until item1 is availiable
-func _on_Item1Cooldown_timeout():
-	item_slot1_off_cooldown = true
-
-# timer used to countdown until item2 is availiable
-func _on_Item2Cooldown_timeout():
-	item_slot2_off_cooldown = true
 
 # loads player profile from database
 func _on_HTTPRequest_request_completed(_result, response_code, _headers, body):
@@ -397,3 +347,24 @@ func _on_Area2D_body_entered(body):
 		$Area2D.set_gravity_is_point(true)
 		$Area2D.set_gravity_vector(Vector2(0, 0))
 		play_coin_sfx()
+
+# resets the cooldown of slot utilized allowing reuse
+func reset_skill_cooldown(skill_slot_num):
+	# skill num 1 thruough 5 are skill slots
+	# skill num 6 and 7 are item slots
+	if skill_slot_num == 1:
+		skill_slot1_off_cooldown = true
+	elif skill_slot_num == 2:
+		skill_slot2_off_cooldown = true
+		$GhostInterval.stop()
+		movement_speed = max_speed * run_speed_modifier
+	elif skill_slot_num == 3:
+		skill_slot3_off_cooldown = true
+	elif skill_slot_num == 4:
+		skill_slot4_off_cooldown = true
+	elif skill_slot_num == 5:
+		skill_slot5_off_cooldown = true
+	elif skill_slot_num == 6:
+		item_slot1_off_cooldown = true
+	elif skill_slot_num == 7:
+		item_slot1_off_cooldown = true
