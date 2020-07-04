@@ -97,6 +97,8 @@ func animation_loop(attack, skill1, skill2, skill3, skill4, skill5, item1, item2
 			play_animation("idle")
 
 		# attacking state
+		if !attack:
+			toggle_hitbox_off()
 		if attack && is_on_floor():
 			anim_finished = false
 			play_animation("attack3")
@@ -139,6 +141,12 @@ func animation_loop(attack, skill1, skill2, skill3, skill4, skill5, item1, item2
 			play_potion_sfx()
 			mana = max_mp
 			UI.mana_bar.update_bar(mana)
+			
+		# bow draw: work in progress, not fully implemented
+		if Input.is_action_pressed("ui_bow"):
+			anim_finished = false
+			play_animation("bow_attack")
+			apply_delay()
 
 # movement logic
 func movement_loop(attack, up, left, right):
@@ -250,8 +258,10 @@ func play_coin_sfx():
 	SoundManager.play_sfx(load("res://audio/sfx/coin.ogg"), 0)
 	
 # hitbox for detecting normal attack collisions with enemies
-func toggle_hitbox():
-	$HitBox/CollisionShape2D.disabled = not $HitBox/CollisionShape2D.disabled
+func toggle_hitbox_on():
+	$HitBox/CollisionShape2D.disabled = false
+func toggle_hitbox_off():
+	$HitBox/CollisionShape2D.disabled = true
 
 # activates skill 1 shooting a ranged projectile
 func distance_blade():
@@ -353,8 +363,7 @@ func _on_IFrame_timeout():
 # applies damage when hitbox collide with enemies
 func _on_HitBox_body_entered(body):
 	if "Enemy" in body.name:
-		#body.hurt(1, 65)
-		body.react_to_hit(transform.origin, 1, 65)
+		body.hurt(1, 0)
 
 # time used to countdown the animation of skill2 buff
 func _on_ghost_timer_timeout():
