@@ -363,7 +363,7 @@ func _on_IFrame_timeout():
 # applies damage when hitbox collide with enemies
 func _on_HitBox_body_entered(body):
 	if "Enemy" in body.name:
-		body.hurt(1, 65)
+		body.hurt(1, 0)
 
 # time used to countdown the animation of skill2 buff
 func _on_ghost_timer_timeout():

@@ -4,9 +4,6 @@ extends KinematicBody2D
 # goblin enemy class
 ###############################################################################
 
-const CHEST = preload("res://scenes/Chest.tscn")
-var COIN_DROPPER = preload("res://scenes/CoinDropper.tscn").instance()
-
 enum DIRECTION {
 	N, # north/up
 	S, # south/down
@@ -14,19 +11,19 @@ enum DIRECTION {
 	E, # east/right
 }
 
-const base_speed = 100
-var gravity = 18
+onready var player = get_parent().get_node("Warrior")
+onready var health_bar = $HealthBar
 
+# enemy speed and state variables
 var health = 100
+var base_speed = 100
 var velocity = Vector2(0, 0)
 var is_dead = false
-var timer = null
+var gravity = 18
 var despawn_timer = 1
-var direction = 1 # left
-onready var health_bar = $HealthBar
-onready var audio_player = $AudioStreamPlayer2D
+var timer = null
 
-onready var player = get_parent().get_node("Warrior")
+# variables related to AI pathfinding
 var react_time = 100
 var dir = 0
 var next_dir = 0
@@ -35,22 +32,25 @@ var next_jump_time = -1
 var target_player_dist = 35
 var eye_reach = 90
 var vision = 160
+var direction_facing = DIRECTION.W # default left facing
 
-var state_machine
+# animation states
+var state_machine = null
 var anim_finished = true
-
-var direction_facing = DIRECTION.W
 
 signal loot_done
 
-var knockback = Vector2.ZERO
+# knockback variables
+# TODO: change knockback_direction to local
+var knockback_frames = 0
+var knockback_direction = Vector2.ZERO
 
 # called when the node enters the scene tree for the first time
 func _ready():
 	health_bar.value = 100
 	setup_timer() 
-	set_process(true)
 	setup_state_machine()
+	set_process(true)
 
 # called every delta
 func _physics_process(_delta):
@@ -103,16 +103,19 @@ func movement_loop():
 		velocity.y = 0
 
 	# horizontal movement speed of enemy
-	if anim_finished:
+	# apply knockback when knockback_frames available
+	if (knockback_frames > 0):
+		# apply knockback
+		velocity = knockback_direction.normalized() * base_speed * 3
+		knockback_frames -= 1
+		
+	elif (anim_finished):
+		# apply regular horizontal movement
 		velocity.x = dir * base_speed
+
 	# apply gravity
 	velocity.y += gravity 
-
 	velocity = move_and_slide(velocity, Vector2(0, -1))
-	
-	# not sure how to add vectors
-#	knockback = knockback.move_toward(Vector2.ZERO, 1000 * delta)
-#	knockback = move_and_slide(knockback)
 
 # update health bar
 func hurt(skill_multiplier, intensity):
@@ -132,6 +135,7 @@ func hurt(skill_multiplier, intensity):
 	health_bar.value = health
 	$FCTMgr.show_value(dmg, crit)
 	
+	# check if enemy is alive
 	if health < 1:
 		is_dead = true
 		timer.start()
@@ -139,17 +143,21 @@ func hurt(skill_multiplier, intensity):
 		play_death_sfx()
 		$CollisionShape2D.queue_free()
 		$HealthBar.queue_free()
+	# apply knockback effect if any
+	else:
+		react_to_hit(intensity)
 
-	# currently not active
-	knock_back(intensity)
 
-# knocks back the enemy a certain distance based on intensities
-func knock_back(intensity):
-	if direction_facing == DIRECTION.W:
-		knockback = Vector2(1,-1) * intensity
-	elif direction_facing == DIRECTION.E:
-		knockback = Vector2(-1,-1) * intensity
-	
+# sets knockback_direction relative to 'other_body_origin'
+# general hit reaction
+
+# applies a knockback scaling off intensity input
+func react_to_hit(intensity):
+	if (knockback_frames <= 0):
+		# set some knockback_frames
+		knockback_frames = intensity
+		knockback_direction = transform.origin - player.transform.origin
+
 # init timer 
 func setup_timer():
 	timer = Timer.new()
@@ -254,15 +262,15 @@ func play_hurt_sfx():
 # spawns chest with respect to drop rate
 func spawn_chest():
 	# spawn chest
-	var chest = CHEST.instance()
+	var chest = preload("res://scenes/Chest.tscn").instance()
 	# drop chest with respect to DROPRATE
 	chest.drop(self)
 
 # drops loot which can be a chest and/or coins
 func drop_loot():
 	spawn_chest()
-	var _coin_amount = COIN_DROPPER.drop(self)
-	#print(coin_amount)
+	var coin_dropper = preload("res://scenes/CoinDropper.tscn").instance()
+	var _coin_amount = coin_dropper.drop(self)
 	emit_signal("loot_done")
 	
 # wait_time: in seconds

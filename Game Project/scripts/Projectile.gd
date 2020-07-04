@@ -24,7 +24,7 @@ func _physics_process(delta):
 # detect collision with enemies
 func _on_Projectile_body_entered(body):
 	if "Enemy" in body.name:
-		body.hurt(2, 400)
+		body.hurt(2, 10)
 		play_explosion_sfx()
 		$CollisionShape2D.queue_free()
 		$CPUParticles2D.queue_free()

@@ -28,7 +28,7 @@ func _on_VisibilityNotifier2D_screen_exited():
 # detect collision with enemies
 func _on_Area2D_body_entered(body):
 	if "Enemy" in body.name:
-		body.hurt(3, 300)
+		body.hurt(3, 5)
 		play_explosion_sfx()
 	
 # shoots the projectile
