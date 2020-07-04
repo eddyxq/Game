@@ -12,7 +12,7 @@ onready var skill_slot3 = $Skill_Slot3
 onready var skill_slot4 = $Skill_Slot4
 onready var skill_slot5 = $Skill_Slot5
 onready var item_slot1 = $Item_Slot1
-onready var item_slot2 = $Item_Slot1
+onready var item_slot2 = $Item_Slot2
 
 # called when the node enters the scene tree for the first time
 func _ready():

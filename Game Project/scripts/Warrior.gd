@@ -133,12 +133,14 @@ func animation_loop(attack, skill1, skill2, skill3, skill4, skill5, item1, item2
 			# not yet implemented
 			pass
 		elif item1 && item_slot1_off_cooldown:
+			UI.item_slot1.start_cooldown()
 			item_slot1_off_cooldown = false
 			play_potion_sfx()
 			# potion fully heals the player's health
 			UI.health_bar.increase(health, max_hp - health)
 			health = max_hp
 		elif item2 && item_slot2_off_cooldown:
+			UI.item_slot2.start_cooldown()
 			item_slot2_off_cooldown = false
 			play_potion_sfx()
 			# potion fully heals the player's mana
@@ -387,4 +389,4 @@ func reset_skill_cooldown(skill_slot_num):
 	elif skill_slot_num == 6:
 		item_slot1_off_cooldown = true
 	elif skill_slot_num == 7:
-		item_slot1_off_cooldown = true
+		item_slot2_off_cooldown = true
