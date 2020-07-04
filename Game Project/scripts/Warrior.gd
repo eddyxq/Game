@@ -76,6 +76,9 @@ var skill3_mana_cost = 2
 var skill4_mana_cost = 4
 var skill5_mana_cost = 6
 
+# flag to prevent spamming of invalid skill use sfx
+var invalid_sfx = true
+
 # called when the node enters the scene tree for the first time
 func _ready():
 	# Firebase.get_document("users/%s" % Firebase.user_info.id, http)
@@ -104,34 +107,53 @@ func animation_loop(attack, skill1, skill2, skill3, skill4, skill5, item1, item2
 			anim_finished = false
 			play_animation("attack3")
 			apply_delay()
-		elif skill1 && skill_slot1_off_cooldown && mana >= skill1_mana_cost:
-			UI.skill_slot1.start_cooldown()
-			anim_finished = false
-			skill_slot1_off_cooldown = false
-			play_animation("distance_blade")
-			apply_delay()
-		elif skill2 && skill_slot2_off_cooldown && mana >= skill2_mana_cost:
-			UI.skill_slot2.start_cooldown()
-			anim_finished = false
-			skill_slot2_off_cooldown = false
-			$GhostInterval.start()
-			movement_speed = max_speed * boost_speed_modifier
-			play_animation("buff")
-			apply_delay()
-		elif skill3 && skill_slot3_off_cooldown && mana >= skill3_mana_cost && is_on_floor():
-			UI.skill_slot3.start_cooldown()
-			anim_finished = false
-			skill_slot3_off_cooldown = false
-			play_animation("rock_strike")
-			apply_delay()
-		elif skill4 && skill_slot4_off_cooldown && mana >= skill4_mana_cost:
-			UI.skill_slot4.start_cooldown()
-			anim_finished = false
-			play_animation("bow_attack")
-			apply_delay()
-		elif skill5 && skill_slot5_off_cooldown && mana >= skill5_mana_cost:
-			# not yet implemented
-			pass
+		elif skill1 && skill_slot1_off_cooldown:
+			if mana >= skill1_mana_cost:
+				UI.skill_slot1.start_cooldown()
+				anim_finished = false
+				skill_slot1_off_cooldown = false
+				play_animation("distance_blade")
+				apply_delay()
+			else:
+				play_invalid_sfx()
+				invalid_sfx = false
+		elif skill2 && skill_slot2_off_cooldown:
+			if mana >= skill2_mana_cost:
+				UI.skill_slot2.start_cooldown()
+				anim_finished = false
+				skill_slot2_off_cooldown = false
+				$GhostInterval.start()
+				movement_speed = max_speed * boost_speed_modifier
+				play_animation("buff")
+				apply_delay()
+			else:
+				play_invalid_sfx()
+				invalid_sfx = false
+		elif skill3 && skill_slot3_off_cooldown:
+			if mana >= skill3_mana_cost && is_on_floor():
+				UI.skill_slot3.start_cooldown()
+				anim_finished = false
+				skill_slot3_off_cooldown = false
+				play_animation("rock_strike")
+				apply_delay()
+			else:
+				play_invalid_sfx()
+				invalid_sfx = false
+		elif skill4 && skill_slot4_off_cooldown:
+			if mana >= skill4_mana_cost:
+				UI.skill_slot4.start_cooldown()
+				anim_finished = false
+				play_animation("bow_attack")
+				apply_delay()
+			else:
+				play_invalid_sfx()
+				invalid_sfx = false
+		# not yet implemented
+		elif skill5 && skill_slot5_off_cooldown:
+			if mana >= skill5_mana_cost:
+				pass
+			else:
+				pass
 		elif item1 && item_slot1_off_cooldown:
 			UI.item_slot1.start_cooldown()
 			item_slot1_off_cooldown = false
@@ -248,7 +270,9 @@ func play_hurt_sfx():
 	
 # plays a invalid sfx
 func play_invalid_sfx():
-	SoundManager.play_sfx(load("res://audio/sfx/invalid.ogg"), 0)
+	if invalid_sfx:
+		SoundManager.play_sfx(load("res://audio/sfx/invalid.ogg"), 1)
+		$InvalidSFX.start()
 	
 # plays a invalid sfx
 func play_death_sfx():
@@ -344,6 +368,10 @@ func _on_HTTPRequest_request_completed(_result, response_code, _headers, body):
 # player becomes invicible for a moment after getting hurt
 func _on_IFrame_timeout():
 	invincible = false
+	
+# allows another invalid sfx to be played
+func _on_InvalidSFX_timeout():
+	invalid_sfx = true
 
 # applies damage when hitbox collide with enemies
 func _on_HitBox_body_entered(body):
@@ -390,3 +418,6 @@ func reset_skill_cooldown(skill_slot_num):
 		item_slot1_off_cooldown = true
 	elif skill_slot_num == 7:
 		item_slot2_off_cooldown = true
+
+
+

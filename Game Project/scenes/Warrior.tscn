@@ -717,7 +717,7 @@ material = SubResource( 2 )
 texture = ExtResource( 1 )
 vframes = 26
 hframes = 8
-frame = 40
+frame = 39
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 anims/attack1 = SubResource( 3 )
@@ -765,6 +765,10 @@ one_shot = true
 wait_time = 0.4
 one_shot = true
 
+[node name="InvalidSFX" type="Timer" parent="."]
+wait_time = 1.4
+one_shot = true
+
 [node name="HTTPRequest" type="HTTPRequest" parent="."]
 
 [node name="Camera2D" type="Camera2D" parent="."]
@@ -810,6 +814,7 @@ shape = SubResource( 57 )
 [connection signal="timeout" from="ManaRecovery" to="." method="_on_ManaRecovery_timeout"]
 [connection signal="timeout" from="AnimationDelay" to="." method="_on_AnimationDelay_timeout"]
 [connection signal="timeout" from="IFrame" to="." method="_on_IFrame_timeout"]
+[connection signal="timeout" from="InvalidSFX" to="." method="_on_InvalidSFX_timeout"]
 [connection signal="request_completed" from="HTTPRequest" to="." method="_on_HTTPRequest_request_completed"]
 [connection signal="body_entered" from="HitBox" to="." method="_on_HitBox_body_entered"]
 [connection signal="timeout" from="GhostInterval" to="." method="_on_ghost_timer_timeout"]
