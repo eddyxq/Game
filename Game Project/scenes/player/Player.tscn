@@ -1,9 +1,10 @@
-[gd_scene load_steps=62 format=2]
+[gd_scene load_steps=63 format=2]
 
 [ext_resource path="res://images/warrior_sprites/sprite_sheet.png" type="Texture" id=1]
 [ext_resource path="res://scripts/Player.gd" type="Script" id=2]
 [ext_resource path="res://images/warrior_sprites/sprite_sheet_emission.png" type="Texture" id=3]
 [ext_resource path="res://images/effects/2DLight.png" type="Texture" id=4]
+[ext_resource path="res://scenes/Screen_Shaker.tscn" type="PackedScene" id=5]
 
 [sub_resource type="Shader" id=1]
 code = "shader_type canvas_item;
@@ -91,6 +92,20 @@ tracks/3/keys = {
 "method": "play_attack_animation"
 } ]
 }
+tracks/4/type = "method"
+tracks/4/path = NodePath(".")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/keys = {
+"times": PoolRealArray( 0.06 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [  ],
+"method": "freeze_frame"
+} ]
+}
 
 [sub_resource type="Animation" id=4]
 length = 0.2
@@ -152,6 +167,20 @@ tracks/3/keys = {
 "method": "play_attack_animation"
 } ]
 }
+tracks/4/type = "method"
+tracks/4/path = NodePath(".")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/keys = {
+"times": PoolRealArray( 0.11 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [  ],
+"method": "freeze_frame"
+} ]
+}
 
 [sub_resource type="Animation" id=5]
 length = 0.2
@@ -211,6 +240,20 @@ tracks/3/keys = {
 "values": [ {
 "args": [ "attack3" ],
 "method": "play_attack_animation"
+} ]
+}
+tracks/4/type = "method"
+tracks/4/path = NodePath(".")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/keys = {
+"times": PoolRealArray( 0.11 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [  ],
+"method": "freeze_frame"
 } ]
 }
 
@@ -690,7 +733,7 @@ states/sprint/position = Vector2( 679, 101.902 )
 transitions = [ "idle", "jump", SubResource( 33 ), "fall", "idle", SubResource( 34 ), "jump", "fall", SubResource( 35 ), "idle", "sprint", SubResource( 36 ), "sprint", "idle", SubResource( 37 ), "attack3", "idle", SubResource( 38 ), "idle", "distance_blade", SubResource( 39 ), "distance_blade", "idle", SubResource( 40 ), "idle", "attack1", SubResource( 41 ), "attack1", "idle", SubResource( 42 ), "attack1", "attack2", SubResource( 43 ), "attack2", "attack3", SubResource( 44 ), "attack2", "idle", SubResource( 45 ), "idle", "dead", SubResource( 46 ), "idle", "buff", SubResource( 47 ), "buff", "idle", SubResource( 48 ), "idle", "rock_strike", SubResource( 49 ), "rock_strike", "idle", SubResource( 50 ), "bow_attack", "idle", SubResource( 51 ), "idle", "bow_attack", SubResource( 52 ) ]
 start_node = "idle"
 end_node = "dead"
-graph_offset = Vector2( -42.077, 63.1833 )
+graph_offset = Vector2( 107.372, 95.2741 )
 
 [sub_resource type="AnimationNodeStateMachinePlayback" id=54]
 
@@ -781,6 +824,8 @@ drag_margin_v_enabled = true
 smoothing_enabled = true
 drag_margin_top = 0.5
 drag_margin_bottom = 0.0
+
+[node name="ScreenShaker" parent="Camera2D" instance=ExtResource( 5 )]
 
 [node name="HitBox" type="Area2D" parent="."]
 position = Vector2( 20, 2 )

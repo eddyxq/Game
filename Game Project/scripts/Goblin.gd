@@ -44,6 +44,9 @@ signal loot_done
 # TODO: change knockback_direction to local
 var knockback_frames = 0
 var knockback_direction = Vector2.ZERO
+var knockback_intensity = 0
+
+var stun_counter = 0
 
 # called when the node enters the scene tree for the first time
 func _ready():
@@ -106,18 +109,28 @@ func movement_loop():
 	# apply knockback when knockback_frames available
 	if (knockback_frames > 0):
 		# apply knockback
-		velocity = knockback_direction.normalized() * base_speed * 3
+		velocity = knockback_direction.normalized() * base_speed * knockback_intensity
+		print("knockback frame:", knockback_frames, "-", velocity)
 		knockback_frames -= 1
-		
+		if (knockback_frames == 0):
+			stun_counter = 15
+			
+	# apply regular horizontal movement		
 	elif (anim_finished):
-		# apply regular horizontal movement
-		velocity.x = dir * base_speed
+		if (stun_counter <= 0):
+			velocity.x = dir * base_speed
+		else:
+			velocity.x = 0
+			stun_counter -= 1
+
+
 
 	# apply gravity
 	velocity.y += gravity 
 	velocity = move_and_slide(velocity, Vector2(0, -1))
 
 # update health bar
+# returns boolean: true if damage was critical, false otherwise
 func hurt(base_damage: int, knockback_intensity: int):
 	play_hurt_sfx()
 	var dmg = (randi() % int(player.strength) + base_damage) 
@@ -141,16 +154,20 @@ func hurt(base_damage: int, knockback_intensity: int):
 	# apply knockback effect if any
 	else:
 		react_to_hit(knockback_intensity)
+	
+	return crit
+	
+	# currently not active
+	#knock_back(intensity)
 
 
-# sets knockback_direction relative to 'other_body_origin'
 # general hit reaction
-
 # applies a knockback scaling off intensity input
 func react_to_hit(intensity):
-	if (knockback_frames <= 0):
+	if (intensity > 0 and knockback_frames <= 0):
 		# set some knockback_frames
-		knockback_frames = intensity
+		knockback_frames = 10
+		knockback_intensity = intensity
 		knockback_direction = transform.origin - player.transform.origin
 
 # init timer 
