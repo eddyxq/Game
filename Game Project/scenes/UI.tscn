@@ -71,7 +71,7 @@ __meta__ = {
 position = Vector2( 20, 7 )
 scale = Vector2( 2.5, 2.5 )
 frames = SubResource( 1 )
-frame = 2
+frame = 3
 playing = true
 __meta__ = {
 "_edit_lock_": true
@@ -96,12 +96,14 @@ margin_left = 80.0002
 margin_top = 68.0
 margin_right = 112.0
 margin_bottom = 100.0
+cooldown = 2.0
 
 [node name="Skill_Slot4" parent="." instance=ExtResource( 6 )]
 margin_left = 112.0
 margin_top = 68.0
 margin_right = 144.0
 margin_bottom = 100.0
+cooldown = 5.0
 
 [node name="Skill_Slot5" parent="." instance=ExtResource( 6 )]
 margin_left = 144.0

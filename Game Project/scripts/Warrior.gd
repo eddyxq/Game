@@ -104,12 +104,14 @@ func animation_loop(attack, skill1, skill2, skill3, skill4, skill5, item1, item2
 			play_animation("attack3")
 			apply_delay()
 		elif skill1 && skill_slot1_off_cooldown:
+			UI.skill_slot1.start_cooldown()
 			anim_finished = false
 			skill_slot1_off_cooldown = false
 			$Skill1Cooldown.start()
 			play_animation("distance_blade")
 			apply_delay()
 		elif skill2 && skill_slot2_off_cooldown:
+			UI.skill_slot2.start_cooldown()
 			anim_finished = false
 			skill_slot2_off_cooldown = false
 			$Skill2Cooldown.start()
@@ -119,13 +121,17 @@ func animation_loop(attack, skill1, skill2, skill3, skill4, skill5, item1, item2
 			play_animation("buff")
 			apply_delay()
 		elif skill3 && skill_slot3_off_cooldown && is_on_floor():
+			UI.skill_slot3.start_cooldown()
 			anim_finished = false
 			skill_slot3_off_cooldown = false
 			$Skill3Cooldown.start()
 			play_animation("rock_strike")
 			apply_delay()
 		elif skill4 && skill_slot4_off_cooldown:
-			pass
+			UI.skill_slot4.start_cooldown()
+			anim_finished = false
+			play_animation("bow_attack")
+			apply_delay()
 		elif skill5 && skill_slot5_off_cooldown:
 			pass
 		elif item1 && item_slot1_off_cooldown:
@@ -280,6 +286,13 @@ func rock_strike():
 		projectile.position.x = $PositionCenter.global_position.x - 64
 	projectile.position.y = $PositionCenter.global_position.y + 36
 	projectile.set_projectile_direction(dir) 
+	
+# activates skill 4 shooting a ranged projectile
+func piercing_arrow():
+	var projectile = PROJECTILE.instance()
+	get_parent().add_child(projectile)
+	projectile.position = $PositionCenter.global_position
+	projectile.set_projectile_direction(dir)
 
 # initializes the state machine for managing animation state transitions
 func setup_state_machine():

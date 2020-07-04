@@ -229,6 +229,20 @@ tracks/0/keys = {
 "update": 1,
 "values": [ 184, 185, 186, 187, 188, 189, 190, 191, 192, 190 ]
 }
+tracks/1/type = "method"
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 1.8 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [  ],
+"method": "piercing_arrow"
+} ]
+}
 
 [sub_resource type="Animation" id=7]
 resource_name = "bow_idle"
@@ -736,9 +750,11 @@ wait_time = 3.0
 one_shot = true
 
 [node name="Skill3Cooldown" type="Timer" parent="."]
+wait_time = 2.0
 one_shot = true
 
 [node name="Skill4Cooldown" type="Timer" parent="."]
+wait_time = 5.0
 one_shot = true
 
 [node name="Skill5Cooldown" type="Timer" parent="."]

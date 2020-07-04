@@ -6,6 +6,13 @@ extends Control
 
 onready var health_bar = $HealthBar
 onready var mana_bar = $ManaBar
+onready var skill_slot1 = $Skill_Slot1
+onready var skill_slot2 = $Skill_Slot2
+onready var skill_slot3 = $Skill_Slot3
+onready var skill_slot4 = $Skill_Slot4
+onready var skill_slot5 = $Skill_Slot5
+onready var item_slot1 = $Item_Slot1
+onready var item_slot2 = $Item_Slot1
 
 # called when the node enters the scene tree for the first time
 func _ready():
