@@ -118,19 +118,14 @@ func movement_loop():
 	velocity = move_and_slide(velocity, Vector2(0, -1))
 
 # update health bar
-func hurt(skill_multiplier, intensity):
+func hurt(base_damage: int, knockback_intensity: int):
 	play_hurt_sfx()
-	# damage formula: normal damage value can be up to the maximum strength
-	# critical hits add additional damage equal to the strength
-	# var dmg = randi() % int(Global.profile.player_strength.stringValue) + 1
-	var dmg = (randi() % int(10) + 4) * skill_multiplier 
+	var dmg = (randi() % int(player.strength) + base_damage) 
 	var crit = false
 	# critical when random number rolled out of 100 is within critical value
-	# if randi() % 100+1 <= int(Global.profile.player_critical.stringValue):
-	if randi() % 100+1 <= int(30):
+	if randi() % 100+1 <= int(player.crit_rate):
 		crit = true
-		# dmg += int(Global.profile.player_strength.stringValue)
-		dmg += int(10) * skill_multiplier
+		dmg *= 2 # critical hits do double damage
 	health -= dmg
 	health_bar.value = health
 	$FCTMgr.show_value(dmg, crit)
@@ -145,7 +140,7 @@ func hurt(skill_multiplier, intensity):
 		$HealthBar.queue_free()
 	# apply knockback effect if any
 	else:
-		react_to_hit(intensity)
+		react_to_hit(knockback_intensity)
 
 
 # sets knockback_direction relative to 'other_body_origin'

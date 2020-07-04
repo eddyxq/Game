@@ -1,16 +1,16 @@
 extends Area2D
 
 ###############################################################################
-# rock strike sword skill
+# piercing arrow bow skill
 ###############################################################################
 
 # skill description:
-# range: short
-# damage: medium
-# mana cost: medium
+# range: long
+# damage: high
+# mana cost: high
 # aoe piercing: yes
 
-var SPEED = 180
+const SPEED = 600
 var velocity = Vector2()
 var projectile_dir
 
@@ -26,40 +26,29 @@ func set_projectile_direction(dir):
 
 func _physics_process(delta):
 	shoot_projectile(delta, projectile_dir)
-
-# remove projectile when it leaves the screen
-func _on_VisibilityNotifier2D_screen_exited():
-	queue_free()
-
-# detect collision with enemies
-func _on_Area2D_body_entered(body):
-	if "Enemy" in body.name:
-		var base_damage = 10
-		var knockback_intensity = 5
-		body.hurt(base_damage, knockback_intensity)
-		play_rock_sfx()
 	
+# detect collision with enemies
+func _on_Projectile_body_entered(body):
+	if "Enemy" in body.name:
+		var base_damage = 25
+		var knockback_intensity = 25
+		body.hurt(base_damage, knockback_intensity)
+		play_explosion_sfx()
+
 # shoots the projectile
 func shoot_projectile(delta, dir):
 	if dir == DIRECTION.W:
-		self.scale.x = -0.4
-		velocity.x = -(SPEED/18 * delta)
-		velocity.y = -(SPEED * delta)
+		velocity.x = -(SPEED * delta)
+		$ProjectileSprite.play("shoot_left")
 	elif dir == DIRECTION.E:
-		self.scale.x = 0.4
-		velocity.x = SPEED/18 * delta 
-		velocity.y = -(SPEED * delta)
+		velocity.x = SPEED * delta 
+		$ProjectileSprite.play("shoot_right")
 	translate(velocity)
 	
-# plays a rock sfx
-func play_rock_sfx():
-	SoundManager.play_sfx(load("res://audio/sfx/rock.ogg"), 1)
+# plays a explosion sfx
+func play_explosion_sfx():
+	SoundManager.play_sfx(load("res://audio/sfx/explosion.ogg"), 1)
 
+# despawn timer
 func _on_Timer_timeout():
-	SPEED = 0
-	$CollisionPolygon2D.queue_free()
-	$DespawnTimer.start()
-
-
-func _on_DespawnTimer_timeout():
 	queue_free()

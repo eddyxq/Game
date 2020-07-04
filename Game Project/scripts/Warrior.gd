@@ -32,6 +32,8 @@ const max_mp = 6
 const min_mp = 0
 var health = max_hp
 var mana = max_mp
+var strength = 10
+var crit_rate = 30
 
 # speed stats
 const jump_speed = 320
@@ -56,6 +58,7 @@ var state_machine
 # flags for player states
 var anim_finished = true # used to lock out player inputs for a short amount of time (0.2s) so prevent key spamming
 var invincible = false # true when player has invincible frames
+var can_move = true
 
 # flags that restrict usage of skills and items
 var skill_slot1_off_cooldown = true
@@ -65,6 +68,13 @@ var skill_slot4_off_cooldown = true
 var skill_slot5_off_cooldown = true
 var item_slot1_off_cooldown = true
 var item_slot2_off_cooldown = true
+
+# mana cost of each skill
+var skill1_mana_cost = 1
+var skill2_mana_cost = 2
+var skill3_mana_cost = 2
+var skill4_mana_cost = 4
+var skill5_mana_cost = 6
 
 # called when the node enters the scene tree for the first time
 func _ready():
@@ -94,13 +104,13 @@ func animation_loop(attack, skill1, skill2, skill3, skill4, skill5, item1, item2
 			anim_finished = false
 			play_animation("attack3")
 			apply_delay()
-		elif skill1 && skill_slot1_off_cooldown:
+		elif skill1 && skill_slot1_off_cooldown && mana >= skill1_mana_cost:
 			UI.skill_slot1.start_cooldown()
 			anim_finished = false
 			skill_slot1_off_cooldown = false
 			play_animation("distance_blade")
 			apply_delay()
-		elif skill2 && skill_slot2_off_cooldown:
+		elif skill2 && skill_slot2_off_cooldown && mana >= skill2_mana_cost:
 			UI.skill_slot2.start_cooldown()
 			anim_finished = false
 			skill_slot2_off_cooldown = false
@@ -108,18 +118,18 @@ func animation_loop(attack, skill1, skill2, skill3, skill4, skill5, item1, item2
 			movement_speed = max_speed * boost_speed_modifier
 			play_animation("buff")
 			apply_delay()
-		elif skill3 && skill_slot3_off_cooldown && is_on_floor():
+		elif skill3 && skill_slot3_off_cooldown && mana >= skill3_mana_cost && is_on_floor():
 			UI.skill_slot3.start_cooldown()
 			anim_finished = false
 			skill_slot3_off_cooldown = false
 			play_animation("rock_strike")
 			apply_delay()
-		elif skill4 && skill_slot4_off_cooldown:
+		elif skill4 && skill_slot4_off_cooldown && mana >= skill4_mana_cost:
 			UI.skill_slot4.start_cooldown()
 			anim_finished = false
 			play_animation("bow_attack")
 			apply_delay()
-		elif skill5 && skill_slot5_off_cooldown:
+		elif skill5 && skill_slot5_off_cooldown && mana >= skill5_mana_cost:
 			# not yet implemented
 			pass
 		elif item1 && item_slot1_off_cooldown:
@@ -136,11 +146,12 @@ func animation_loop(attack, skill1, skill2, skill3, skill4, skill5, item1, item2
 			UI.mana_bar.update_bar(mana)
 
 # movement logic
-func movement_loop(attack, up, left, right):
-	# pulls player downwards
+func movement_loop(attack, up, left, right, skill4):
+	# apply gravity
 	velocity.y += GRAVITY
-	update_hitbox_location()
+	
 	# update players direction 
+	update_hitbox_location()
 	if right:
 		dir = DIRECTION.E 
 		$Sprite.flip_h = false
@@ -148,11 +159,11 @@ func movement_loop(attack, up, left, right):
 		dir = DIRECTION.W
 		$Sprite.flip_h = true
 
+	# air state
 	if anim_finished:
 		if is_on_floor():
 			velocity.y = 0
-			# Jumping
-			if up:
+			if up: # jump
 				velocity.y = -jump_speed
 
 	# reduces movement speed during attack animation
@@ -174,6 +185,11 @@ func movement_loop(attack, up, left, right):
 
 	# translates player horizontally when left or right key is pressed
 	velocity.x = (-int(left) + int(right)) * movement_speed
+	
+	# restrict movement during certain attack/skill
+	if attack or skill4:
+		velocity.x = 0
+	
 	# apply translations to the player
 	velocity = move_and_slide(velocity, Vector2(0,-1))
 
@@ -254,7 +270,7 @@ func toggle_hitbox_off():
 
 # activates skill 1 shooting a ranged projectile
 func distance_blade():
-	var projectile = preload("res://scenes/Projectile.tscn").instance()
+	var projectile = preload("res://scenes/BladeProjectile.tscn").instance()
 	get_parent().add_child(projectile)
 	projectile.position = $PositionCenter.global_position
 	projectile.set_projectile_direction(dir)
@@ -272,7 +288,7 @@ func rock_strike():
 	
 # activates skill 4 shooting a ranged projectile
 func piercing_arrow():
-	var projectile = preload("res://scenes/Projectile.tscn").instance()
+	var projectile = preload("res://scenes/ArrowProjectile.tscn").instance()
 	get_parent().add_child(projectile)
 	projectile.position = $PositionCenter.global_position
 	projectile.set_projectile_direction(dir)
@@ -294,12 +310,16 @@ func restore_mp(amount):
 	if mana > max_mp:
 		mana = max_mp
 
+# ***temporarily disabled: might be adjusted or removed for game balance***
+# to enable to go HealthRecovery node and check off Autostart
 # auto health recovery over time
 func _on_HealthRecovery_timeout():
 	if health < max_hp && health > -1:
 		UI.health_bar.increase(health, 1)
 		health += 1
 
+# ***temporarily disabled: might be adjusted or removed for game balance***
+# to enable to go ManaRecovery node and check off Autostart
 # auto mana recovery over time
 func _on_ManaRecovery_timeout():
 	if mana < max_mp && health > -1:
@@ -326,7 +346,7 @@ func _on_IFrame_timeout():
 # applies damage when hitbox collide with enemies
 func _on_HitBox_body_entered(body):
 	if "Enemy" in body.name:
-		body.hurt(1, 0)
+		body.hurt(5, 0)
 
 # time used to countdown the animation of skill2 buff
 func _on_ghost_timer_timeout():

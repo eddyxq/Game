@@ -224,10 +224,10 @@ tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 0.1, 0.2, 0.4, 0.6, 0.9, 1.2, 1.5, 1.7, 1.9 ),
-"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ),
+"times": PoolRealArray( 0, 0.1, 0.2, 0.5, 0.7, 1, 1.3, 1.6, 1.7, 1.8, 1.9 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ),
 "update": 1,
-"values": [ 184, 185, 186, 187, 188, 189, 190, 191, 192, 190 ]
+"values": [ 184, 185, 186, 187, 188, 189, 190, 191, 192, 190, 38 ]
 }
 tracks/1/type = "method"
 tracks/1/path = NodePath(".")
@@ -241,6 +241,20 @@ tracks/1/keys = {
 "values": [ {
 "args": [  ],
 "method": "piercing_arrow"
+} ]
+}
+tracks/2/type = "method"
+tracks/2/path = NodePath(".")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 1.8 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [ 4 ],
+"method": "consume_mp"
 } ]
 }
 
@@ -739,11 +753,9 @@ parameters/playback = SubResource( 54 )
 
 [node name="HealthRecovery" type="Timer" parent="."]
 wait_time = 0.5
-autostart = true
 
 [node name="ManaRecovery" type="Timer" parent="."]
 wait_time = 4.0
-autostart = true
 
 [node name="AnimationDelay" type="Timer" parent="."]
 wait_time = 0.2

@@ -1,8 +1,14 @@
 extends Area2D
 
 ###############################################################################
-# distance blade warrior skill
+# distance blade sword skill
 ###############################################################################
+
+# skill description:
+# range: medium
+# damage: low
+# mana cost: low
+# aoe piercing: no
 
 const SPEED = 400
 var velocity = Vector2()
@@ -24,7 +30,9 @@ func _physics_process(delta):
 # detect collision with enemies
 func _on_Projectile_body_entered(body):
 	if "Enemy" in body.name:
-		body.hurt(2, 10)
+		var base_damage = 15
+		var knockback_intensity = 10
+		body.hurt(base_damage, knockback_intensity)
 		play_explosion_sfx()
 		$CollisionShape2D.queue_free()
 		$CPUParticles2D.queue_free()
