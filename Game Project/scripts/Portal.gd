@@ -5,6 +5,6 @@ onready var scene_changer = get_tree().get_root().get_node("/root/Controller/HUD
 
 
 func _on_Area2D_body_entered(body):
-	if body.name == "Warrior" && target_scene != "":
+	if body.name == "Player" && target_scene != "":
 		scene_changer.change_scene(target_scene)
 		

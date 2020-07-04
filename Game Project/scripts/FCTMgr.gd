@@ -4,7 +4,7 @@ extends Node2D
 # manages how the damage numbers pop up
 ###############################################################################
 
-var FCT = preload("res://scenes/FCT.tscn")
+var FCT = preload("res://scenes/enemy/FCT.tscn")
 
 export var travel = Vector2(0, -80)
 export var duration = 2

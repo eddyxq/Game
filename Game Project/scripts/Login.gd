@@ -38,14 +38,14 @@ func _on_HTTPRequest_request_completed(_result: int, response_code: int, _header
 	else:
 		# new users logging in for the first time goes to character creation screen
 		if response_code != 200:
-			var _scene = get_tree().change_scene("res://scenes/CreateCharacter.tscn")
+			var _scene = get_tree().change_scene("res://scenes/ui/CreateCharacter.tscn")
 		# existing users go straight into the game
 		else:
 			var _scene = get_tree().change_scene("res://scenes/Controller.tscn")
 
 # redirects user to the registration page
 func _on_RegisterButton_pressed():
-	var _scene = get_tree().change_scene("res://scenes/Register.tscn")
+	var _scene = get_tree().change_scene("res://scenes/ui/Register.tscn")
 
 # not yet implemented
 func _on_ForgotPasswordButton_pressed():

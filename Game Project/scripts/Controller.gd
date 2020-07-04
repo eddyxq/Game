@@ -21,7 +21,7 @@ var item1  # q / x
 var item2  # e / c
 
 # references to child nodes
-onready var player = $Warrior
+onready var player = $Player
 onready var ui = $HUD/UI
 onready var scene_changer = $HUD/SceneChanger/AnimationPlayer
 

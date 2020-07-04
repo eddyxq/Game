@@ -49,4 +49,4 @@ func start_item2_cooldown():
 	$Item_Slot2.start_cooldown()
 # opens up the user profile 
 func _on_TextureButton_pressed():
-	var _scene = get_tree().change_scene("res://scenes/UserProfile.tscn")
+	var _scene = get_tree().change_scene("res://scenes/ui/UserProfile.tscn")

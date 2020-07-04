@@ -4,7 +4,7 @@
 [ext_resource path="res://tilemap/forest_prop_tiles.tres" type="TileSet" id=2]
 [ext_resource path="res://images/tileset/backgrounds/sky2.png" type="Texture" id=3]
 [ext_resource path="res://images/tileset/backgrounds/clouds.png" type="Texture" id=4]
-[ext_resource path="res://scenes/Portal.tscn" type="PackedScene" id=5]
+[ext_resource path="res://scenes/environment/Portal.tscn" type="PackedScene" id=5]
 
 [node name="ForestStage" type="Node2D"]
 
@@ -38,8 +38,8 @@ tile_data = PoolIntArray( 327681, 9, 0, 327682, 10, 0, 327683, 11, 0, 327684, 12
 
 [node name="Portal" parent="." instance=ExtResource( 5 )]
 position = Vector2( 456, 240 )
-target_scene = "res://scenes/Map3_Desert.tscn"
+target_scene = "res://scenes/environment/Map3_Desert.tscn"
 
 [node name="Portal2" parent="." instance=ExtResource( 5 )]
 position = Vector2( 504, 80 )
-target_scene = "res://scenes/Map2_Snowing_Winterland.tscn"
+target_scene = "res://scenes/environment/Map2_Frozen.tscn"

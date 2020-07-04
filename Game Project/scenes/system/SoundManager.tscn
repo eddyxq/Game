@@ -70,3 +70,33 @@ volume_db = -15.0
 
 [node name="sfxPlayer20" type="AudioStreamPlayer2D" parent="SFX"]
 volume_db = -15.0
+
+[node name="sfxPlayer21" type="AudioStreamPlayer2D" parent="SFX"]
+volume_db = -15.0
+
+[node name="sfxPlayer22" type="AudioStreamPlayer2D" parent="SFX"]
+volume_db = -15.0
+
+[node name="sfxPlayer23" type="AudioStreamPlayer2D" parent="SFX"]
+volume_db = -15.0
+
+[node name="sfxPlayer24" type="AudioStreamPlayer2D" parent="SFX"]
+volume_db = -15.0
+
+[node name="sfxPlayer25" type="AudioStreamPlayer2D" parent="SFX"]
+volume_db = -15.0
+
+[node name="sfxPlayer26" type="AudioStreamPlayer2D" parent="SFX"]
+volume_db = -15.0
+
+[node name="sfxPlayer27" type="AudioStreamPlayer2D" parent="SFX"]
+volume_db = -15.0
+
+[node name="sfxPlayer28" type="AudioStreamPlayer2D" parent="SFX"]
+volume_db = -15.0
+
+[node name="sfxPlayer29" type="AudioStreamPlayer2D" parent="SFX"]
+volume_db = -15.0
+
+[node name="sfxPlayer30" type="AudioStreamPlayer2D" parent="SFX"]
+volume_db = -15.0

@@ -28,7 +28,7 @@ func _input(_event):
 	if (Input.is_action_just_pressed("ui_interact")):
 		var bodies = $Area2D.get_overlapping_bodies()
 		for body in bodies:
-			if body.name == "Warrior":
+			if body.name == "Player":
 				play_chest_sfx()
 				$AnimatedSprite.play("open")
 

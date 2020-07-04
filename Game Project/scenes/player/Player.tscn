@@ -1,7 +1,7 @@
 [gd_scene load_steps=62 format=2]
 
 [ext_resource path="res://images/warrior_sprites/sprite_sheet.png" type="Texture" id=1]
-[ext_resource path="res://scripts/Warrior.gd" type="Script" id=2]
+[ext_resource path="res://scripts/Player.gd" type="Script" id=2]
 [ext_resource path="res://images/warrior_sprites/sprite_sheet_emission.png" type="Texture" id=3]
 [ext_resource path="res://images/effects/2DLight.png" type="Texture" id=4]
 
@@ -706,7 +706,7 @@ glow_intensity = 0.12
 [sub_resource type="CircleShape2D" id=57]
 radius = 93.7913
 
-[node name="Warrior" type="KinematicBody2D"]
+[node name="Player" type="KinematicBody2D"]
 script = ExtResource( 2 )
 
 [node name="PositionCenter" type="Position2D" parent="."]

@@ -1,15 +1,18 @@
 [gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://scripts/UI.gd" type="Script" id=1]
-[ext_resource path="res://scenes/HealthBar.tscn" type="PackedScene" id=2]
+[ext_resource path="res://scenes/player/HealthBar.tscn" type="PackedScene" id=2]
 [ext_resource path="res://images/ui/Player_Portrait/portrait3.png" type="Texture" id=3]
 [ext_resource path="res://images/ui/UI_borders.png" type="Texture" id=4]
-[ext_resource path="res://scenes/ManaBar.tscn" type="PackedScene" id=5]
-[ext_resource path="res://scenes/SkillSlot.tscn" type="PackedScene" id=6]
+[ext_resource path="res://scenes/player/ManaBar.tscn" type="PackedScene" id=5]
+[ext_resource path="res://scenes/ui/SkillSlot.tscn" type="PackedScene" id=6]
 [ext_resource path="res://images/ui/Player_Portrait/portrait1.png" type="Texture" id=9]
 [ext_resource path="res://images/ui/Player_Portrait/portrait2 .png" type="Texture" id=10]
 [ext_resource path="res://images/ui/Player_Portrait/portrait4.png" type="Texture" id=11]
 [ext_resource path="res://images/ui/UI_borders_small.png" type="Texture" id=12]
+
+
+
 
 [sub_resource type="SpriteFrames" id=1]
 animations = [ {

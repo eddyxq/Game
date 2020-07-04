@@ -5,7 +5,7 @@ extends TextureButton
 ###############################################################################
 
 onready var time_label = $Value
-onready var player = get_tree().get_root().get_node("/root/Controller/Warrior")
+onready var player = get_tree().get_root().get_node("/root/Controller/Player")
 
 export var skill_slot_num = 1
 export var cooldown = 1.0

@@ -11,7 +11,7 @@ enum DIRECTION {
 	E, # east/right
 }
 
-onready var player = get_parent().get_node("Warrior")
+onready var player = get_parent().get_node("Player")
 onready var health_bar = $HealthBar
 
 # enemy speed and state variables
@@ -175,7 +175,7 @@ func play_death_sfx():
 
 # detects if the enemy collides with player
 func _on_Area2D_body_entered(body):
-	if body.name == "Warrior":
+	if body.name == "Player":
 		turn_around()
 
 # set direction for enemy to move to horizontally
@@ -207,7 +207,7 @@ func sees_player():
 				continue
 			# collision mask = sum of 2^(collision layers) - e.g 2^0 + 2^3 = 9
 			var collision = space_state.intersect_ray(eye, corner, [], 1) 
-			if collision and collision.collider.name == "Warrior":
+			if collision and collision.collider.name == "Player":
 				return true
 	return false
 
@@ -221,7 +221,7 @@ func _on_AnimationDelay_timeout():
 
 # deal damage to player when attacking hitbox collides with player
 func _on_HitBox_body_entered(body):
-	if "Warrior" in body.name:
+	if "Player" in body.name:
 		body.hurt(20)
 
 # called when attacking, toggles the hitbox on/off
@@ -257,14 +257,14 @@ func play_hurt_sfx():
 # spawns chest with respect to drop rate
 func spawn_chest():
 	# spawn chest
-	var chest = preload("res://scenes/Chest.tscn").instance()
+	var chest = preload("res://scenes/item/Chest.tscn").instance()
 	# drop chest with respect to DROPRATE
 	chest.drop(self)
 
 # drops loot which can be a chest and/or coins
 func drop_loot():
 	spawn_chest()
-	var coin_dropper = preload("res://scenes/CoinDropper.tscn").instance()
+	var coin_dropper = preload("res://scenes/item/CoinDropper.tscn").instance()
 	var _coin_amount = coin_dropper.drop(self)
 	emit_signal("loot_done")
 	

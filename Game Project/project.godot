@@ -16,14 +16,14 @@ _global_script_class_icons={
 [application]
 
 config/name="Prototype"
-run/main_scene="res://scenes/Map2_Snowing_Winterland.tscn"
+run/main_scene="res://scenes/environment/Map2_Frozen.tscn"
 config/icon="res://images/thumbnail/icon.png"
 
 [autoload]
 
 Global="*res://scripts/Global.gd"
 Firebase="*res://scripts/Firebase.gd"
-SoundManager="*res://scenes/SoundManager.tscn"
+SoundManager="*res://scenes/system/SoundManager.tscn"
 
 [display]
 

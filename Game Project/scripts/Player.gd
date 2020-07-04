@@ -296,14 +296,14 @@ func toggle_hitbox_off():
 
 # activates skill 1 shooting a ranged projectile
 func distance_blade():
-	var projectile = preload("res://scenes/BladeProjectile.tscn").instance()
+	var projectile = preload("res://scenes/player/BladeProjectile.tscn").instance()
 	get_parent().add_child(projectile)
 	projectile.position = $PositionCenter.global_position
 	projectile.set_projectile_direction(dir)
 
 # activates skill 3 summoning rock pillars from below
 func rock_strike():
-	var projectile = preload("res://scenes/RockStrike.tscn").instance()
+	var projectile = preload("res://scenes/player/RockStrike.tscn").instance()
 	get_parent().add_child(projectile)
 	if dir == DIRECTION.E:
 		projectile.position.x = $PositionCenter.global_position.x + 64
@@ -314,7 +314,7 @@ func rock_strike():
 	
 # activates skill 4 shooting a ranged projectile
 func piercing_arrow():
-	var projectile = preload("res://scenes/ArrowProjectile.tscn").instance()
+	var projectile = preload("res://scenes/player/ArrowProjectile.tscn").instance()
 	get_parent().add_child(projectile)
 	projectile.position = $PositionCenter.global_position
 	projectile.set_projectile_direction(dir)
@@ -380,7 +380,7 @@ func _on_HitBox_body_entered(body):
 
 # time used to countdown the animation of skill2 buff
 func _on_ghost_timer_timeout():
-	var ghost_sprite = preload("res://scenes/PlayerGhost.tscn").instance()
+	var ghost_sprite = preload("res://scenes/player/PlayerGhost.tscn").instance()
 	get_parent().add_child(ghost_sprite)
 	ghost_sprite.position = position
 	ghost_sprite.frame = $Sprite.frame
