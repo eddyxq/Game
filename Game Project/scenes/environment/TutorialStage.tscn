@@ -41,6 +41,7 @@ z_index = -1
 tile_set = ExtResource( 3 )
 cell_size = Vector2( 16, 16 )
 format = 1
+tile_data = PoolIntArray( 1048740, 57, 0, 1572709, 42, 0, 1572720, 57, 0, 1572744, 57, 0, 1572762, 57, 0, 1572784, 57, 0, 1572802, 57, 0, 1572849, 57, 0, 1507333, 57, 0, 1507359, 57, 0, 1507384, 57, 0, 1507397, 57, 0, 1507417, 57, 0, 1507431, 57, 0, 1507448, 57, 0, 1507467, 57, 0 )
 
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource( 6 )
