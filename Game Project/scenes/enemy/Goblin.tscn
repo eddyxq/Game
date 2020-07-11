@@ -6,8 +6,6 @@
 [ext_resource path="res://audio/sfx/slime.ogg" type="AudioStream" id=19]
 [ext_resource path="res://scenes/enemy/FCTMgr.tscn" type="PackedScene" id=20]
 
-
-
 [sub_resource type="Animation" id=1]
 resource_name = "attack"
 length = 0.5
@@ -150,7 +148,7 @@ position = Vector2( -17.5, 0 )
 texture = ExtResource( 1 )
 vframes = 5
 hframes = 7
-frame = 3
+frame = 2
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 anims/attack = SubResource( 1 )

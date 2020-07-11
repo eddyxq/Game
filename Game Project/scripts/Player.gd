@@ -61,20 +61,21 @@ var invincible = false # true when player has invincible frames
 var can_move = true
 
 # flags that restrict usage of skills and items
+var skill_slot0_off_cooldown = true
 var skill_slot1_off_cooldown = true
 var skill_slot2_off_cooldown = true
 var skill_slot3_off_cooldown = true
 var skill_slot4_off_cooldown = true
-var skill_slot5_off_cooldown = true
+
 var item_slot1_off_cooldown = true
 var item_slot2_off_cooldown = true
 
 # mana cost of each skill
+var skill0_mana_cost = 2
 var skill1_mana_cost = 1
 var skill2_mana_cost = 2
-var skill3_mana_cost = 2
-var skill4_mana_cost = 4
-var skill5_mana_cost = 6
+var skill3_mana_cost = 4
+var skill4_mana_cost = 6
 
 # flag to prevent spamming of invalid skill use sfx
 var invalid_sfx = true
@@ -85,7 +86,7 @@ func _ready():
 	setup_state_machine()
 
 # animation logic
-func animation_loop(attack, skill1, skill2, skill3, skill4, skill5, item1, item2):
+func animation_loop(attack,skill0, skill1, skill2, skill3, skill4, item1, item2):
 	# disable animations while player is attacking
 	if anim_finished: 
 		# moving state
@@ -107,6 +108,18 @@ func animation_loop(attack, skill1, skill2, skill3, skill4, skill5, item1, item2
 			anim_finished = false
 			play_animation("attack3")
 			apply_delay()
+		elif skill0 && skill_slot0_off_cooldown:
+			if mana >= skill0_mana_cost:
+				UI.skill_slot0.start_cooldown()
+				anim_finished = false
+				skill_slot0_off_cooldown = false
+				$GhostInterval.start()
+				movement_speed = max_speed * boost_speed_modifier
+				play_animation("buff")
+				apply_delay()
+			else:
+				play_invalid_sfx()
+				invalid_sfx = false
 		elif skill1 && skill_slot1_off_cooldown:
 			if mana >= skill1_mana_cost:
 				UI.skill_slot1.start_cooldown()
@@ -118,30 +131,18 @@ func animation_loop(attack, skill1, skill2, skill3, skill4, skill5, item1, item2
 				play_invalid_sfx()
 				invalid_sfx = false
 		elif skill2 && skill_slot2_off_cooldown:
-			if mana >= skill2_mana_cost:
+			if mana >= skill2_mana_cost && is_on_floor():
 				UI.skill_slot2.start_cooldown()
 				anim_finished = false
 				skill_slot2_off_cooldown = false
-				$GhostInterval.start()
-				movement_speed = max_speed * boost_speed_modifier
-				play_animation("buff")
-				apply_delay()
-			else:
-				play_invalid_sfx()
-				invalid_sfx = false
-		elif skill3 && skill_slot3_off_cooldown:
-			if mana >= skill3_mana_cost && is_on_floor():
-				UI.skill_slot3.start_cooldown()
-				anim_finished = false
-				skill_slot3_off_cooldown = false
 				play_animation("rock_strike")
 				apply_delay()
 			else:
 				play_invalid_sfx()
 				invalid_sfx = false
-		elif skill4 && skill_slot4_off_cooldown:
-			if mana >= skill4_mana_cost:
-				UI.skill_slot4.start_cooldown()
+		elif skill3 && skill_slot3_off_cooldown:
+			if mana >= skill3_mana_cost:
+				UI.skill_slot3.start_cooldown()
 				anim_finished = false
 				play_animation("bow_attack")
 				apply_delay()
@@ -149,8 +150,8 @@ func animation_loop(attack, skill1, skill2, skill3, skill4, skill5, item1, item2
 				play_invalid_sfx()
 				invalid_sfx = false
 		# not yet implemented
-		elif skill5 && skill_slot5_off_cooldown:
-			if mana >= skill5_mana_cost:
+		elif skill4 && skill_slot4_off_cooldown:
+			if mana >= skill4_mana_cost:
 				pass
 			else:
 				pass
@@ -170,7 +171,7 @@ func animation_loop(attack, skill1, skill2, skill3, skill4, skill5, item1, item2
 			UI.mana_bar.update_bar(mana)
 
 # movement logic
-func movement_loop(attack, up, left, right, skill4):
+func movement_loop(attack, up, left, right, skill3):
 	# apply gravity
 	velocity.y += GRAVITY
 	
@@ -191,7 +192,7 @@ func movement_loop(attack, up, left, right, skill4):
 				velocity.y = -jump_speed
 
 	# reduces movement speed during attack animation
-	if skill_slot2_off_cooldown:
+	if skill_slot0_off_cooldown:
 		if attack and is_on_floor():
 			movement_speed = base_speed * atkmove_speed_modifier
 		else:
@@ -211,7 +212,7 @@ func movement_loop(attack, up, left, right, skill4):
 	velocity.x = (-int(left) + int(right)) * movement_speed
 	
 	# restrict movement during certain attack/skill
-	if attack or skill4:
+	if attack or skill3:
 		velocity.x = 0
 	
 	# apply translations to the player
@@ -301,7 +302,7 @@ func distance_blade():
 	projectile.position = $PositionCenter.global_position
 	projectile.set_projectile_direction(dir)
 
-# activates skill 3 summoning rock pillars from below
+# activates skill 2 summoning rock pillars from below
 func rock_strike():
 	var projectile = preload("res://scenes/player/RockStrike.tscn").instance()
 	get_parent().add_child(projectile)
@@ -312,7 +313,7 @@ func rock_strike():
 	projectile.position.y = $PositionCenter.global_position.y + 36
 	projectile.set_projectile_direction(dir) 
 	
-# activates skill 4 shooting a ranged projectile
+# activates skill 3 shooting a ranged projectile
 func piercing_arrow():
 	var projectile = preload("res://scenes/player/ArrowProjectile.tscn").instance()
 	get_parent().add_child(projectile)
@@ -378,7 +379,7 @@ func _on_HitBox_body_entered(body):
 	if "Enemy" in body.name:
 		body.hurt(5, 0)
 
-# time used to countdown the animation of skill2 buff
+# time used to countdown the animation of skill0 buff
 func _on_ghost_timer_timeout():
 	var ghost_sprite = preload("res://scenes/player/PlayerGhost.tscn").instance()
 	get_parent().add_child(ghost_sprite)
@@ -400,23 +401,23 @@ func _on_Area2D_body_entered(body):
 
 # resets the cooldown of slot utilized allowing reuse
 func reset_skill_cooldown(skill_slot_num):
-	# skill num 1 thruough 5 are skill slots
-	# skill num 6 and 7 are item slots
-	if skill_slot_num == 1:
+	# skill num 0 thruough 4 are skill slots
+	# skill num 5 and 6 are item slots
+	if skill_slot_num == 0:
+		skill_slot0_off_cooldown = true
+		$GhostInterval.stop()
+		movement_speed = max_speed * run_speed_modifier
+	elif skill_slot_num == 1:
 		skill_slot1_off_cooldown = true
 	elif skill_slot_num == 2:
 		skill_slot2_off_cooldown = true
-		$GhostInterval.stop()
-		movement_speed = max_speed * run_speed_modifier
 	elif skill_slot_num == 3:
 		skill_slot3_off_cooldown = true
 	elif skill_slot_num == 4:
 		skill_slot4_off_cooldown = true
 	elif skill_slot_num == 5:
-		skill_slot5_off_cooldown = true
-	elif skill_slot_num == 6:
 		item_slot1_off_cooldown = true
-	elif skill_slot_num == 7:
+	elif skill_slot_num == 6:
 		item_slot2_off_cooldown = true
 
 

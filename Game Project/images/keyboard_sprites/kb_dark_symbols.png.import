@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/icon6.png-95da453468826feeb168d5bf91bdb7b7.stex"
+path="res://.import/kb_dark_symbols.png-bca3ded0f5ac3b870cbf636945aa001b.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://images/skill_icons/icon6.png"
-dest_files=[ "res://.import/icon6.png-95da453468826feeb168d5bf91bdb7b7.stex" ]
+source_file="res://images/keyboard_sprites/kb_dark_symbols.png"
+dest_files=[ "res://.import/kb_dark_symbols.png-bca3ded0f5ac3b870cbf636945aa001b.stex" ]
 
 [params]
 

@@ -1,0 +1,74 @@
+[gd_scene load_steps=10 format=2]
+
+[ext_resource path="res://images/keyboard_sprites/kb_dark_all.png" type="Texture" id=1]
+[ext_resource path="res://fonts/monogram.ttf" type="DynamicFontData" id=2]
+
+[sub_resource type="DynamicFont" id=1]
+font_data = ExtResource( 2 )
+
+[sub_resource type="AtlasTexture" id=2]
+atlas = ExtResource( 1 )
+region = Rect2( 128, 128, 16, 16 )
+
+[sub_resource type="AtlasTexture" id=3]
+atlas = ExtResource( 1 )
+region = Rect2( 160, 128, 16, 16 )
+
+[sub_resource type="SpriteFrames" id=4]
+animations = [ {
+"frames": [ SubResource( 2 ), SubResource( 3 ) ],
+"loop": true,
+"name": "default",
+"speed": 1.0
+} ]
+
+[sub_resource type="AtlasTexture" id=5]
+atlas = ExtResource( 1 )
+region = Rect2( 0, 400, 16, 16 )
+
+[sub_resource type="AtlasTexture" id=6]
+atlas = ExtResource( 1 )
+region = Rect2( 32, 400, 16, 16 )
+
+[sub_resource type="SpriteFrames" id=7]
+animations = [ {
+"frames": [ SubResource( 5 ), SubResource( 6 ) ],
+"loop": true,
+"name": "default",
+"speed": 1.0
+} ]
+
+[node name="TutoriaItems" type="Node2D"]
+
+[node name="Label" type="Label" parent="."]
+margin_left = -56.0
+margin_top = 24.0
+margin_right = 16.0
+margin_bottom = 38.0
+custom_fonts/font = SubResource( 1 )
+text = "Attack"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label2" type="Label" parent="."]
+margin_left = 27.3036
+margin_top = 24.0
+margin_right = 93.3036
+margin_bottom = 38.0
+custom_fonts/font = SubResource( 1 )
+text = "or"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="space" type="AnimatedSprite" parent="."]
+position = Vector2( 0, 32 )
+frames = SubResource( 4 )
+frame = 1
+playing = true
+
+[node name="z" type="AnimatedSprite" parent="."]
+position = Vector2( 64, 32 )
+frames = SubResource( 7 )
+playing = true
