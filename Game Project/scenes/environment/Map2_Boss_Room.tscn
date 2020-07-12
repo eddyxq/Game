@@ -1,27 +1,35 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=14 format=2]
 
+[ext_resource path="res://scenes/environment/Snow.tscn" type="PackedScene" id=1]
 [ext_resource path="res://scenes/enemy/Goblin.tscn" type="PackedScene" id=2]
 [ext_resource path="res://scenes/player/Player.tscn" type="PackedScene" id=3]
 [ext_resource path="res://scenes/system/SceneChanger.tscn" type="PackedScene" id=4]
 [ext_resource path="res://scenes/ui/UI.tscn" type="PackedScene" id=5]
-[ext_resource path="res://scenes/environment/TutorialStage.tscn" type="PackedScene" id=6]
+[ext_resource path="res://scenes/environment/BossRoom.tscn" type="PackedScene" id=6]
 [ext_resource path="res://scenes/ui/FPSMonitor.tscn" type="PackedScene" id=7]
 [ext_resource path="res://scenes/ui/Pause.tscn" type="PackedScene" id=8]
 [ext_resource path="res://scripts/Controller.gd" type="Script" id=9]
 [ext_resource path="res://scenes/ui/Dialog.tscn" type="PackedScene" id=10]
+[ext_resource path="res://scenes/ui/StageClearMenu.tscn" type="PackedScene" id=11]
+[ext_resource path="res://scripts/HUD.gd" type="Script" id=12]
+[ext_resource path="res://audio/music/boss_battle_music.ogg" type="AudioStream" id=13]
 
 [node name="Controller" type="Node2D"]
 script = ExtResource( 9 )
 
-[node name="TutorialStage" parent="." instance=ExtResource( 6 )]
+[node name="BossRoom" parent="." instance=ExtResource( 6 )]
 
 [node name="Enemy" parent="." instance=ExtResource( 2 )]
-position = Vector2( 4073, 370 )
+position = Vector2( 311, 330 )
+scale = Vector2( 2.5, 2.5 )
+is_boss = true
+max_health = 300.0
 
 [node name="Player" parent="." instance=ExtResource( 3 )]
-position = Vector2( 1000, 367 )
+position = Vector2( 150, 350 )
 
 [node name="HUD" type="CanvasLayer" parent="."]
+script = ExtResource( 12 )
 
 [node name="SceneChanger" parent="HUD" instance=ExtResource( 4 )]
 
@@ -35,3 +43,13 @@ anchor_bottom = 0.0
 visible = false
 
 [node name="DialogBox" parent="HUD" instance=ExtResource( 10 )]
+
+[node name="StageClearMenu" parent="HUD" instance=ExtResource( 11 )]
+visible = false
+
+[node name="BgMusic" type="AudioStreamPlayer2D" parent="HUD"]
+stream = ExtResource( 13 )
+autoplay = true
+
+[node name="Snow" parent="." instance=ExtResource( 1 )]
+position = Vector2( -400, 0 )

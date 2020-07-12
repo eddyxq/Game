@@ -29,12 +29,14 @@ func update_bar(mana):
 		$orb3.visible = true
 		$orb4.visible = true
 	elif mana == 5:
+		hide_all()
 		$orb1.visible = true
 		$orb2.visible = true
 		$orb3.visible = true
 		$orb4.visible = true
 		$orb5.visible = true
 	elif mana == 6:
+		hide_all()
 		$orb1.visible = true
 		$orb2.visible = true
 		$orb3.visible = true

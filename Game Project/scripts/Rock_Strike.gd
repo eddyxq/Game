@@ -53,7 +53,7 @@ func shoot_projectile(delta, dir):
 	
 # plays a rock sfx
 func play_rock_sfx():
-	SoundManager.play_sfx(load("res://audio/sfx/rock.ogg"), 1)
+	SoundManager.play("res://audio/sfx/rock.ogg")
 
 func _on_Timer_timeout():
 	SPEED = 0

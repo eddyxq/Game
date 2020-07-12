@@ -71,11 +71,11 @@ var item_slot1_off_cooldown = true
 var item_slot2_off_cooldown = true
 
 # mana cost of each skill
-var skill0_mana_cost = 2
+var skill0_mana_cost = 1
 var skill1_mana_cost = 1
-var skill2_mana_cost = 2
-var skill3_mana_cost = 4
-var skill4_mana_cost = 6
+var skill2_mana_cost = 1
+var skill3_mana_cost = 1
+var skill4_mana_cost = 1
 
 # flag to prevent spamming of invalid skill use sfx
 var invalid_sfx = true
@@ -142,7 +142,7 @@ func animation_loop(attack,skill0, skill1, skill2, skill3, skill4, item1, item2)
 				invalid_sfx = false
 		elif skill3 && skill_slot3_off_cooldown:
 			if mana >= skill3_mana_cost:
-				UI.skill_slot3.start_cooldown()
+				#UI.skill_slot3.start_cooldown()
 				anim_finished = false
 				play_animation("bow_attack")
 				apply_delay()
@@ -168,7 +168,7 @@ func animation_loop(attack,skill0, skill1, skill2, skill3, skill4, item1, item2)
 			play_potion_sfx()
 			# potion fully heals the player's mana
 			mana = max_mp
-			UI.mana_bar.update_bar(mana)
+		UI.mana_bar.update_bar(mana)
 
 # movement logic
 func movement_loop(attack, up, left, right, skill3):
@@ -190,6 +190,7 @@ func movement_loop(attack, up, left, right, skill3):
 			velocity.y = 0
 			if up: # jump
 				velocity.y = -jump_speed
+				play_footstep_sfx()
 
 	# reduces movement speed during attack animation
 	if skill_slot0_off_cooldown:

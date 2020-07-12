@@ -33,6 +33,9 @@ var dialog6 = [
 	'From here on out you are on your own.',
 	'Good luck adventurer!'
 ]
+var dialog7 = [
+	'Prepare yourself, you have angered the goblin cheif.'
+]
 
 
 func _on_CheckPoint_area_entered(_area):
@@ -48,6 +51,8 @@ func _on_CheckPoint_area_entered(_area):
 		dialog_box.set_dialog(dialog5)
 	elif check_point_id == 6:
 		dialog_box.set_dialog(dialog6)
+	elif check_point_id == 7:
+		dialog_box.set_dialog(dialog7)
 		
 	dialog_box.load_dialog()
 	dialog_box.show_dialog_box()

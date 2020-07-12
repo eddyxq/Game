@@ -11,11 +11,15 @@ enum DIRECTION {
 	E, # east/right
 }
 
+onready var UI = get_tree().get_root().get_node("/root/Controller/HUD")
 onready var player = get_parent().get_node("Player")
 onready var health_bar = $HealthBar
 
+export var is_boss = false
+
 # enemy speed and state variables
-var health = 100
+export var max_health = 100.0
+var health = max_health
 var base_speed = 100
 var velocity = Vector2(0, 0)
 var is_dead = false
@@ -47,6 +51,7 @@ var knockback_direction = Vector2.ZERO
 
 # called when the node enters the scene tree for the first time
 func _ready():
+	health = max_health
 	health_bar.value = 100
 	setup_timer() 
 	setup_state_machine()
@@ -54,6 +59,14 @@ func _ready():
 
 # called every delta
 func _physics_process(_delta):
+	# enemies dies when it falls down
+	if self.get_global_position().y > 440:
+		hurt(health, 0)
+		
+	# aggro range increase upon getting hit
+	if health < max_health:
+		vision = 250
+
 	if is_dead:
 		set_physics_process(false)
 	else:
@@ -127,7 +140,8 @@ func hurt(base_damage: int, knockback_intensity: int):
 		crit = true
 		dmg *= 2 # critical hits do double damage
 	health -= dmg
-	health_bar.value = health
+	var health_percent = health / max_health * 100.0
+	health_bar.value = health_percent
 	$FCTMgr.show_value(dmg, crit)
 	
 	# check if enemy is alive
@@ -141,7 +155,6 @@ func hurt(base_damage: int, knockback_intensity: int):
 	# apply knockback effect if any
 	else:
 		react_to_hit(knockback_intensity)
-
 
 # sets knockback_direction relative to 'other_body_origin'
 # general hit reaction
@@ -167,6 +180,9 @@ func on_timeout_complete():
 	wait_and_execute(0.5, "drop_loot")
 	# wait until loot is done then queue_free
 	yield(self, "loot_done")
+	if is_boss:
+		UI.stage_clear_menu.visible = true
+		UI.bg_music.queue_free()
 	queue_free()
 
 # plays a enemy dying sfx

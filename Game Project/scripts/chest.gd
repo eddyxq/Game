@@ -26,6 +26,8 @@ func drop(calling_node):
 # TODO: add loot, pause player movement?
 func _input(_event):
 	if (Input.is_action_just_pressed("ui_interact")):
+		$DespawnTimer.start()
+		$KeyPress.visible = false
 		var bodies = $Area2D.get_overlapping_bodies()
 		for body in bodies:
 			if body.name == "Player":
@@ -35,3 +37,7 @@ func _input(_event):
 # plays a chest opening sfx
 func play_chest_sfx():
 	SoundManager.play("res://audio/sfx/chest.ogg")
+
+
+func _on_DespawnTimer_timeout():
+	queue_free()
