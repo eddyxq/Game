@@ -91,7 +91,10 @@ func animation_loop(attack,skill0, skill1, skill2, skill3, skill4, item1, item2)
 	if anim_finished: 
 		# moving state
 		if velocity.x != 0 && is_on_floor():
-			play_animation("sprint")
+			if !skill_slot0_off_cooldown:
+				play_animation("sprint")
+			else:
+				play_animation("run")
 		# jumping state
 		elif velocity.y < 0 && !is_on_floor():
 			play_animation("jump")
@@ -287,6 +290,10 @@ func play_potion_sfx():
 # plays a coin sfx
 func play_coin_sfx():
 	SoundManager.play("res://audio/sfx/coin.ogg")
+	
+# plays a buff sfx
+func play_buff_sfx():
+	SoundManager.play("res://audio/sfx/buff.ogg")
 	
 # enables normal attack hitbox
 func toggle_hitbox_on():

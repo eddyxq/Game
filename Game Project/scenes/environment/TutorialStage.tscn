@@ -1,11 +1,10 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://tilemap/frozen_tiles.tres" type="TileSet" id=1]
 [ext_resource path="res://images/tileset/backgrounds/sky2.png" type="Texture" id=2]
 [ext_resource path="res://tilemap/frozen_prop_tiles.tres" type="TileSet" id=3]
 [ext_resource path="res://scenes/ui/TutorialSprint.tscn" type="PackedScene" id=4]
 [ext_resource path="res://tilemap/frozen_bg_tiles.tres" type="TileSet" id=5]
-[ext_resource path="res://audio/music/winter_day.ogg" type="AudioStream" id=6]
 [ext_resource path="res://scenes/ui/TutorialItems.tscn" type="PackedScene" id=7]
 [ext_resource path="res://scenes/ui/CheckPoint.tscn" type="PackedScene" id=8]
 [ext_resource path="res://scenes/ui/TutorialMovement.tscn" type="PackedScene" id=9]
@@ -44,10 +43,6 @@ cell_size = Vector2( 16, 16 )
 format = 1
 tile_data = PoolIntArray( 1048740, 57, 0, 1572709, 42, 0, 1572720, 57, 0, 1572744, 57, 0, 1572762, 57, 0, 1572784, 57, 0, 1572802, 57, 0, 1572849, 57, 0, 1507333, 57, 0, 1507359, 57, 0, 1507384, 57, 0, 1507397, 57, 0, 1507417, 57, 0, 1507431, 57, 0, 1507448, 57, 0, 1507467, 57, 0 )
 
-[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
-stream = ExtResource( 6 )
-volume_db = -10.0
-
 [node name="CheckPoint1" parent="." instance=ExtResource( 8 )]
 position = Vector2( -2500, 0 )
 check_point_id = 1
@@ -79,7 +74,7 @@ position = Vector2( -2592, 336 )
 position = Vector2( -1728, 328 )
 
 [node name="TutorialSprint" parent="." instance=ExtResource( 4 )]
-position = Vector2( -730, 336 )
+position = Vector2( -450, 360 )
 
 [node name="TutorialAttack" parent="." instance=ExtResource( 11 )]
 position = Vector2( 250, 336 )

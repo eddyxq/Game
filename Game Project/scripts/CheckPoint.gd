@@ -12,12 +12,13 @@ var dialog1 = [
 	'Perhaps you should explore the area.'
 ]
 var dialog2= [
-	'Watch out! There is a small pit in front of you.',
-	'You do not want to fall in, consider jumping over it.'
+	'Watch out! There is a ledge in front of you.',
+	'Consider jumping over it.',
+	'Those who fall will lose all their memories and be sent to the beginning.'
 ]
 var dialog3 = [
 	'Press Shift to active your speed skill.',
-	'That should help you get over this massive pit.'
+	'That should help you get over this river.'
 ]
 var dialog4 = [
 	'Watch out! There is a dangerous monster ahead.',

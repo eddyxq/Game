@@ -1,14 +1,10 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=6 format=2]
 
+[ext_resource path="res://scenes/ui/HUD.tscn" type="PackedScene" id=1]
 [ext_resource path="res://scenes/enemy/Goblin.tscn" type="PackedScene" id=2]
 [ext_resource path="res://scenes/player/Player.tscn" type="PackedScene" id=3]
-[ext_resource path="res://scenes/system/SceneChanger.tscn" type="PackedScene" id=4]
-[ext_resource path="res://scenes/ui/UI.tscn" type="PackedScene" id=5]
 [ext_resource path="res://scenes/environment/TutorialStage.tscn" type="PackedScene" id=6]
-[ext_resource path="res://scenes/ui/FPSMonitor.tscn" type="PackedScene" id=7]
-[ext_resource path="res://scenes/ui/Pause.tscn" type="PackedScene" id=8]
 [ext_resource path="res://scripts/Controller.gd" type="Script" id=9]
-[ext_resource path="res://scenes/ui/Dialog.tscn" type="PackedScene" id=10]
 
 [node name="Controller" type="Node2D"]
 script = ExtResource( 9 )
@@ -21,17 +17,4 @@ position = Vector2( 4073, 370 )
 [node name="Player" parent="." instance=ExtResource( 3 )]
 position = Vector2( 1000, 367 )
 
-[node name="HUD" type="CanvasLayer" parent="."]
-
-[node name="SceneChanger" parent="HUD" instance=ExtResource( 4 )]
-
-[node name="UI" parent="HUD" instance=ExtResource( 5 )]
-anchor_right = 0.0
-anchor_bottom = 0.0
-
-[node name="FPSMonitor" parent="HUD" instance=ExtResource( 7 )]
-
-[node name="DialogBox" parent="HUD" instance=ExtResource( 10 )]
-
-[node name="Pause" parent="HUD" instance=ExtResource( 8 )]
-visible = false
+[node name="HUD" parent="." instance=ExtResource( 1 )]

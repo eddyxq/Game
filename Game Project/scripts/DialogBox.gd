@@ -21,7 +21,7 @@ func load_dialog():
 		$Tween.interpolate_property(
 			$TextureRect/RichTextLabel, "percent_visible", 0, 1, 1, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 		$Tween.start()
-		if !$AudioStreamPlayer2D.is_playing():
+		if !$AudioStreamPlayer.is_playing():
 			play_dialog_sfx()
 		
 	else:
@@ -30,7 +30,7 @@ func load_dialog():
 	
 func _on_Tween_tween_completed(_object, _key):
 	finished = true
-	$AudioStreamPlayer2D.stop()
+	$AudioStreamPlayer.stop()
 
 # pauses the scene and displays the dialog box
 func show_dialog_box():
@@ -48,8 +48,8 @@ func set_dialog(text):
 
 # plays a dialog scrolling sfx
 func play_dialog_sfx():
-	$AudioStreamPlayer2D.play()
+	$AudioStreamPlayer.play()
 	
 # stops a dialog scrolling sfx
 func stop_dialog_sfx():
-	$AudioStreamPlayer2D.stop()
+	$AudioStreamPlayer.stop()

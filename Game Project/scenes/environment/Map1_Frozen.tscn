@@ -1,15 +1,12 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://scripts/Controller.gd" type="Script" id=1]
-[ext_resource path="res://scenes/ui/Dialog.tscn" type="PackedScene" id=2]
+[ext_resource path="res://scenes/ui/HUD.tscn" type="PackedScene" id=2]
 [ext_resource path="res://scenes/enemy/Goblin.tscn" type="PackedScene" id=3]
-[ext_resource path="res://scenes/ui/UI.tscn" type="PackedScene" id=4]
+[ext_resource path="res://audio/music/winter_day.ogg" type="AudioStream" id=4]
 [ext_resource path="res://scenes/environment/Snow.tscn" type="PackedScene" id=5]
-[ext_resource path="res://scenes/system/SceneChanger.tscn" type="PackedScene" id=6]
-[ext_resource path="res://scenes/ui/FPSMonitor.tscn" type="PackedScene" id=7]
 [ext_resource path="res://scenes/environment/FrozenStage.tscn" type="PackedScene" id=8]
 [ext_resource path="res://scenes/player/Player.tscn" type="PackedScene" id=9]
-[ext_resource path="res://scenes/ui/Pause.tscn" type="PackedScene" id=10]
 
 [node name="Controller" type="Node2D"]
 script = ExtResource( 1 )
@@ -49,20 +46,11 @@ position = Vector2( 2450, 368 )
 [node name="Player" parent="." instance=ExtResource( 9 )]
 position = Vector2( 150, 350 )
 
-[node name="HUD" type="CanvasLayer" parent="."]
+[node name="HUD" parent="." instance=ExtResource( 2 )]
 
-[node name="SceneChanger" parent="HUD" instance=ExtResource( 6 )]
-
-[node name="UI" parent="HUD" instance=ExtResource( 4 )]
-anchor_right = 0.0
-anchor_bottom = 0.0
-
-[node name="FPSMonitor" parent="HUD" instance=ExtResource( 7 )]
-
-[node name="DialogBox" parent="HUD" instance=ExtResource( 2 )]
-
-[node name="Pause" parent="HUD" instance=ExtResource( 10 )]
-visible = false
+[node name="BgMusic" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 4 )
+autoplay = true
 
 [node name="Snow" parent="." instance=ExtResource( 5 )]
 position = Vector2( -400, 0 )

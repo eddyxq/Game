@@ -49,9 +49,9 @@ __meta__ = {
 }
 
 [node name="Label2" type="Label" parent="."]
-margin_left = -102.068
+margin_left = -96.0
 margin_top = 24.446
-margin_right = -30.0675
+margin_right = -23.9995
 margin_bottom = 38.446
 custom_fonts/font = SubResource( 4 )
 text = "Right Shift"

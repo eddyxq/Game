@@ -24,8 +24,6 @@ var base_speed = 100
 var velocity = Vector2(0, 0)
 var is_dead = false
 var gravity = 18
-var despawn_timer = 1
-var timer = null
 
 # variables related to AI pathfinding
 var react_time = 100
@@ -42,8 +40,6 @@ var direction_facing = DIRECTION.W # default left facing
 var state_machine = null
 var anim_finished = true
 
-signal loot_done
-
 # knockback variables
 # TODO: change knockback_direction to local
 var knockback_frames = 0
@@ -53,7 +49,6 @@ var knockback_direction = Vector2.ZERO
 func _ready():
 	health = max_health
 	health_bar.value = 100
-	setup_timer() 
 	setup_state_machine()
 	set_process(true)
 
@@ -147,7 +142,7 @@ func hurt(base_damage: int, knockback_intensity: int):
 	# check if enemy is alive
 	if health < 1:
 		is_dead = true
-		timer.start()
+		$DespawnTimer.start()
 		state_machine.travel("dead")
 		play_death_sfx()
 		$CollisionShape2D.queue_free()
@@ -166,23 +161,11 @@ func react_to_hit(intensity):
 		knockback_frames = intensity
 		knockback_direction = transform.origin - player.transform.origin
 
-# init timer 
-func setup_timer():
-	timer = Timer.new()
-	timer.set_wait_time(despawn_timer)
-	timer.connect("timeout", self, "on_timeout_complete")
-	add_child(timer)
-
 # despawns and removes sprite
-func on_timeout_complete():
+func _on_DespawnTimer_timeout():
 	$Sprite.visible = false
-	# wait 0.5 seconds then try to spawn loot
-	wait_and_execute(0.5, "drop_loot")
-	# wait until loot is done then queue_free
-	yield(self, "loot_done")
 	if is_boss:
 		UI.stage_clear_menu.visible = true
-		UI.bg_music.queue_free()
 	queue_free()
 
 # plays a enemy dying sfx
@@ -282,13 +265,3 @@ func drop_loot():
 	spawn_chest()
 	var coin_dropper = preload("res://scenes/item/CoinDropper.tscn").instance()
 	var _coin_amount = coin_dropper.drop(self)
-	emit_signal("loot_done")
-	
-# wait_time: in seconds
-# function: function to execute
-func wait_and_execute(wait_time, function):
-	var my_timer = Timer.new()
-	my_timer.set_wait_time(wait_time)
-	my_timer.connect("timeout", self, function)
-	add_child(my_timer)
-	my_timer.start()
