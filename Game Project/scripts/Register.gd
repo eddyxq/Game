@@ -31,8 +31,8 @@ func _on_HTTPRequest_request_completed(_result: int, response_code: int, _header
 	else:
 		notification.text = "Registration sucessful!"
 		yield(get_tree().create_timer(2.0), "timeout")
-		var _scene = get_tree().change_scene("res://scenes/Login.tscn")
+		var _scene = get_tree().change_scene("res://scenes/ui/Login.tscn")
 
 # redirects user to the login page
 func _on_CancelButton_pressed():
-	var _scene = get_tree().change_scene("res://scenes/Login.tscn")
+	var _scene = get_tree().change_scene("res://scenes/ui/Login.tscn")

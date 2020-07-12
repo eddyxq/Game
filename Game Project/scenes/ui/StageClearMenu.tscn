@@ -1,0 +1,59 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://scripts/StageClearMenu.gd" type="Script" id=1]
+[ext_resource path="res://fonts/monogram.ttf" type="DynamicFontData" id=3]
+
+[sub_resource type="DynamicFont" id=1]
+size = 72
+outline_size = 1
+outline_color = Color( 0.392157, 0.392157, 0.392157, 1 )
+font_data = ExtResource( 3 )
+
+[sub_resource type="DynamicFont" id=2]
+size = 96
+font_data = ExtResource( 3 )
+
+[node name="StageClearMenu" type="Control"]
+pause_mode = 2
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ColorRect" type="ColorRect" parent="."]
+pause_mode = 2
+margin_right = 640.0
+margin_bottom = 360.0
+color = Color( 1, 1, 1, 0.27451 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ResumeButton" type="Button" parent="."]
+pause_mode = 2
+margin_left = 176.0
+margin_top = 184.0
+margin_right = 485.0
+margin_bottom = 247.0
+custom_fonts/font = SubResource( 1 )
+custom_colors/font_color_hover = Color( 0, 0, 0, 1 )
+custom_colors/font_color_pressed = Color( 0.27451, 0.27451, 0.27451, 1 )
+text = "Play Again!"
+flat = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="."]
+margin_left = 80.0
+margin_top = 96.0
+margin_right = 584.0
+margin_bottom = 172.0
+custom_fonts/font = SubResource( 2 )
+text = "Stage Cleared!"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+[connection signal="pressed" from="ResumeButton" to="." method="_on_ResumeButton_pressed"]

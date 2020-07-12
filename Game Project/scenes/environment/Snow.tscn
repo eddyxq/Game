@@ -1,0 +1,20 @@
+[gd_scene load_steps=2 format=2]
+
+[sub_resource type="Curve" id=1]
+min_value = -40.0
+max_value = 40.0
+_data = [ Vector2( 0, 1 ), 0.0, 0.0, 0, 0, Vector2( 0.0678408, 21 ), 0.0, 0.0, 0, 0, Vector2( 0.110241, -8.81818 ), 0.0, 0.0, 0, 0, Vector2( 0.23092, 20.2727 ), 518.563, 518.563, 0, 0, Vector2( 0.26484, 10.8182 ), -2880.18, -2880.18, 0, 0, Vector2( 0.383562, 25.3636 ), 905.863, 905.863, 0, 0, Vector2( 0.467058, 5.72727 ), -1592.72, -1592.72, 0, 0, Vector2( 0.570124, -13.9091 ), 1003.42, 1003.42, 0, 0, Vector2( 0.62818, 39.1818 ), 557.457, 557.457, 0, 0, Vector2( 0.740378, -11 ), 0.0, 0.0, 0, 0, Vector2( 0.827136, 17.3636 ), 0.0, 0.0, 0, 0, Vector2( 0.903457, -30.6364 ), 0.0, 0.0, 0, 0, Vector2( 0.998043, 2.09091 ), 0.0, 0.0, 0, 0 ]
+
+[node name="Snow" type="Node2D"]
+
+[node name="CPUParticles2D" type="CPUParticles2D" parent="."]
+amount = 500
+lifetime = 7.5
+preprocess = 7.5
+randomness = 1.0
+emission_shape = 2
+emission_rect_extents = Vector2( 1280, 1 )
+gravity = Vector2( 0, 10 )
+tangential_accel_curve = SubResource( 1 )
+scale_amount = 2.0
+scale_amount_random = 1.0

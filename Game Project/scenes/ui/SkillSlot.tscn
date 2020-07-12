@@ -1,0 +1,62 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://scripts/SkillSlot.gd" type="Script" id=1]
+[ext_resource path="res://images/skill_icons/blank_icon.png" type="Texture" id=2]
+
+[sub_resource type="DynamicFontData" id=1]
+font_path = "res://fonts/monogram.ttf"
+
+[sub_resource type="DynamicFont" id=2]
+size = 23
+font_data = SubResource( 1 )
+
+[node name="Skill_Slot" type="TextureButton"]
+margin_right = 32.0
+margin_bottom = 32.0
+rect_scale = Vector2( 1.5, 1.5 )
+texture_normal = ExtResource( 2 )
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Sweep" type="TextureProgress" parent="."]
+modulate = Color( 0.145098, 0.145098, 0.145098, 0.87451 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+value = 100.0
+fill_mode = 5
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Timer" type="Timer" parent="."]
+one_shot = true
+
+[node name="Counter" type="MarginContainer" parent="."]
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = -64.0
+margin_bottom = -32.0
+mouse_filter = 2
+custom_constants/margin_right = 5
+custom_constants/margin_left = 5
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Value" type="Label" parent="."]
+margin_left = -5.78891
+margin_top = -7.44667
+margin_right = 26.2111
+margin_bottom = 24.5533
+custom_fonts/font = SubResource( 2 )
+text = "0"
+align = 1
+valign = 1
+clip_text = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+[connection signal="timeout" from="Timer" to="." method="_on_Timer_timeout"]
