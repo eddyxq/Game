@@ -4,53 +4,32 @@ extends Node2D
 # managing the playback of music and sfx
 ###############################################################################
 
-var dic: Dictionary = {}
+var num_players = 8
+var bus = "master"
 
-func play_sfx(audio_clip: AudioStream, priority: int = 0):
-	for child in $SFX.get_children():
-		if child.playing == false:
-			child.stream = audio_clip
-			child.play()
-			dic[child.name] = priority
-			break
-
-		if child.get_index() == $SFX.get_child_count() - 1:
-			var priority_player = find_oldest_player()
-			if priority_player != null:
-				priority_player.stream = audio_clip
-				priority_player.play()
+var available = []
+var queue = []
 
 
-func check_priority(_dic: Dictionary, _priority):
-	var prio_list: Array = []
-	
-	for key in _dic:
-		if _priority > _dic[key]:
-			prio_list.append(key)
-			
-	var last_prio = null
-	for key in prio_list:
-		if last_prio == null:
-			last_prio = key
-			continue
-		if _dic[key] < _dic[last_prio]:
-			last_prio = key
-	return last_prio
+func _ready():
+	for i in num_players:
+		var p = AudioStreamPlayer.new()
+		add_child(p)
+		available.append(p)
+		p.connect("finished", self, "_on_stream_finished", [p])
+		p.bus = bus
 
 
-func find_oldest_player():
-	var last_child = null
-	
-	for child in $SFX.get_children():
-		if last_child == null:
-			last_child = child
-			continue
-		# find player which played the longest
-		if child.get_playback_position() > last_child.get_playback_position():
-			last_child = child
-	return last_child
+func _on_stream_finished(stream):
+	available.append(stream)
 
 
-func play_music(music_clip: AudioStream):
-	$Music/Music_Player.stream = music_clip
-	$Music/Music_Player.play()
+func play(sound_path):
+	queue.append(sound_path)
+
+
+func _process(_delta):
+	if not queue.empty() and not available.empty():
+		available[0].stream = load(queue.pop_front())
+		available[0].play()
+		available.pop_front()

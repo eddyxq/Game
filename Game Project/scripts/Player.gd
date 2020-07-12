@@ -251,41 +251,41 @@ func apply_delay():
 
 # plays a sword swing sfx
 func play_atk_sfx():
-	SoundManager.play_sfx(load("res://audio/sfx/sword_swing.ogg"), 0)
+	SoundManager.play("res://audio/sfx/sword_swing.ogg")
 	
 # plays a swoosh sfx
 func play_swoosh_sfx():
-	SoundManager.play_sfx(load("res://audio/sfx/swoosh.ogg"), 0)
+	SoundManager.play("res://audio/sfx/swoosh.ogg")
 	
 # plays a rock sfx
 func play_rock_sfx():
-	SoundManager.play_sfx(load("res://audio/sfx/rock.ogg"), 0)
+	SoundManager.play("res://audio/sfx/rock.ogg")
 	
 # plays a footstep sfx
 func play_footstep_sfx():
-	SoundManager.play_sfx(load("res://audio/sfx/footstep.ogg"), 0)
+	SoundManager.play("res://audio/sfx/footstep.ogg")
 
 # plays a hurt sfx
 func play_hurt_sfx():
-	SoundManager.play_sfx(load("res://audio/sfx/hurt.ogg"), 0)
+	SoundManager.play("res://audio/sfx/hurt.ogg")
 	
 # plays a invalid sfx
 func play_invalid_sfx():
 	if invalid_sfx:
-		SoundManager.play_sfx(load("res://audio/sfx/invalid.ogg"), 1)
+		SoundManager.play("res://audio/sfx/invalid.ogg")
 		$InvalidSFX.start()
 	
 # plays a invalid sfx
 func play_death_sfx():
-	SoundManager.play_sfx(load("res://audio/sfx/death.ogg"), 0)
+	SoundManager.play("res://audio/sfx/death.ogg")
 	
 # plays a potion sfx
 func play_potion_sfx():
-	SoundManager.play_sfx(load("res://audio/sfx/potion.ogg"), 0)
+	SoundManager.play("res://audio/sfx/potion.ogg")
 	
 # plays a coin sfx
 func play_coin_sfx():
-	SoundManager.play_sfx(load("res://audio/sfx/coin.ogg"), 0)
+	SoundManager.play("res://audio/sfx/coin.ogg")
 	
 # enables normal attack hitbox
 func toggle_hitbox_on():

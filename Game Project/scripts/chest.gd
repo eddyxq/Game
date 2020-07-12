@@ -34,4 +34,4 @@ func _input(_event):
 
 # plays a chest opening sfx
 func play_chest_sfx():
-	SoundManager.play_sfx(load("res://audio/sfx/chest.ogg"), 1)
+	SoundManager.play("res://audio/sfx/chest.ogg")

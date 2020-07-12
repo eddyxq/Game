@@ -23,7 +23,7 @@ config/icon="res://images/thumbnail/icon.png"
 
 Global="*res://scripts/Global.gd"
 Firebase="*res://scripts/Firebase.gd"
-SoundManager="*res://scenes/system/SoundManager.tscn"
+SoundManager="*res://scripts/SoundManager.gd"
 
 [display]
 

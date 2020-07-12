@@ -171,7 +171,7 @@ func on_timeout_complete():
 
 # plays a enemy dying sfx
 func play_death_sfx():
-	SoundManager.play_sfx(load("res://audio/sfx/slime.ogg"), 1)
+	SoundManager.play("res://audio/sfx/slime.ogg")
 
 # detects if the enemy collides with player
 func _on_Area2D_body_entered(body):
@@ -252,7 +252,7 @@ func turn_around():
 
 # plays a hurt sfx
 func play_hurt_sfx():
-	SoundManager.play_sfx(load("res://audio/sfx/hit.ogg"), 0)
+	SoundManager.play("res://audio/sfx/hit.ogg")
 
 # spawns chest with respect to drop rate
 func spawn_chest():

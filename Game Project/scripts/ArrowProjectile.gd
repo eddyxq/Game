@@ -47,7 +47,7 @@ func shoot_projectile(delta, dir):
 	
 # plays a explosion sfx
 func play_explosion_sfx():
-	SoundManager.play_sfx(load("res://audio/sfx/explosion.ogg"), 1)
+	SoundManager.play("res://audio/sfx/explosion.ogg")
 
 # despawn timer
 func _on_Timer_timeout():
