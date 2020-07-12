@@ -59,10 +59,10 @@ anchor_bottom = 0.0
 
 [node name="FPSMonitor" parent="HUD" instance=ExtResource( 7 )]
 
+[node name="DialogBox" parent="HUD" instance=ExtResource( 2 )]
+
 [node name="Pause" parent="HUD" instance=ExtResource( 10 )]
 visible = false
-
-[node name="DialogBox" parent="HUD" instance=ExtResource( 2 )]
 
 [node name="Snow" parent="." instance=ExtResource( 5 )]
 position = Vector2( -400, 0 )

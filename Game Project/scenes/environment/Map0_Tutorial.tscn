@@ -31,7 +31,7 @@ anchor_bottom = 0.0
 
 [node name="FPSMonitor" parent="HUD" instance=ExtResource( 7 )]
 
+[node name="DialogBox" parent="HUD" instance=ExtResource( 10 )]
+
 [node name="Pause" parent="HUD" instance=ExtResource( 8 )]
 visible = false
-
-[node name="DialogBox" parent="HUD" instance=ExtResource( 10 )]
