@@ -54,13 +54,13 @@ func _physics_process(_delta):
 		player.play_animation("idle")
 	
 	# player dies when he falls down
-	if player.get_global_position().y > 440:
+	if player.get_global_position().y > 442:
 		player.health = 0
 	
 	# disable controller when player dies
 	if player.health < 1:
 		player.play_death_sfx()
-		player.play_animation("dead")
+		player.play_animation("die")
 		set_physics_process(false) 
 		yield(get_tree().create_timer(2.0), "timeout")
 		var _scene = get_tree().reload_current_scene()

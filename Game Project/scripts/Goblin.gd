@@ -21,6 +21,7 @@ export var is_boss = false
 export var max_health = 100.0
 var health = max_health
 var base_speed = 100
+var strength = 10
 var velocity = Vector2(0, 0)
 var is_dead = false
 var gravity = 18
@@ -221,7 +222,8 @@ func _on_AnimationDelay_timeout():
 # deal damage to player when attacking hitbox collides with player
 func _on_HitBox_body_entered(body):
 	if "Player" in body.name:
-		body.hurt(20)
+		var dmg = (randi() % int(strength) + 5) 
+		body.hurt(dmg)
 
 # called when attacking, toggles the hitbox on/off
 func toggle_hitbox():

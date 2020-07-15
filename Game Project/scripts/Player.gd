@@ -36,9 +36,9 @@ var strength = 10
 var crit_rate = 30
 
 # speed stats
-const jump_speed = 320
-const run_speed_modifier = 1.4
-const boost_speed_modifier = 2.5
+const jump_speed = 330
+const run_speed_modifier = 1.3
+const boost_speed_modifier = 2.3
 const atkmove_speed_modifier = 0
 var base_speed = 50
 var max_speed = 100
@@ -58,7 +58,6 @@ var state_machine
 # flags for player states
 var anim_finished = true # used to lock out player inputs for a short amount of time (0.2s) so prevent key spamming
 var invincible = false # true when player has invincible frames
-var can_move = true
 
 # flags that restrict usage of skills and items
 var skill_slot0_off_cooldown = true
@@ -427,6 +426,3 @@ func reset_skill_cooldown(skill_slot_num):
 		item_slot1_off_cooldown = true
 	elif skill_slot_num == 6:
 		item_slot2_off_cooldown = true
-
-
-
