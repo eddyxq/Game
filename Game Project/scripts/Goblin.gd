@@ -109,8 +109,8 @@ func movement_loop():
 	# apply knockback when knockback_frames available
 	if (knockback_frames > 0):
 		# apply knockback
-		velocity = knockback_direction.normalized() * base_speed * knockback_intensity
-		print("knockback frame:", knockback_frames, "-", velocity)
+		velocity = knockback_direction * base_speed * knockback_intensity
+		print("knockback frame:", knockback_frames, "-", knockback_direction)
 		knockback_frames -= 1
 		if (knockback_frames == 0):
 			stun_counter = 15
@@ -131,7 +131,7 @@ func movement_loop():
 
 # update health bar
 # returns boolean: true if damage was critical, false otherwise
-func hurt(base_damage: int, knockback_intensity: int):
+func hurt(base_damage: int, knockback_intensity: int, knockback_frames: int):
 	play_hurt_sfx()
 	var dmg = (randi() % int(player.strength) + base_damage) 
 	var crit = false
@@ -153,7 +153,7 @@ func hurt(base_damage: int, knockback_intensity: int):
 		$HealthBar.queue_free()
 	# apply knockback effect if any
 	else:
-		react_to_hit(knockback_intensity)
+		react_to_hit(knockback_intensity, knockback_frames)
 	
 	return crit
 	
@@ -163,12 +163,13 @@ func hurt(base_damage: int, knockback_intensity: int):
 
 # general hit reaction
 # applies a knockback scaling off intensity input
-func react_to_hit(intensity):
+func react_to_hit(intensity, frames):
 	if (intensity > 0 and knockback_frames <= 0):
 		# set some knockback_frames
-		knockback_frames = 10
+		knockback_frames = frames
 		knockback_intensity = intensity
 		knockback_direction = transform.origin - player.transform.origin
+		knockback_direction = knockback_direction.normalized()
 
 # init timer 
 func setup_timer():

@@ -376,7 +376,7 @@ func _on_InvalidSFX_timeout():
 # applies damage when hitbox collide with enemies
 func _on_HitBox_body_entered(body):
 	if "Enemy" in body.name:
-		var is_crit = body.hurt(5, 0)
+		var is_crit = body.hurt(5, 1, 2)
 		if (is_crit):
 			$Camera2D/ScreenShaker.start()
 		recent_hit = true
