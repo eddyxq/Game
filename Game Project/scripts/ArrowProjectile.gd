@@ -31,8 +31,8 @@ func _physics_process(delta):
 func _on_Projectile_body_entered(body):
 	if "Enemy" in body.name:
 		var base_damage = 25
-		var knockback_intensity = 25
-		body.hurt(base_damage, knockback_intensity)
+		var knockback_intensity = 1
+		body.hurt(base_damage, knockback_intensity, 10)
 		play_explosion_sfx()
 
 # shoots the projectile

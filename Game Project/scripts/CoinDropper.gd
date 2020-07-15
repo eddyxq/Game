@@ -1,6 +1,6 @@
 extends Node2D
 
-const COIN = preload("res://scenes/item/Coin.tscn")
+var COIN = preload("res://scenes/item/Coin.tscn")
 # maximum number of coins to drop
 var max_drop = 5
 # some RNG functions seem to be broken
