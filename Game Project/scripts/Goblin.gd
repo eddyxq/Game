@@ -45,9 +45,6 @@ var anim_finished = true
 # TODO: change knockback_direction to local
 var knockback_frames = 0
 var knockback_direction = Vector2.ZERO
-var knockback_intensity = 0
-
-var stun_counter = 0
 
 # called when the node enters the scene tree for the first time
 func _ready():
@@ -60,7 +57,7 @@ func _ready():
 func _physics_process(_delta):
 	# enemies dies when it falls down
 	if self.get_global_position().y > 440:
-		hurt(health, 0, 0)
+		hurt(health, 0)
 		
 	# aggro range increase upon getting hit
 	if health < max_health:
@@ -118,29 +115,19 @@ func movement_loop():
 	# apply knockback when knockback_frames available
 	if (knockback_frames > 0):
 		# apply knockback
-		velocity = knockback_direction * base_speed * knockback_intensity
-		#print("knockback frame:", knockback_frames, "-", knockback_direction)
+		velocity = knockback_direction.normalized() * base_speed * 3
 		knockback_frames -= 1
-		if (knockback_frames == 0):
-			stun_counter = 15
-			
-	# apply regular horizontal movement		
+		
 	elif (anim_finished):
-		if (stun_counter <= 0):
-			velocity.x = dir * base_speed
-		else:
-			velocity.x = 0
-			stun_counter -= 1
-
-
+		# apply regular horizontal movement
+		velocity.x = dir * base_speed
 
 	# apply gravity
 	velocity.y += gravity 
 	velocity = move_and_slide(velocity, Vector2(0, -1))
 
 # update health bar
-# returns boolean: true if damage was critical, false otherwise
-func hurt(base_damage: int, knockback_intensity: int, knockback_frames: int):
+func hurt(base_damage: int, knockback_intensity: int):
 	play_hurt_sfx()
 	var dmg = (randi() % int(player.strength) + base_damage) 
 	var crit = false
@@ -163,23 +150,17 @@ func hurt(base_damage: int, knockback_intensity: int, knockback_frames: int):
 		$HealthBar.queue_free()
 	# apply knockback effect if any
 	else:
-		react_to_hit(knockback_intensity, knockback_frames)
-	
-	return crit
-	
-	# currently not active
-	#knock_back(intensity)
+		react_to_hit(knockback_intensity)
 
 # sets knockback_direction relative to 'other_body_origin'
 # general hit reaction
+
 # applies a knockback scaling off intensity input
-func react_to_hit(intensity, frames):
-	if (intensity > 0 and knockback_frames <= 0):
+func react_to_hit(intensity):
+	if (knockback_frames <= 0):
 		# set some knockback_frames
-		knockback_frames = frames
-		knockback_intensity = intensity
+		knockback_frames = intensity
 		knockback_direction = transform.origin - player.transform.origin
-		knockback_direction = knockback_direction.normalized()
 
 # despawns and removes sprite
 func _on_DespawnTimer_timeout():

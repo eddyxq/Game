@@ -79,9 +79,6 @@ var skill4_mana_cost = 1
 # flag to prevent spamming of invalid skill use sfx
 var invalid_sfx = true
 
-# cheap way to detect if player recently hit something
-var recent_hit = false
-
 # called when the node enters the scene tree for the first time
 func _ready():
 	# Firebase.get_document("users/%s" % Firebase.user_info.id, http)
@@ -298,7 +295,6 @@ func play_buff_sfx():
 	SoundManager.play("res://audio/sfx/buff.ogg")
 	
 # enables normal attack hitbox
-# hitbox for detecting normal attack collisions with enemies
 func toggle_hitbox_on():
 	$HitBox/CollisionShape2D.disabled = false
 
@@ -388,10 +384,7 @@ func _on_InvalidSFX_timeout():
 # applies damage when hitbox collide with enemies
 func _on_HitBox_body_entered(body):
 	if "Enemy" in body.name:
-		var is_crit = body.hurt(5, 0, 0)
-		if (is_crit):
-			$Camera2D/ScreenShaker.start()
-		recent_hit = true
+		body.hurt(5, 0)
 
 # time used to countdown the animation of skill0 buff
 func _on_ghost_timer_timeout():
@@ -411,6 +404,7 @@ func _on_Area2D_body_entered(body):
 		$Area2D.set_space_override_mode(3)
 		$Area2D.set_gravity_is_point(true)
 		$Area2D.set_gravity_vector(Vector2(0, 0))
+		play_coin_sfx()
 
 # resets the cooldown of slot utilized allowing reuse
 func reset_skill_cooldown(skill_slot_num):
@@ -432,10 +426,3 @@ func reset_skill_cooldown(skill_slot_num):
 		item_slot1_off_cooldown = true
 	elif skill_slot_num == 6:
 		item_slot2_off_cooldown = true
-
-# tries to freeze the game when a hit has been detected
-# called by the players attack animation frames
-func freeze_frame():
-	if (recent_hit):
-		OS.delay_msec(100)
-		recent_hit = false

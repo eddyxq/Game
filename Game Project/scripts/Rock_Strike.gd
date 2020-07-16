@@ -36,8 +36,7 @@ func _on_Area2D_body_entered(body):
 	if "Enemy" in body.name:
 		var base_damage = 10
 		var knockback_intensity = 5
-		var knockback_frames = 10
-		body.hurt(base_damage, knockback_intensity, knockback_frames)
+		body.hurt(base_damage, knockback_intensity)
 		play_rock_sfx()
 	
 # shoots the projectile
