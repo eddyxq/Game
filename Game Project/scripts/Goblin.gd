@@ -27,14 +27,14 @@ var is_dead = false
 var gravity = 18
 
 # variables related to AI pathfinding
-var react_time = 0
+var react_time = 100
 var dir = 0
 var next_dir = 0
 var next_dir_time = 0
 var next_jump_time = -1
 var target_player_dist = 35
-var eye_reach = 9000000
-var vision = 160000000
+var eye_reach = 90
+var vision = 160
 var direction_facing = DIRECTION.W # default left facing
 
 # animation states
@@ -55,7 +55,6 @@ func _ready():
 	health_bar.value = 100
 	setup_state_machine()
 	set_process(true)
-	#set_physics_process(false)
 
 # called every delta
 func _physics_process(_delta):
