@@ -87,6 +87,7 @@ func _ready():
 	# Firebase.get_document("users/%s" % Firebase.user_info.id, http)
 	setup_state_machine()
 
+var currently_attacking = false
 # animation logic
 func animation_loop(attack,skill0, skill1, skill2, skill3, skill4, item1, item2):
 	# disable animations while player is attacking
@@ -110,6 +111,7 @@ func animation_loop(attack,skill0, skill1, skill2, skill3, skill4, item1, item2)
 		if !attack:
 			toggle_hitbox_off()
 		if attack && is_on_floor():
+			#currently_attacking = true
 			anim_finished = false
 			play_animation("attack3")
 			apply_delay()
@@ -182,10 +184,10 @@ func movement_loop(attack, up, left, right, skill3):
 	
 	# update players direction 
 	update_hitbox_location()
-	if right:
+	if right and anim_finished:
 		dir = DIRECTION.E 
 		$Sprite.flip_h = false
-	elif left:
+	elif left and anim_finished:
 		dir = DIRECTION.W
 		$Sprite.flip_h = true
 
@@ -218,7 +220,7 @@ func movement_loop(attack, up, left, right, skill3):
 	velocity.x = (-int(left) + int(right)) * movement_speed
 	
 	# restrict movement during certain attack/skill
-	if attack or skill3:
+	if attack or skill3 or currently_attacking:
 		velocity.x = 0
 	
 	# apply translations to the player
@@ -388,7 +390,7 @@ func _on_InvalidSFX_timeout():
 # applies damage when hitbox collide with enemies
 func _on_HitBox_body_entered(body):
 	if "Enemy" in body.name:
-		var is_crit = body.hurt(5, 0, 0)
+		var is_crit = body.hurt(25, 0, 0)
 		if (is_crit):
 			$Camera2D/ScreenShaker.start()
 		recent_hit = true
@@ -411,6 +413,8 @@ func _on_Area2D_body_entered(body):
 		$Area2D.set_space_override_mode(3)
 		$Area2D.set_gravity_is_point(true)
 		$Area2D.set_gravity_vector(Vector2(0, 0))
+		$Area2D.set_gravity(450.0)
+		#$Area2D.set_gravity_distance_scale(-10000)
 
 # resets the cooldown of slot utilized allowing reuse
 func reset_skill_cooldown(skill_slot_num):
@@ -439,3 +443,6 @@ func freeze_frame():
 	if (recent_hit):
 		OS.delay_msec(100)
 		recent_hit = false
+
+func finished_attacking():
+	currently_attacking = false
