@@ -31,11 +31,7 @@ func _physics_process(delta):
 func _on_Projectile_body_entered(body):
 	if "Enemy" in body.name:
 		var base_damage = 15
-<<<<<<< HEAD
 		var knockback_intensity = 10
-=======
-		var knockback_intensity = 4
->>>>>>> parent of 68393a9... added more parameters to knockback function
 		body.hurt(base_damage, knockback_intensity)
 		play_explosion_sfx()
 		$CollisionShape2D.queue_free()

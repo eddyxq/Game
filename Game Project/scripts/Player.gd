@@ -384,14 +384,7 @@ func _on_InvalidSFX_timeout():
 # applies damage when hitbox collide with enemies
 func _on_HitBox_body_entered(body):
 	if "Enemy" in body.name:
-<<<<<<< HEAD
 		body.hurt(5, 0)
-=======
-		var is_crit = body.hurt(5, 0)
-		if (is_crit):
-			$Camera2D/ScreenShaker.start()
-		recent_hit = true
->>>>>>> parent of 68393a9... added more parameters to knockback function
 
 # time used to countdown the animation of skill0 buff
 func _on_ghost_timer_timeout():

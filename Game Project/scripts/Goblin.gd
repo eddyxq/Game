@@ -115,12 +115,7 @@ func movement_loop():
 	# apply knockback when knockback_frames available
 	if (knockback_frames > 0):
 		# apply knockback
-<<<<<<< HEAD
 		velocity = knockback_direction.normalized() * base_speed * 3
-=======
-		velocity = knockback_direction.normalized() * base_speed * knockback_intensity
-		print("knockback frame:", knockback_frames, "-", velocity)
->>>>>>> parent of 68393a9... added more parameters to knockback function
 		knockback_frames -= 1
 		
 	elif (anim_finished):
@@ -132,10 +127,6 @@ func movement_loop():
 	velocity = move_and_slide(velocity, Vector2(0, -1))
 
 # update health bar
-<<<<<<< HEAD
-=======
-# returns boolean: true if damage was critical, false otherwise
->>>>>>> parent of 68393a9... added more parameters to knockback function
 func hurt(base_damage: int, knockback_intensity: int):
 	play_hurt_sfx()
 	var dmg = (randi() % int(player.strength) + base_damage) 
@@ -160,40 +151,16 @@ func hurt(base_damage: int, knockback_intensity: int):
 	# apply knockback effect if any
 	else:
 		react_to_hit(knockback_intensity)
-<<<<<<< HEAD
-=======
-	
-	return crit
-	
-	# currently not active
-	#knock_back(intensity)
-
->>>>>>> parent of 68393a9... added more parameters to knockback function
 
 # sets knockback_direction relative to 'other_body_origin'
 # general hit reaction
 
 # applies a knockback scaling off intensity input
 func react_to_hit(intensity):
-<<<<<<< HEAD
 	if (knockback_frames <= 0):
 		# set some knockback_frames
 		knockback_frames = intensity
 		knockback_direction = transform.origin - player.transform.origin
-=======
-	if (intensity > 0 and knockback_frames <= 0):
-		# set some knockback_frames
-		knockback_frames = 10
-		knockback_intensity = intensity
-		knockback_direction = transform.origin - player.transform.origin
-
-# init timer 
-func setup_timer():
-	timer = Timer.new()
-	timer.set_wait_time(despawn_timer)
-	timer.connect("timeout", self, "on_timeout_complete")
-	add_child(timer)
->>>>>>> parent of 68393a9... added more parameters to knockback function
 
 # despawns and removes sprite
 func _on_DespawnTimer_timeout():
