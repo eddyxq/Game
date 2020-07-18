@@ -55,7 +55,6 @@ func _ready():
 	health_bar.value = 100
 	setup_state_machine()
 	set_process(true)
-	#set_physics_process(false)
 
 # called every delta
 func _physics_process(_delta):
@@ -287,3 +286,6 @@ func drop_loot():
 	spawn_chest()
 	var coin_dropper = preload("res://scenes/item/CoinDropper.tscn").instance()
 	var _coin_amount = coin_dropper.drop(self)
+	
+func disable_movement():
+	set_physics_process(false)

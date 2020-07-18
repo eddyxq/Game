@@ -1,4 +1,4 @@
-[gd_scene load_steps=68 format=2]
+[gd_scene load_steps=74 format=2]
 
 [ext_resource path="res://images/warrior_sprites/sprite_sheet.png" type="Texture" id=1]
 [ext_resource path="res://scripts/Player.gd" type="Script" id=2]
@@ -99,7 +99,7 @@ tracks/4/loop_wrap = true
 tracks/4/imported = false
 tracks/4/enabled = true
 tracks/4/keys = {
-"times": PoolRealArray( 0.08 ),
+"times": PoolRealArray( 0.1 ),
 "transitions": PoolRealArray( 1 ),
 "values": [ {
 "args": [  ],
@@ -183,16 +183,16 @@ tracks/4/keys = {
 }
 
 [sub_resource type="Animation" id=5]
-length = 0.26
+length = 0.37
 step = 0.01
 tracks/0/type = "value"
 tracks/0/path = NodePath("Sprite:frame")
-tracks/0/interp = 1
+tracks/0/interp = 2
 tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 0.05, 0.1, 0.16, 0.19, 0.24 ),
+"times": PoolRealArray( 0, 0.15, 0.2, 0.25, 0.29, 0.33 ),
 "transitions": PoolRealArray( 1, 1, 1, 1, 1, 1 ),
 "update": 1,
 "values": [ 53, 54, 55, 56, 57, 58 ]
@@ -204,7 +204,7 @@ tracks/1/loop_wrap = true
 tracks/1/imported = false
 tracks/1/enabled = true
 tracks/1/keys = {
-"times": PoolRealArray( 0.1 ),
+"times": PoolRealArray( 0.2 ),
 "transitions": PoolRealArray( 1 ),
 "values": [ {
 "args": [  ],
@@ -218,7 +218,7 @@ tracks/2/loop_wrap = true
 tracks/2/imported = false
 tracks/2/enabled = true
 tracks/2/keys = {
-"times": PoolRealArray( 0.1, 0.2 ),
+"times": PoolRealArray( 0.2, 0.25 ),
 "transitions": PoolRealArray( 1, 1 ),
 "values": [ {
 "args": [  ],
@@ -235,7 +235,7 @@ tracks/3/loop_wrap = true
 tracks/3/imported = false
 tracks/3/enabled = true
 tracks/3/keys = {
-"times": PoolRealArray( 0.08 ),
+"times": PoolRealArray( 0.14 ),
 "transitions": PoolRealArray( 1 ),
 "values": [ {
 "args": [ "attack3" ],
@@ -249,7 +249,7 @@ tracks/4/loop_wrap = true
 tracks/4/imported = false
 tracks/4/enabled = true
 tracks/4/keys = {
-"times": PoolRealArray( 0.15 ),
+"times": PoolRealArray( 0.25 ),
 "transitions": PoolRealArray( 1 ),
 "values": [ {
 "args": [  ],
@@ -372,6 +372,48 @@ tracks/2/keys = {
 "values": [ {
 "args": [  ],
 "method": "play_buff_sfx"
+} ]
+}
+
+[sub_resource type="Animation" id=63]
+resource_name = "buff_slow"
+length = 0.3
+step = 0.01
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1, 0.2, 0.29 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 93, 94, 95, 94 ]
+}
+tracks/1/type = "method"
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray(  ),
+"transitions": PoolRealArray(  ),
+"values": [  ]
+}
+tracks/2/type = "method"
+tracks/2/path = NodePath(".")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0.3 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [  ],
+"method": "move_forward_after_climb"
 } ]
 }
 
@@ -687,6 +729,9 @@ animation = "bow_attack"
 [sub_resource type="AnimationNodeAnimation" id=25]
 animation = "buff"
 
+[sub_resource type="AnimationNodeAnimation" id=64]
+animation = "buff_slow"
+
 [sub_resource type="AnimationNodeAnimation" id=26]
 animation = "dead"
 
@@ -764,6 +809,14 @@ switch_mode = 2
 
 [sub_resource type="AnimationNodeStateMachineTransition" id=57]
 
+[sub_resource type="AnimationNodeStateMachineTransition" id=65]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=66]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=67]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=68]
+
 [sub_resource type="AnimationNodeStateMachine" id=58]
 states/attack1/node = SubResource( 21 )
 states/attack1/position = Vector2( 1161.43, 486.015 )
@@ -775,6 +828,8 @@ states/bow_attack/node = SubResource( 24 )
 states/bow_attack/position = Vector2( 157.923, 181.183 )
 states/buff/node = SubResource( 25 )
 states/buff/position = Vector2( 1161.43, 101.902 )
+states/buff_slow/node = SubResource( 64 )
+states/buff_slow/position = Vector2( 174.631, 279.482 )
 states/dead/node = SubResource( 26 )
 states/dead/position = Vector2( 401, 101.902 )
 states/die/node = SubResource( 27 )
@@ -782,21 +837,21 @@ states/die/position = Vector2( 264.923, 101.902 )
 states/distance_blade/node = SubResource( 28 )
 states/distance_blade/position = Vector2( 679, 486.015 )
 states/fall/node = SubResource( 29 )
-states/fall/position = Vector2( 401, 382.015 )
+states/fall/position = Vector2( 350, 543.015 )
 states/idle/node = SubResource( 30 )
 states/idle/position = Vector2( 679, 279.482 )
 states/jump/node = SubResource( 31 )
-states/jump/position = Vector2( 401, 279.482 )
+states/jump/position = Vector2( 367, 391.482 )
 states/rock_strike/node = SubResource( 32 )
 states/rock_strike/position = Vector2( 921.923, 486.015 )
 states/run/node = SubResource( 33 )
 states/run/position = Vector2( 873.923, 101.902 )
 states/sprint/node = SubResource( 34 )
 states/sprint/position = Vector2( 679, 101.902 )
-transitions = [ "idle", "jump", SubResource( 35 ), "fall", "idle", SubResource( 36 ), "jump", "fall", SubResource( 37 ), "idle", "sprint", SubResource( 38 ), "sprint", "idle", SubResource( 39 ), "attack3", "idle", SubResource( 40 ), "idle", "distance_blade", SubResource( 41 ), "distance_blade", "idle", SubResource( 42 ), "idle", "attack1", SubResource( 43 ), "attack1", "idle", SubResource( 44 ), "attack1", "attack2", SubResource( 45 ), "attack2", "attack3", SubResource( 46 ), "attack2", "idle", SubResource( 47 ), "idle", "dead", SubResource( 48 ), "idle", "buff", SubResource( 49 ), "buff", "idle", SubResource( 50 ), "idle", "rock_strike", SubResource( 51 ), "rock_strike", "idle", SubResource( 52 ), "bow_attack", "idle", SubResource( 53 ), "idle", "bow_attack", SubResource( 54 ), "idle", "run", SubResource( 55 ), "run", "idle", SubResource( 56 ), "idle", "die", SubResource( 57 ) ]
+transitions = [ "idle", "jump", SubResource( 35 ), "fall", "idle", SubResource( 36 ), "jump", "fall", SubResource( 37 ), "idle", "sprint", SubResource( 38 ), "sprint", "idle", SubResource( 39 ), "attack3", "idle", SubResource( 40 ), "idle", "distance_blade", SubResource( 41 ), "distance_blade", "idle", SubResource( 42 ), "idle", "attack1", SubResource( 43 ), "attack1", "idle", SubResource( 44 ), "attack1", "attack2", SubResource( 45 ), "attack2", "attack3", SubResource( 46 ), "attack2", "idle", SubResource( 47 ), "idle", "dead", SubResource( 48 ), "idle", "buff", SubResource( 49 ), "buff", "idle", SubResource( 50 ), "idle", "rock_strike", SubResource( 51 ), "rock_strike", "idle", SubResource( 52 ), "bow_attack", "idle", SubResource( 53 ), "idle", "bow_attack", SubResource( 54 ), "idle", "run", SubResource( 55 ), "run", "idle", SubResource( 56 ), "idle", "die", SubResource( 57 ), "jump", "buff_slow", SubResource( 65 ), "buff_slow", "idle", SubResource( 66 ), "fall", "buff_slow", SubResource( 67 ), "idle", "buff_slow", SubResource( 68 ) ]
 start_node = "idle"
 end_node = "die"
-graph_offset = Vector2( -42.077, 63.1833 )
+graph_offset = Vector2( 0.631154, 149.455 )
 
 [sub_resource type="AnimationNodeStateMachinePlayback" id=59]
 
@@ -832,6 +887,7 @@ anims/attack3 = SubResource( 5 )
 anims/bow_attack = SubResource( 6 )
 anims/bow_idle = SubResource( 7 )
 anims/buff = SubResource( 8 )
+anims/buff_slow = SubResource( 63 )
 anims/crouch = SubResource( 9 )
 anims/dead = SubResource( 10 )
 anims/die = SubResource( 11 )
@@ -914,9 +970,25 @@ texture_scale = 0.2
 shadow_enabled = true
 
 [node name="Area2D" type="Area2D" parent="."]
+visible = false
+__meta__ = {
+"_edit_group_": true
+}
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 shape = SubResource( 62 )
+
+[node name="LowerEdgeDetect" type="RayCast2D" parent="."]
+position = Vector2( 0, -1 )
+enabled = true
+cast_to = Vector2( 6, 0 )
+collision_mask = 4
+
+[node name="HigherEdgeDetect" type="RayCast2D" parent="."]
+position = Vector2( 0, -6 )
+enabled = true
+cast_to = Vector2( 6, 0 )
+collision_mask = 4
 [connection signal="timeout" from="HealthRecovery" to="." method="_on_HealthRecovery_timeout"]
 [connection signal="timeout" from="ManaRecovery" to="." method="_on_ManaRecovery_timeout"]
 [connection signal="timeout" from="AnimationDelay" to="." method="_on_AnimationDelay_timeout"]

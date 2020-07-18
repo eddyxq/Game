@@ -82,6 +82,11 @@ var invalid_sfx = true
 # cheap way to detect if player recently hit something
 var recent_hit = false
 
+# variables used for ledge climbing
+var isTouchingLedge = false
+var highRayCast = null
+var lowRayCast = null
+
 # called when the node enters the scene tree for the first time
 func _ready():
 	# Firebase.get_document("users/%s" % Firebase.user_info.id, http)
@@ -90,6 +95,7 @@ func _ready():
 var currently_attacking = false
 # animation logic
 func animation_loop(attack,skill0, skill1, skill2, skill3, skill4, item1, item2):
+		
 	# disable animations while player is attacking
 	if anim_finished: 
 		# moving state
@@ -175,13 +181,29 @@ func animation_loop(attack,skill0, skill1, skill2, skill3, skill4, item1, item2)
 			play_potion_sfx()
 			# potion fully heals the player's mana
 			mana = max_mp
+		elif isTouchingLedge:
+			anim_finished = false
+			play_animation("buff_slow")
 		UI.mana_bar.update_bar(mana)
 
 # movement logic
 func movement_loop(attack, up, left, right, skill3):
-	# apply gravity
-	velocity.y += GRAVITY
 	
+	# updates the velocity of the player if no ledge was detected
+	if (not isTouchingLedge):
+		update_velocity(attack, up, left, right, skill3)
+		# updates direction of the player
+		update_direction(left, right)
+		
+	# updates function reliant on player movement
+	# current only updates ledge detection
+	update_others()
+
+# updates modules based on player input
+func update_others():
+	ledge_grab_update()
+
+func update_direction(left, right):
 	# update players direction 
 	update_hitbox_location()
 	if right and anim_finished:
@@ -190,7 +212,8 @@ func movement_loop(attack, up, left, right, skill3):
 	elif left and anim_finished:
 		dir = DIRECTION.W
 		$Sprite.flip_h = true
-
+		
+func update_velocity(attack, up, left, right, skill3):
 	# air state
 	if anim_finished:
 		if is_on_floor():
@@ -220,8 +243,11 @@ func movement_loop(attack, up, left, right, skill3):
 	velocity.x = (-int(left) + int(right)) * movement_speed
 	
 	# restrict movement during certain attack/skill
-	if attack or skill3 or currently_attacking:
+	if attack or skill3:
 		velocity.x = 0
+		
+	# apply gravity
+	velocity.y += GRAVITY
 	
 	# apply translations to the player
 	velocity = move_and_slide(velocity, Vector2(0,-1))
@@ -446,3 +472,57 @@ func freeze_frame():
 
 func finished_attacking():
 	currently_attacking = false
+	
+func ledge_grab_update():
+	if (not isTouchingLedge):
+		update_ledge_grab_direction()
+		isTouchingLedge = is_ledge_detected()
+	
+func update_ledge_grab_direction():
+	# flip raycast if it does not correspond to player direction
+	var lowRayCastDirection = $LowerEdgeDetect.get_cast_to()
+	# only checks one ray cast since both raycast should have the same direction
+	if (dir == DIRECTION.E and lowRayCastDirection.x < 0) or (dir == DIRECTION.W and lowRayCastDirection.x > 0):
+		lowRayCastDirection.x *= -1
+		$LowerEdgeDetect.set_cast_to(lowRayCastDirection)
+		
+		var highRayCastDirection = $HigherEdgeDetect.get_cast_to()
+		highRayCastDirection.x *= -1
+		$HigherEdgeDetect.set_cast_to(highRayCastDirection)
+		#print("raycast direction flipped")
+
+# TODO: needs a better way to identify blocks in the stage
+# detects whether an player is close to an edge
+# an edge is detected when lower raycast intersects with a block while upper ray cast does not
+func is_ledge_detected():
+	var lowerCollision = $LowerEdgeDetect.get_collider()
+	var higherCollision = $HigherEdgeDetect.get_collider()
+	
+	if lowerCollision != null and higherCollision == null:
+		#print(lowerCollision.get_name())
+		if lowerCollision.get_name() == "Blocks":
+			highRayCast = $LowerEdgeDetect.get_collision_point()
+			var absolute_y = abs(int(highRayCast.y))
+			var new_y = absolute_y + (16 - (absolute_y % 16))
+			if (highRayCast.y < 0):
+				new_y *= -1
+				new_y += 16
+			highRayCast.y = new_y - 32
+			self.position = highRayCast 
+			print("new position:", highRayCast)
+			return true
+	
+	return false
+	
+func move_forward_after_climb():
+	if dir == DIRECTION.E:
+		self.position.x += 8
+	else:
+		self.position.x -= 8
+	
+	isTouchingLedge = false
+	anim_finished = true
+
+func ledge_climb():
+	pass
+
