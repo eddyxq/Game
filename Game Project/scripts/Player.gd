@@ -1,17 +1,25 @@
 extends KinematicBody2D
 
 ###############################################################################
-# warrior class
+# player class
 ###############################################################################
 
 onready var UI = get_tree().get_root().get_node("/root/Controller/HUD/UI")
 onready var http : HTTPRequest = $HTTPRequest
 
+# player direction
 enum DIRECTION {
 	N, # north/up
 	S, # south/down
 	W, # west/left
 	E, # east/right
+}
+
+# possible weapons and stances
+enum STANCE {
+	FIST, 
+	SWORD, 
+	BOW
 }
 
 # user profile sstructure
@@ -49,11 +57,11 @@ var movement_speed # final actual speed after calculations
 # player orientation
 var dir = DIRECTION.E # default right facing 
 
+# player orientation
+var stance = STANCE.FIST # default fist stance
+
 # world constants
 const GRAVITY = 18
-
-var velocity = Vector2()
-var state_machine
 
 # flags for player states
 var anim_finished = true # used to lock out player inputs for a short amount of time (0.2s) so prevent key spamming
@@ -65,9 +73,9 @@ var skill_slot1_off_cooldown = true
 var skill_slot2_off_cooldown = true
 var skill_slot3_off_cooldown = true
 var skill_slot4_off_cooldown = true
-
 var item_slot1_off_cooldown = true
 var item_slot2_off_cooldown = true
+var stance_change_off_cooldown = true
 
 # mana cost of each skill
 var skill0_mana_cost = 1
@@ -79,147 +87,39 @@ var skill4_mana_cost = 1
 # flag to prevent spamming of invalid skill use sfx
 var invalid_sfx = true
 
+# velocity vector
+var velocity = Vector2()
+
+# animation tree
+var state_machine
+
 # called when the node enters the scene tree for the first time
 func _ready():
 	# Firebase.get_document("users/%s" % Firebase.user_info.id, http)
 	setup_state_machine()
 
 # animation logic
-func animation_loop(attack,skill0, skill1, skill2, skill3, skill4, item1, item2):
+func animation_loop(attack,skill0, skill1, skill2, skill3, skill4, item1, item2, switch):
 	# disable animations while player is attacking
 	if anim_finished: 
-		# moving state
-		if velocity.x != 0 && is_on_floor():
-			if !skill_slot0_off_cooldown:
-				play_animation("sprint")
-			else:
-				play_animation("run")
-		# jumping state
-		elif velocity.y < 0 && !is_on_floor():
-			play_animation("jump")
-		# falling state
-		elif velocity.y > 0 && !is_on_floor():
-			play_animation("fall")
-		# idle state
-		elif velocity.length() == 0: 
-			play_animation("idle")
-		# attacking state
-		if !attack:
-			toggle_hitbox_off()
-		if attack && is_on_floor():
-			anim_finished = false
-			play_animation("attack3")
-			apply_delay()
-		elif skill0 && skill_slot0_off_cooldown:
-			if mana >= skill0_mana_cost:
-				UI.skill_slot0.start_cooldown()
-				anim_finished = false
-				skill_slot0_off_cooldown = false
-				$GhostInterval.start()
-				movement_speed = max_speed * boost_speed_modifier
-				play_animation("buff")
-				apply_delay()
-			else:
-				play_invalid_sfx()
-				invalid_sfx = false
-		elif skill1 && skill_slot1_off_cooldown:
-			if mana >= skill1_mana_cost:
-				UI.skill_slot1.start_cooldown()
-				anim_finished = false
-				skill_slot1_off_cooldown = false
-				play_animation("distance_blade")
-				apply_delay()
-			else:
-				play_invalid_sfx()
-				invalid_sfx = false
-		elif skill2 && skill_slot2_off_cooldown:
-			if mana >= skill2_mana_cost && is_on_floor():
-				UI.skill_slot2.start_cooldown()
-				anim_finished = false
-				skill_slot2_off_cooldown = false
-				play_animation("rock_strike")
-				apply_delay()
-			else:
-				play_invalid_sfx()
-				invalid_sfx = false
-		elif skill3 && skill_slot3_off_cooldown:
-			if mana >= skill3_mana_cost:
-				#UI.skill_slot3.start_cooldown()
-				anim_finished = false
-				play_animation("bow_attack")
-				apply_delay()
-			else:
-				play_invalid_sfx()
-				invalid_sfx = false
-		# not yet implemented
-		elif skill4 && skill_slot4_off_cooldown:
-			if mana >= skill4_mana_cost:
-				pass
-			else:
-				pass
-		elif item1 && item_slot1_off_cooldown:
-			UI.item_slot1.start_cooldown()
-			item_slot1_off_cooldown = false
-			play_potion_sfx()
-			# potion fully heals the player's health
-			UI.health_bar.increase(health, max_hp - health)
-			health = max_hp
-		elif item2 && item_slot2_off_cooldown:
-			UI.item_slot2.start_cooldown()
-			item_slot2_off_cooldown = false
-			play_potion_sfx()
-			# potion fully heals the player's mana
-			mana = max_mp
-		UI.mana_bar.update_bar(mana)
+		move() # moving state
+		jump() # jumping state
+		fall() # falling state
+		idle() # idle state
+		attack(attack) # attacking state
+		detect_skill_activation(skill0, skill1, skill2, skill3, skill4) # pass input
+		item(item1, item2) # item activation
+		stance_update(switch) # stance change
 
 # movement logic
 func movement_loop(attack, up, left, right, skill3):
-	# apply gravity
-	velocity.y += GRAVITY
-	
-	# update players direction 
-	update_hitbox_location()
-	if right:
-		dir = DIRECTION.E 
-		$Sprite.flip_h = false
-	elif left:
-		dir = DIRECTION.W
-		$Sprite.flip_h = true
-
-	# air state
-	if anim_finished:
-		if is_on_floor():
-			velocity.y = 0
-			if up: # jump
-				velocity.y = -jump_speed
-				play_footstep_sfx()
-
-	# reduces movement speed during attack animation
-	if skill_slot0_off_cooldown:
-		if attack and is_on_floor():
-			movement_speed = base_speed * atkmove_speed_modifier
-		else:
-			 movement_speed = base_speed * run_speed_modifier
-			
-	# acceleration effect
-	if !left && !right:
-		base_speed -= acceleration_rate *2
-		if base_speed < min_speed:
-			base_speed = min_speed
-	else:
-		base_speed += acceleration_rate
-		if base_speed > max_speed:
-			base_speed = max_speed
-
-	# translates player horizontally when left or right key is pressed
-	velocity.x = (-int(left) + int(right)) * movement_speed
-	
-	# restrict movement during certain attack/skill
-	if attack or skill3:
-		velocity.x = 0
-	
-	# apply translations to the player
-	velocity = move_and_slide(velocity, Vector2(0,-1))
+	apply_gravity() # pull player downwards
+	update_hitbox_location() # update hitbox
+	horizontal_movement(right, left) # horizontal translation
+	vertical_movement(up) # vertical translation
+	update_speed_modifier(attack) # restricts movement during certain actions
+	apply_accel_decel(left, right) # acceleration effect
+	apply_translation(left, right, attack, skill3)
 
 # applies a blinking damage effect to the player
 func hurt(dmg):
@@ -229,13 +129,7 @@ func hurt(dmg):
 		health -= dmg
 		if health > 0:
 			invincible = true
-			$IFrame.start()
-			# blinks 4 times in 0.1 second intervals
-			for i in 4:
-				$Sprite.set_modulate(Color(1,1,1,0.5)) 
-				yield(get_tree().create_timer(0.1), "timeout")
-				$Sprite.set_modulate(Color(1,1,1,1)) 
-				yield(get_tree().create_timer(0.1), "timeout")
+			blinking_damage_effect()
 
 # ensures the hitbox is always in front
 func update_hitbox_location():
@@ -243,6 +137,24 @@ func update_hitbox_location():
 		$HitBox.position.x *= -1
 	elif $HitBox.position.x > 0 && dir == DIRECTION.W:
 		$HitBox.position.x *= -1
+
+# update player's direction and sprite orientation
+func horizontal_movement(right, left):
+	if right:
+		dir = DIRECTION.E 
+		$Sprite.flip_h = false
+	elif left:
+		dir = DIRECTION.W
+		$Sprite.flip_h = true
+
+# update player's y velocity
+func vertical_movement(up):
+	if anim_finished:
+		if is_on_floor():
+			velocity.y = 0
+			if up: # jump
+				velocity.y = -jump_speed
+				play_footstep_sfx()
 
 # travel to input state in animation tree
 func play_animation(anim):
@@ -252,48 +164,6 @@ func play_animation(anim):
 func apply_delay():
 	$AnimationDelay.start()
 
-# plays a sword swing sfx
-func play_atk_sfx():
-	SoundManager.play("res://audio/sfx/sword_swing.ogg")
-	
-# plays a swoosh sfx
-func play_swoosh_sfx():
-	SoundManager.play("res://audio/sfx/swoosh.ogg")
-	
-# plays a rock sfx
-func play_rock_sfx():
-	SoundManager.play("res://audio/sfx/rock.ogg")
-	
-# plays a footstep sfx
-func play_footstep_sfx():
-	SoundManager.play("res://audio/sfx/footstep.ogg")
-
-# plays a hurt sfx
-func play_hurt_sfx():
-	SoundManager.play("res://audio/sfx/hurt.ogg")
-	
-# plays a invalid sfx
-func play_invalid_sfx():
-	if invalid_sfx:
-		SoundManager.play("res://audio/sfx/invalid.ogg")
-		$InvalidSFX.start()
-	
-# plays a invalid sfx
-func play_death_sfx():
-	SoundManager.play("res://audio/sfx/death.ogg")
-	
-# plays a potion sfx
-func play_potion_sfx():
-	SoundManager.play("res://audio/sfx/potion.ogg")
-	
-# plays a coin sfx
-func play_coin_sfx():
-	SoundManager.play("res://audio/sfx/coin.ogg")
-	
-# plays a buff sfx
-func play_buff_sfx():
-	SoundManager.play("res://audio/sfx/buff.ogg")
-	
 # enables normal attack hitbox
 func toggle_hitbox_on():
 	$HitBox/CollisionShape2D.disabled = false
@@ -426,3 +296,256 @@ func reset_skill_cooldown(skill_slot_num):
 		item_slot1_off_cooldown = true
 	elif skill_slot_num == 6:
 		item_slot2_off_cooldown = true
+
+# toggles the player's stance between fist and sword
+func toggle_stance():
+	print(stance)
+	if stance_change_off_cooldown:
+
+		if stance == STANCE.FIST:
+			draw_sword()
+		elif stance == STANCE.SWORD:
+			sheath_sword()
+		stance_change_off_cooldown = false
+
+# draws sword weapon
+func draw_sword():
+	stance = STANCE.SWORD
+
+# put away sword
+func sheath_sword():
+	stance = STANCE.FIST
+
+# on timeout player is allowed to change stance again
+func _on_StanceChangeCooldown_timeout():
+	stance_change_off_cooldown = true
+
+# left and right movement
+func move():
+	if velocity.x != 0 && is_on_floor():
+		if !skill_slot0_off_cooldown:
+			play_animation("sprint")
+		else:
+			if stance == STANCE.FIST:
+				play_animation("run")
+			elif stance == STANCE.SWORD:
+				play_animation("sword_run")
+
+# player jumps in air 
+func jump():
+	if velocity.y < 0 && !is_on_floor():
+		play_animation("jump")
+
+# player enters fall state while mid air
+func fall():
+	if velocity.y > 0 && !is_on_floor():
+		play_animation("fall")
+
+# player is in idle state when they are not moving
+func idle():
+	if velocity.length() == 0 && stance_change_off_cooldown == true: 
+		if stance == STANCE.FIST:
+			play_animation("idle_fist")
+		elif stance == STANCE.SWORD:
+			play_animation("idle_sword")
+
+# regular attacking skills
+func attack(attack):
+	if !attack:
+		toggle_hitbox_off()
+	if attack && is_on_floor():
+		anim_finished = false
+		if stance == STANCE.FIST:
+			play_animation("fist_attack4")
+		elif stance == STANCE.SWORD:
+			play_animation("sword_attack3")
+		apply_delay()
+
+# sends skill input 
+func detect_skill_activation(skill0, skill1, skill2, skill3, skill4):
+	skill0(skill0)
+	skill1(skill1)
+	skill2(skill2)
+	skill3(skill3)
+	skill4(skill4)
+
+# sprint buff
+func skill0(skill0):
+	if skill0 && skill_slot0_off_cooldown:
+		if mana >= skill0_mana_cost:
+			UI.skill_slot0.start_cooldown()
+			anim_finished = false
+			skill_slot0_off_cooldown = false
+			$GhostInterval.start()
+			movement_speed = max_speed * boost_speed_modifier
+			play_animation("buff")
+			apply_delay()
+		else:
+			play_invalid_sfx()
+			invalid_sfx = false
+
+# distance blade
+func skill1(skill1):
+	if skill1 && skill_slot1_off_cooldown:
+		if mana >= skill1_mana_cost:
+			UI.skill_slot1.start_cooldown()
+			anim_finished = false
+			skill_slot1_off_cooldown = false
+			play_animation("distance_blade")
+			apply_delay()
+		else:
+			play_invalid_sfx()
+			invalid_sfx = false
+	
+# rock strike
+func skill2(skill2):
+	if skill2 && skill_slot2_off_cooldown:
+		if mana >= skill2_mana_cost && is_on_floor():
+			UI.skill_slot2.start_cooldown()
+			anim_finished = false
+			skill_slot2_off_cooldown = false
+			play_animation("rock_strike")
+			apply_delay()
+		else:
+			play_invalid_sfx()
+			invalid_sfx = false
+
+# piercing arrow
+func skill3(skill3):
+	if skill3 && skill_slot3_off_cooldown:
+		if mana >= skill3_mana_cost:
+			#UI.skill_slot3.start_cooldown()
+			anim_finished = false
+			play_animation("bow_attack")
+			apply_delay()
+		else:
+			play_invalid_sfx()
+			invalid_sfx = false
+
+# not yet implemented
+func skill4(skill4):
+	if skill4 && skill_slot4_off_cooldown:
+		if mana >= skill4_mana_cost:
+			pass
+		else:
+			pass
+
+# item consumables for status recovery
+func item(item1, item2):
+	if item1 && item_slot1_off_cooldown:
+		UI.item_slot1.start_cooldown()
+		item_slot1_off_cooldown = false
+		play_potion_sfx()
+		# potion fully heals the player's health
+		UI.health_bar.increase(health, max_hp - health)
+		health = max_hp
+	elif item2 && item_slot2_off_cooldown:
+		UI.item_slot2.start_cooldown()
+		item_slot2_off_cooldown = false
+		play_potion_sfx()
+		# potion fully heals the player's mana
+		mana = max_mp
+
+# changes the stance and weapon of the player
+func stance_update(switch):
+	if switch && stance_change_off_cooldown:
+		$StanceChangeCooldown.start()
+		stance_change_off_cooldown = false
+		if stance == STANCE.FIST:
+			play_animation("sword_draw")
+		elif stance == STANCE.SWORD:
+			play_animation("sword_sheath")
+		UI.mana_bar.update_bar(mana)
+
+# translates the player downwards every frame at the rate of gravity
+func apply_gravity():
+	velocity.y += GRAVITY
+
+# applies a acceleration and deceeleration effect
+func apply_accel_decel(left, right):
+	if !left && !right:
+		base_speed -= acceleration_rate *2
+		if base_speed < min_speed:
+			base_speed = min_speed
+	else:
+		base_speed += acceleration_rate
+		if base_speed > max_speed:
+			base_speed = max_speed
+
+# restricts the movement ability of the player depending on actions
+func update_speed_modifier(attack):
+	if skill_slot0_off_cooldown:
+		if attack and is_on_floor():
+			movement_speed = base_speed * atkmove_speed_modifier
+		else:
+			 movement_speed = base_speed * run_speed_modifier
+
+# update velocity and vectors
+func apply_translation(left, right, attack, skill3):
+	# translates player horizontally when left or right key is pressed
+	velocity.x = (-int(left) + int(right)) * movement_speed
+	# restrict movement during certain attack/skill
+	if attack or skill3:
+		velocity.x = 0
+	# apply translations to the player
+	velocity = move_and_slide(velocity, Vector2(0,-1))
+
+# upon receiving damage player sprite blinks
+func blinking_damage_effect():
+	$IFrame.start()
+	# blinks 4 times in 0.1 second intervals
+	for i in 4:
+		$Sprite.set_modulate(Color(1,1,1,0.5)) 
+		yield(get_tree().create_timer(0.1), "timeout")
+		$Sprite.set_modulate(Color(1,1,1,1)) 
+		yield(get_tree().create_timer(0.1), "timeout")
+
+###############################################################################
+# sound effects
+###############################################################################
+
+# plays a sword swing sfx
+func play_atk_sfx():
+	SoundManager.play("res://audio/sfx/sword_swing.ogg")
+
+# plays a swoosh sfx
+func play_swoosh_sfx():
+	SoundManager.play("res://audio/sfx/swoosh.ogg")
+
+# plays a rock sfx
+func play_rock_sfx():
+	SoundManager.play("res://audio/sfx/rock.ogg")
+
+# plays a footstep sfx
+func play_footstep_sfx():
+	SoundManager.play("res://audio/sfx/footstep.ogg")
+
+# plays a hurt sfx
+func play_hurt_sfx():
+	SoundManager.play("res://audio/sfx/hurt.ogg")
+
+# plays a invalid sfx
+func play_death_sfx():
+	SoundManager.play("res://audio/sfx/death.ogg")
+	
+# plays a potion sfx
+func play_potion_sfx():
+	SoundManager.play("res://audio/sfx/potion.ogg")
+	
+# plays a coin sfx
+func play_coin_sfx():
+	SoundManager.play("res://audio/sfx/coin.ogg")
+	
+# plays a punch sfx
+func play_punch_sfx():
+	SoundManager.play("res://audio/sfx/punch.ogg")
+	
+# plays a buff sfx
+func play_buff_sfx():
+	SoundManager.play("res://audio/sfx/buff.ogg")
+	
+# plays a invalid sfx
+func play_invalid_sfx():
+	if invalid_sfx:
+		SoundManager.play("res://audio/sfx/invalid.ogg")
+		$InvalidSFX.start()

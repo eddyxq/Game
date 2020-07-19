@@ -20,6 +20,8 @@ var skill4 # 4 number key
 var item1  # q
 var item2  # e
 
+var switch # tab
+
 # references to child nodes
 onready var player = $Player
 onready var ui = $HUD/UI
@@ -45,10 +47,12 @@ func _physics_process(_delta):
 
 	item1 = Input.is_action_pressed("ui_item_slot1")
 	item2 = Input.is_action_pressed("ui_item_slot2")
+	
+	switch = Input.is_action_pressed("ui_switch")
 
 	if $HUD/DialogBox.visible == false:
 		# update player state
-		player.animation_loop(attack, skill0, skill1, skill2, skill3, skill4, item1, item2)
+		player.animation_loop(attack, skill0, skill1, skill2, skill3, skill4, item1, item2, switch)
 		player.movement_loop(attack, up, left, right, skill3)
 	else:
 		player.play_animation("idle")
