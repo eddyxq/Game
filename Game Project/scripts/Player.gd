@@ -115,17 +115,21 @@ func animation_loop(attack,skill0, skill1, skill2, skill3, skill4, item1, item2,
 		attack(attack) # attacking state
 		detect_skill_activation(skill0, skill1, skill2, skill3, skill4) # pass input
 		item(item1, item2) # item activation
+		grab_ledge()
 		stance_update(switch) # stance change
 
 # movement logic
 func movement_loop(attack, up, left, right, skill3):
-	apply_gravity() # pull player downwards
-	update_hitbox_location() # update hitbox
-	horizontal_movement(right, left) # horizontal translation
-	vertical_movement(up) # vertical translation
-	update_speed_modifier(attack) # restricts movement during certain actions
-	apply_accel_decel(left, right) # acceleration effect
-	apply_translation(left, right, attack, skill3)
+	# this function has a built in: 'if not isTouchingLedge'
+	ledge_grab_update()
+	if not isTouchingLedge:
+		apply_gravity() # pull player downwards
+		update_hitbox_location() # update hitbox
+		horizontal_movement(right, left) # horizontal translation
+		vertical_movement(up) # vertical translation
+		update_speed_modifier(attack) # restricts movement during certain actions
+		apply_accel_decel(left, right) # acceleration effect
+		apply_translation(left, right, attack, skill3)
 
 # applies a blinking damage effect to the player
 func hurt(dmg):
@@ -606,6 +610,9 @@ func move_forward_after_climb():
 	isTouchingLedge = false
 	anim_finished = true
 
-func ledge_climb():
-	pass
+func grab_ledge():
+	if isTouchingLedge:
+		anim_finished = false
+		play_animation("ledge_grab_placeholder")
+		
 
