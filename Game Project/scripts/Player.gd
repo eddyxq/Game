@@ -98,6 +98,7 @@ var isTouchingLedge = false
 var highRayCast = null
 var lowRayCast = null
 
+
 # called when the node enters the scene tree for the first time
 func _ready():
 	# Firebase.get_document("users/%s" % Firebase.user_info.id, http)
@@ -554,8 +555,6 @@ func play_invalid_sfx():
 	if invalid_sfx:
 		SoundManager.play("res://audio/sfx/invalid.ogg")
 		$InvalidSFX.start()
-func finished_attacking():
-	currently_attacking = false
 	
 func ledge_grab_update():
 	if (not isTouchingLedge):
