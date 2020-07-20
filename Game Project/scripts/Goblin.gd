@@ -267,3 +267,6 @@ func drop_loot():
 	spawn_chest()
 	var coin_dropper = preload("res://scenes/item/CoinDropper.tscn").instance()
 	var _coin_amount = coin_dropper.drop(self)
+	
+func disable_movement():
+	set_physics_process(false)

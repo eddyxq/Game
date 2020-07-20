@@ -93,6 +93,11 @@ var velocity = Vector2()
 # animation tree
 var state_machine
 
+# variables used for ledge climbing
+var isTouchingLedge = false
+var highRayCast = null
+var lowRayCast = null
+
 # called when the node enters the scene tree for the first time
 func _ready():
 	# Firebase.get_document("users/%s" % Firebase.user_info.id, http)
@@ -549,3 +554,59 @@ func play_invalid_sfx():
 	if invalid_sfx:
 		SoundManager.play("res://audio/sfx/invalid.ogg")
 		$InvalidSFX.start()
+func finished_attacking():
+	currently_attacking = false
+	
+func ledge_grab_update():
+	if (not isTouchingLedge):
+		update_ledge_grab_direction()
+		isTouchingLedge = is_ledge_detected()
+	
+func update_ledge_grab_direction():
+	# flip raycast if it does not correspond to player direction
+	var lowRayCastDirection = $LowerEdgeDetect.get_cast_to()
+	# only checks one ray cast since both raycast should have the same direction
+	if (dir == DIRECTION.E and lowRayCastDirection.x < 0) or (dir == DIRECTION.W and lowRayCastDirection.x > 0):
+		lowRayCastDirection.x *= -1
+		$LowerEdgeDetect.set_cast_to(lowRayCastDirection)
+		
+		var highRayCastDirection = $HigherEdgeDetect.get_cast_to()
+		highRayCastDirection.x *= -1
+		$HigherEdgeDetect.set_cast_to(highRayCastDirection)
+		#print("raycast direction flipped")
+
+# TODO: needs a better way to identify blocks in the stage
+# detects whether an player is close to an edge
+# an edge is detected when lower raycast intersects with a block while upper ray cast does not
+func is_ledge_detected():
+	var lowerCollision = $LowerEdgeDetect.get_collider()
+	var higherCollision = $HigherEdgeDetect.get_collider()
+	
+	if lowerCollision != null and higherCollision == null:
+		#print(lowerCollision.get_name())
+		if lowerCollision.get_name() == "Blocks":
+			highRayCast = $LowerEdgeDetect.get_collision_point()
+			var absolute_y = abs(int(highRayCast.y))
+			var new_y = absolute_y + (16 - (absolute_y % 16))
+			if (highRayCast.y < 0):
+				new_y *= -1
+				new_y += 16
+			highRayCast.y = new_y - 32
+			self.position = highRayCast 
+			print("new position:", highRayCast)
+			return true
+	
+	return false
+	
+func move_forward_after_climb():
+	if dir == DIRECTION.E:
+		self.position.x += 8
+	else:
+		self.position.x -= 8
+	
+	isTouchingLedge = false
+	anim_finished = true
+
+func ledge_climb():
+	pass
+
