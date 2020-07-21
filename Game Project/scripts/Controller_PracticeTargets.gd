@@ -29,6 +29,7 @@ onready var scene_changer = $HUD/SceneChanger/AnimationPlayer
 
 func _ready():
 	scene_changer.play_backwards("fade")
+	setup_peaceful()
 
 # called every delta
 func _physics_process(_delta):
@@ -75,3 +76,15 @@ func _physics_process(_delta):
 #	else:
 #		player.set_light_enabled(false)
 
+func setup_peaceful():
+	$Enemy.disable_movement()
+	$Enemy.health = 100000000
+	
+	$Enemy2.disable_movement()
+	$Enemy2.health = 100000000
+	
+	$Enemy3.disable_movement()
+	$Enemy3.health = 100000000
+	
+	$Enemy4.disable_movement()
+	$Enemy4.health = 100000000

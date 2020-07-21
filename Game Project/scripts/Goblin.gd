@@ -127,6 +127,7 @@ func movement_loop():
 	velocity = move_and_slide(velocity, Vector2(0, -1))
 
 # update health bar
+# returns boolean: true if damage was critical, false otherwise
 func hurt(base_damage: int, knockback_intensity: int):
 	play_hurt_sfx()
 	var dmg = (randi() % int(player.strength) + base_damage) 
@@ -151,7 +152,8 @@ func hurt(base_damage: int, knockback_intensity: int):
 	# apply knockback effect if any
 	else:
 		react_to_hit(knockback_intensity)
-
+	
+	return crit
 # sets knockback_direction relative to 'other_body_origin'
 # general hit reaction
 

@@ -95,9 +95,11 @@ var state_machine
 
 # variables used for ledge climbing
 var isTouchingLedge = false
-var highRayCast = null
-var lowRayCast = null
+var highRayCast = null  # not used at the moment, likely remove in the future
+var lowRayCast = null   # not used at the moment, likely remove in the future
 
+# flag use to signal that the player hit an enemy
+var recentHit = false
 
 # called when the node enters the scene tree for the first time
 func _ready():
@@ -262,9 +264,13 @@ func _on_InvalidSFX_timeout():
 	invalid_sfx = true
 
 # applies damage when hitbox collide with enemies
+# calls screen shaker whenever damage was critical
 func _on_HitBox_body_entered(body):
 	if "Enemy" in body.name:
-		body.hurt(5, 0)
+		recentHit = true
+		var is_crit = body.hurt(5, 0)
+		if is_crit:
+			$Camera2D/ScreenShaker.start()
 
 # time used to countdown the animation of skill0 buff
 func _on_ghost_timer_timeout():
@@ -615,4 +621,10 @@ func grab_ledge():
 		anim_finished = false
 		play_animation("ledge_grab_placeholder")
 		
+# freezes the frame if the player hit something
+# freezes frame for 100 milliseconds
+func freeze_hit_frame():
+	if recentHit:
+		OS.delay_msec(100)
+		recentHit = false
 
