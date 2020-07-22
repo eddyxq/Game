@@ -93,8 +93,6 @@ var velocity = Vector2()
 # animation tree
 var state_machine
 
-<<<<<<< HEAD
-=======
 # variables used for ledge climbing
 var isTouchingLedge = false
 var highRayCast = null  # not used at the moment, likely remove in the future
@@ -103,7 +101,6 @@ var lowRayCast = null   # not used at the moment, likely remove in the future
 # flag use to signal that the player hit an enemy
 var recentHit = false
 
->>>>>>> experiments
 # called when the node enters the scene tree for the first time
 func _ready():
 	# Firebase.get_document("users/%s" % Firebase.user_info.id, http)
@@ -126,15 +123,6 @@ func animation_loop(attack,skill0, skill1, skill2, skill3, skill4, item1, item2,
 
 # movement logic
 func movement_loop(attack, up, left, right, skill3):
-<<<<<<< HEAD
-	apply_gravity() # pull player downwards
-	update_hitbox_location() # update hitbox
-	horizontal_movement(right, left) # horizontal translation
-	vertical_movement(up) # vertical translation
-	update_speed_modifier(attack) # restricts movement during certain actions
-	apply_accel_decel(left, right) # acceleration effect
-	apply_translation(left, right, attack, skill3)
-=======
 	# this function has a built in: 'if not isTouchingLedge'
 	ledge_grab_update()
 	if not isTouchingLedge:
@@ -145,7 +133,6 @@ func movement_loop(attack, up, left, right, skill3):
 		update_speed_modifier(attack) # restricts movement during certain actions
 		apply_accel_decel(left, right) # acceleration effect
 		apply_translation(left, right, attack, skill3)
->>>>>>> experiments
 
 # applies a blinking damage effect to the player
 func hurt(dmg):
@@ -580,8 +567,6 @@ func play_invalid_sfx():
 	if invalid_sfx:
 		SoundManager.play("res://audio/sfx/invalid.ogg")
 		$InvalidSFX.start()
-<<<<<<< HEAD
-=======
 	
 func ledge_grab_update():
 	if (not isTouchingLedge):
@@ -650,4 +635,3 @@ func animation_done():
 	anim_finished = true
 
 
->>>>>>> experiments
