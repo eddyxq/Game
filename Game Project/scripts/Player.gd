@@ -104,6 +104,7 @@ var recentHit = false
 # called when the node enters the scene tree for the first time
 func _ready():
 	# Firebase.get_document("users/%s" % Firebase.user_info.id, http)
+	$AnimationTree.active = true
 	setup_state_machine()
 
 # animation logic
@@ -375,7 +376,8 @@ func attack(attack):
 			play_animation("fist_attack4")
 		elif stance == STANCE.SWORD:
 			play_animation("sword_attack3")
-		apply_delay()
+		
+		#apply_delay()
 
 # sends skill input 
 func detect_skill_activation(skill0, skill1, skill2, skill3, skill4):
@@ -625,6 +627,11 @@ func grab_ledge():
 # freezes frame for 100 milliseconds
 func freeze_hit_frame():
 	if recentHit:
-		OS.delay_msec(100)
+		OS.delay_msec(50)
 		recentHit = false
+	
+	
+func animation_done():
+	anim_finished = true
+
 
