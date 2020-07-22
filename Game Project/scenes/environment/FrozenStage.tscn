@@ -9,8 +9,8 @@
 [node name="FrozenStage" type="Node2D"]
 
 [node name="sky" type="Sprite" parent="."]
-position = Vector2( 1500, 168 )
-scale = Vector2( 300, 5 )
+position = Vector2( 1500, 468 )
+scale = Vector2( 300, 9.6875 )
 z_index = -2
 texture = ExtResource( 2 )
 

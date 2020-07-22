@@ -110,7 +110,9 @@ func _ready():
 
 # animation logic
 func animation_loop(attack,skill0, skill1, skill2, skill3, skill4, item1, item2, switch):
+	# DEBUG: used to display current animation state, uncomment line below to use
 	print(tree_state.get_current_node())
+	
 	# disable animations while player is attacking
 	if anim_finished: 
 		move() # moving state
@@ -330,10 +332,12 @@ func toggle_stance():
 # draws sword weapon
 func draw_sword():
 	stance = STANCE.SWORD
+	play_animation("idle_sword")
 
 # put away sword
 func sheath_sword():
 	stance = STANCE.FIST
+	play_animation("idle_fist")
 
 # on timeout player is allowed to change stance again
 func _on_StanceChangeCooldown_timeout():
@@ -374,6 +378,7 @@ func attack(attack):
 		toggle_hitbox_off()
 	if attack && is_on_floor():
 		anim_finished = false
+		apply_delay()
 		if stance == STANCE.FIST:
 			play_animation("fist_attack4")
 		elif stance == STANCE.SWORD:
@@ -608,7 +613,6 @@ func is_ledge_detected():
 			self.position = highRayCast 
 			print("new position:", highRayCast)
 			return true
-	
 	return false
 	
 func move_forward_after_climb():
@@ -618,11 +622,11 @@ func move_forward_after_climb():
 		self.position.x -= 8
 	
 	isTouchingLedge = false
-	anim_finished = true
+	animation_done()
 
 func grab_ledge():
 	if isTouchingLedge:
-		anim_finished = false
+		apply_delay()
 		play_animation("ledge_grab_placeholder")
 		
 # freezes the frame if the player hit something
@@ -631,9 +635,6 @@ func freeze_hit_frame():
 	if recentHit:
 		OS.delay_msec(50)
 		recentHit = false
-	
-	
+		
 func animation_done():
 	anim_finished = true
-
-
