@@ -93,9 +93,21 @@ var velocity = Vector2()
 # animation tree
 var state_machine
 
+<<<<<<< HEAD
+=======
+# variables used for ledge climbing
+var isTouchingLedge = false
+var highRayCast = null  # not used at the moment, likely remove in the future
+var lowRayCast = null   # not used at the moment, likely remove in the future
+
+# flag use to signal that the player hit an enemy
+var recentHit = false
+
+>>>>>>> experiments
 # called when the node enters the scene tree for the first time
 func _ready():
 	# Firebase.get_document("users/%s" % Firebase.user_info.id, http)
+	$AnimationTree.active = true
 	setup_state_machine()
 
 # animation logic
@@ -109,10 +121,12 @@ func animation_loop(attack,skill0, skill1, skill2, skill3, skill4, item1, item2,
 		attack(attack) # attacking state
 		detect_skill_activation(skill0, skill1, skill2, skill3, skill4) # pass input
 		item(item1, item2) # item activation
+		grab_ledge()
 		stance_update(switch) # stance change
 
 # movement logic
 func movement_loop(attack, up, left, right, skill3):
+<<<<<<< HEAD
 	apply_gravity() # pull player downwards
 	update_hitbox_location() # update hitbox
 	horizontal_movement(right, left) # horizontal translation
@@ -120,6 +134,18 @@ func movement_loop(attack, up, left, right, skill3):
 	update_speed_modifier(attack) # restricts movement during certain actions
 	apply_accel_decel(left, right) # acceleration effect
 	apply_translation(left, right, attack, skill3)
+=======
+	# this function has a built in: 'if not isTouchingLedge'
+	ledge_grab_update()
+	if not isTouchingLedge:
+		apply_gravity() # pull player downwards
+		update_hitbox_location() # update hitbox
+		horizontal_movement(right, left) # horizontal translation
+		vertical_movement(up) # vertical translation
+		update_speed_modifier(attack) # restricts movement during certain actions
+		apply_accel_decel(left, right) # acceleration effect
+		apply_translation(left, right, attack, skill3)
+>>>>>>> experiments
 
 # applies a blinking damage effect to the player
 func hurt(dmg):
@@ -252,9 +278,13 @@ func _on_InvalidSFX_timeout():
 	invalid_sfx = true
 
 # applies damage when hitbox collide with enemies
+# calls screen shaker whenever damage was critical
 func _on_HitBox_body_entered(body):
 	if "Enemy" in body.name:
-		body.hurt(5, 0)
+		recentHit = true
+		var is_crit = body.hurt(5, 0)
+		if is_crit:
+			$Camera2D/ScreenShaker.start()
 
 # time used to countdown the animation of skill0 buff
 func _on_ghost_timer_timeout():
@@ -359,7 +389,8 @@ func attack(attack):
 			play_animation("fist_attack4")
 		elif stance == STANCE.SWORD:
 			play_animation("sword_attack3")
-		apply_delay()
+		
+		#apply_delay()
 
 # sends skill input 
 func detect_skill_activation(skill0, skill1, skill2, skill3, skill4):
@@ -549,3 +580,74 @@ func play_invalid_sfx():
 	if invalid_sfx:
 		SoundManager.play("res://audio/sfx/invalid.ogg")
 		$InvalidSFX.start()
+<<<<<<< HEAD
+=======
+	
+func ledge_grab_update():
+	if (not isTouchingLedge):
+		update_ledge_grab_direction()
+		isTouchingLedge = is_ledge_detected()
+	
+func update_ledge_grab_direction():
+	# flip raycast if it does not correspond to player direction
+	var lowRayCastDirection = $LowerEdgeDetect.get_cast_to()
+	# only checks one ray cast since both raycast should have the same direction
+	if (dir == DIRECTION.E and lowRayCastDirection.x < 0) or (dir == DIRECTION.W and lowRayCastDirection.x > 0):
+		lowRayCastDirection.x *= -1
+		$LowerEdgeDetect.set_cast_to(lowRayCastDirection)
+		
+		var highRayCastDirection = $HigherEdgeDetect.get_cast_to()
+		highRayCastDirection.x *= -1
+		$HigherEdgeDetect.set_cast_to(highRayCastDirection)
+		#print("raycast direction flipped")
+
+# TODO: needs a better way to identify blocks in the stage
+# detects whether an player is close to an edge
+# an edge is detected when lower raycast intersects with a block while upper ray cast does not
+func is_ledge_detected():
+	var lowerCollision = $LowerEdgeDetect.get_collider()
+	var higherCollision = $HigherEdgeDetect.get_collider()
+	
+	if lowerCollision != null and higherCollision == null:
+		#print(lowerCollision.get_name())
+		if lowerCollision.get_name() == "Blocks":
+			highRayCast = $LowerEdgeDetect.get_collision_point()
+			var absolute_y = abs(int(highRayCast.y))
+			var new_y = absolute_y + (16 - (absolute_y % 16))
+			if (highRayCast.y < 0):
+				new_y *= -1
+				new_y += 16
+			highRayCast.y = new_y - 32
+			self.position = highRayCast 
+			print("new position:", highRayCast)
+			return true
+	
+	return false
+	
+func move_forward_after_climb():
+	if dir == DIRECTION.E:
+		self.position.x += 8
+	else:
+		self.position.x -= 8
+	
+	isTouchingLedge = false
+	anim_finished = true
+
+func grab_ledge():
+	if isTouchingLedge:
+		anim_finished = false
+		play_animation("ledge_grab_placeholder")
+		
+# freezes the frame if the player hit something
+# freezes frame for 100 milliseconds
+func freeze_hit_frame():
+	if recentHit:
+		OS.delay_msec(50)
+		recentHit = false
+	
+	
+func animation_done():
+	anim_finished = true
+
+
+>>>>>>> experiments
