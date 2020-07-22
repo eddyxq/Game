@@ -6,6 +6,7 @@ extends KinematicBody2D
 
 onready var UI = get_tree().get_root().get_node("/root/Controller/HUD/UI")
 onready var http : HTTPRequest = $HTTPRequest
+onready var tree_state = $AnimationTree.get("parameters/playback")
 
 # player direction
 enum DIRECTION {
@@ -109,6 +110,7 @@ func _ready():
 
 # animation logic
 func animation_loop(attack,skill0, skill1, skill2, skill3, skill4, item1, item2, switch):
+	print(tree_state.get_current_node())
 	# disable animations while player is attacking
 	if anim_finished: 
 		move() # moving state

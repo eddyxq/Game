@@ -8,8 +8,8 @@ onready var camera = get_parent()
 # amp measured in pixels
 # higher frequency = faster camera shake
 # default parameters aim to give a quick shake
-func start(duration=0.1, frequency=80, amplitude=8):
-	self.amplitude = amplitude
+func start(duration=0.1, frequency=80, amp=8):
+	self.amplitude = amp
 		
 	$Duration.wait_time = duration
 	$Frequency.wait_time = 1 / float(frequency)

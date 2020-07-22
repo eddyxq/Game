@@ -1,0 +1,53 @@
+extends Node
+
+###############################################################################
+# Below contains the frame numbers of each animation on the player spritesheet 
+###############################################################################
+
+#adventurer_new.aseprite
+#
+#[FRAME ALLOCATION]:
+#idle   			[1-4]
+#crouch 			[5-8]
+#run    			[9-14]
+#jump			[15-18]
+#smrslt			[19-22]
+#fall			[23-24]
+#slide			[25-26]
+#stand			[27-29]
+#crnr-grb		[30-33]
+#crnr-clmb		[34-38]
+#idle-2			[39-42]
+#attack1			[43-47]
+#attack2			[48-53]
+#attack3			[54-59]
+#hurt			[60-62]
+#die			[63-69]
+#swrd-drw		[70-73]
+#swrd-shte		[74-77]
+#crnr-jmp		[78-79]
+#wall-slide		[80-81]
+#ladder-climb		[82-85]
+#cast			[86-89]
+#cast-loop		[90-93]
+#items			[94-96]
+#air-attack1		[97-100]
+#air-attack2		[101-103]
+#air-attack3-rdy		[104]
+#air-attack3-loop	[105-106]
+#air-attack3-end		[107-109]
+#punch			[110-122]
+#run-punch		[123-129]
+#kick			[130-137]
+#drop-kick		[138-141]
+#knock-dwn		[142-148]
+#get-up			[149-155]
+#walk			[156-161]
+#crouch-walk		[162-167]
+#run2			[168-173]
+#bow-draw		[174-180]
+#bow-loop		[181-182]
+#bow-fire		[183-184]
+#bow-air-attack		[185-190]
+#2h-attack1		[191-197]
+#2h-attack2		[198-204]
