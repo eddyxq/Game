@@ -275,6 +275,7 @@ func _on_HitBox_body_entered(body):
 		recentHit = true
 		var is_crit = body.hurt(5, 0)
 		if is_crit:
+			#pass
 			$Camera2D/ScreenShaker.start()
 
 # time used to countdown the animation of skill0 buff
@@ -377,8 +378,8 @@ func attack(attack):
 	if !attack:
 		toggle_hitbox_off()
 	if attack && is_on_floor():
-		anim_finished = false
-		apply_delay()
+		# anim_finished is set to true right before the animation ends using animation_done()
+		anim_finished = false  
 		if stance == STANCE.FIST:
 			play_animation("fist_attack4")
 		elif stance == STANCE.SWORD:

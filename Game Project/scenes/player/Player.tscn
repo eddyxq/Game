@@ -1309,7 +1309,7 @@ material = SubResource( 2 )
 texture = ExtResource( 1 )
 vframes = 27
 hframes = 8
-frame = 8
+frame = 58
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 anims/bow_attack = SubResource( 3 )
@@ -1383,6 +1383,7 @@ drag_margin_bottom = 0.0
 [node name="ScreenShaker" parent="Camera2D" instance=ExtResource( 5 )]
 
 [node name="HitBox" type="Area2D" parent="."]
+visible = false
 position = Vector2( 20, 2 )
 collision_layer = 8
 collision_mask = 2
@@ -1406,6 +1407,7 @@ texture_scale = 0.2
 shadow_enabled = true
 
 [node name="Area2D" type="Area2D" parent="."]
+visible = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 shape = SubResource( 103 )
