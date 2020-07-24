@@ -111,7 +111,7 @@ func _ready():
 # animation logic
 func animation_loop(attack,skill0, skill1, skill2, skill3, skill4, item1, item2, switch):
 	# DEBUG: used to display current animation state, uncomment line below to use
-	print(tree_state.get_current_node())
+	#print(tree_state.get_current_node())
 	
 	# disable animations while player is attacking
 	if anim_finished: 
@@ -321,7 +321,6 @@ func reset_skill_cooldown(skill_slot_num):
 
 # toggles the player's stance between fist and sword
 func toggle_stance():
-	print(stance)
 	if stance_change_off_cooldown:
 
 		if stance == STANCE.FIST:
@@ -612,7 +611,7 @@ func is_ledge_detected():
 				new_y += 16
 			highRayCast.y = new_y - 32
 			self.position = highRayCast 
-			print("new position:", highRayCast)
+			#print("new position:", highRayCast)
 			return true
 	return false
 	
