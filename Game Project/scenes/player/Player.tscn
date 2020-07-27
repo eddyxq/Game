@@ -669,6 +669,35 @@ tracks/1/keys = {
 "method": "play_footstep_sfx"
 } ]
 }
+tracks/2/type = "method"
+tracks/2/path = NodePath(".")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0, 0.2, 0.4, 0.6, 0.8, 1 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1 ),
+"values": [ {
+"args": [  ],
+"method": "emit_foot_dust"
+}, {
+"args": [  ],
+"method": "emit_foot_dust"
+}, {
+"args": [  ],
+"method": "emit_foot_dust"
+}, {
+"args": [  ],
+"method": "emit_foot_dust"
+}, {
+"args": [  ],
+"method": "emit_foot_dust"
+}, {
+"args": [  ],
+"method": "emit_foot_dust"
+} ]
+}
 
 [sub_resource type="Animation" id=19]
 length = 0.6
@@ -1315,6 +1344,7 @@ radius = 93.7913
 script = ExtResource( 2 )
 
 [node name="PositionCenter" type="Position2D" parent="."]
+visible = false
 
 [node name="Sprite" type="Sprite" parent="."]
 light_mask = 0
@@ -1322,7 +1352,7 @@ material = SubResource( 2 )
 texture = ExtResource( 1 )
 vframes = 27
 hframes = 8
-frame = 92
+frame = 8
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 anims/bow_attack = SubResource( 3 )
@@ -1351,6 +1381,7 @@ anims/sword_run = SubResource( 25 )
 anims/sword_sheath = SubResource( 26 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
 position = Vector2( 0, 2 )
 shape = SubResource( 27 )
 __meta__ = {
@@ -1379,6 +1410,7 @@ one_shot = true
 [node name="HTTPRequest" type="HTTPRequest" parent="."]
 
 [node name="Camera2D" type="Camera2D" parent="."]
+visible = false
 position = Vector2( 0, -64 )
 current = true
 zoom = Vector2( 0.7, 0.7 )
@@ -1422,16 +1454,22 @@ visible = false
 shape = SubResource( 108 )
 
 [node name="LowerEdgeDetect" type="RayCast2D" parent="."]
+visible = false
 position = Vector2( 0, -1 )
 enabled = true
 cast_to = Vector2( 7, 0 )
 collision_mask = 4
 
 [node name="HigherEdgeDetect" type="RayCast2D" parent="."]
+visible = false
 position = Vector2( 0, -6 )
 enabled = true
 cast_to = Vector2( 7, 0 )
 collision_mask = 4
+
+[node name="FeetPosition" type="Position2D" parent="."]
+visible = false
+position = Vector2( 0, 14 )
 [connection signal="timeout" from="HealthRecovery" to="." method="_on_HealthRecovery_timeout"]
 [connection signal="timeout" from="ManaRecovery" to="." method="_on_ManaRecovery_timeout"]
 [connection signal="timeout" from="IFrame" to="." method="_on_IFrame_timeout"]

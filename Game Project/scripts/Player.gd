@@ -109,7 +109,7 @@ func _ready():
 # animation logic
 func animation_loop(attack,skill0, skill1, skill2, skill3, skill4, item1, item2, switch):
 	# DEBUG: used to display current animation state, uncomment line below to use
-	print(tree_state.get_current_node())
+	# print(tree_state.get_current_node())
 	
 	# disable animations while player is attacking
 	move() # moving state
@@ -600,4 +600,16 @@ func freeze_hit_frame():
 	if recentHit:
 		OS.delay_msec(50)
 		recentHit = false
+
+# creates dust particles after player movements
+func emit_foot_dust():
+	var dust_particles = preload("res://scenes/player/DustParticle.tscn").instance()
+	dust_particles.set_as_toplevel(true)
+	if dir == DIRECTION.E:
+		dust_particles.scale.x = 1
+	elif dir == DIRECTION.W:
+		dust_particles.scale.x = -1
+	dust_particles.global_position = $FeetPosition.global_position
+	add_child(dust_particles)
+
 
