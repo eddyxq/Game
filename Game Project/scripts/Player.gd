@@ -124,6 +124,7 @@ func animation_loop(attack,skill0, skill1, skill2, skill3, skill4, item1, item2,
 
 # movement logic
 func movement_loop(attack, up, left, right, skill3):
+	print(mana)
 	# this function has a built in: 'if not isTouchingLedge'
 	ledge_grab_update()
 	if not isTouchingLedge:
@@ -441,6 +442,7 @@ func item(item1, item2):
 		play_potion_sfx()
 		# potion fully heals the player's mana
 		mana = max_mp
+		UI.mana_bar.update_bar(mana)
 
 # changes the stance and weapon of the player
 func stance_update(switch):
