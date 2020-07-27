@@ -124,7 +124,6 @@ func animation_loop(attack,skill0, skill1, skill2, skill3, skill4, item1, item2,
 
 # movement logic
 func movement_loop(attack, up, left, right, skill3):
-	print(mana)
 	# this function has a built in: 'if not isTouchingLedge'
 	ledge_grab_update()
 	if not isTouchingLedge:
@@ -167,6 +166,7 @@ func vertical_movement(up):
 	if is_on_floor():
 		velocity.y = 0
 		if up: # jump
+			emit_foot_dust()
 			velocity.y = -jump_speed
 			play_footstep_sfx()
 
@@ -614,5 +614,3 @@ func emit_foot_dust():
 		dust_particles.scale.x = -1
 	dust_particles.global_position = $FeetPosition.global_position
 	add_child(dust_particles)
-
-
