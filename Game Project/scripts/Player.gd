@@ -329,6 +329,7 @@ func move():
 	if velocity.x != 0 && is_on_floor():
 		if !skill_slot0_off_cooldown:
 			play_animation("sprint")
+			emit_foot_dust()
 		else:
 			if stance == STANCE.FIST:
 				play_animation("run")
