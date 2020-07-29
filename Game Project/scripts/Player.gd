@@ -111,7 +111,7 @@ func _ready():
 # animation logic
 func animation_loop(attack,skill0, skill1, skill2, skill3, skill4, item1, item2, switch):
 	# DEBUG: used to display current animation state, uncomment line below to use
-	print(tree_state.get_current_node())
+	#print(tree_state.get_current_node())
 	
 	# disable animations while player is attacking
 	if anim_finished: 
@@ -292,11 +292,14 @@ func set_light_enabled(status):
 
 # changes center of gravity to player so coins will be attracted to it
 func _on_Area2D_body_entered(body):
-	if body.name == "Coin":
-		$Area2D.set_space_override_mode(3)
-		$Area2D.set_gravity_is_point(true)
-		$Area2D.set_gravity_vector(Vector2(0, 0))
-		play_coin_sfx()
+	if body.get_filename() == "res://scenes/item/Coin.tscn":
+		#$Area2D.set_space_override_mode(3)
+		#$Area2D.set_gravity_is_point(true)
+		#$Area2D.set_gravity_vector(Vector2(0, 0))
+		#$Area2D.set_gravity(98.0 * 8)
+		# disable coin's environment interaction
+		body.start_chase(self)
+
 
 # resets the cooldown of slot utilized allowing reuse
 func reset_skill_cooldown(skill_slot_num):
@@ -557,10 +560,6 @@ func play_death_sfx():
 # plays a potion sfx
 func play_potion_sfx():
 	SoundManager.play("res://audio/sfx/potion.ogg")
-	
-# plays a coin sfx
-func play_coin_sfx():
-	SoundManager.play("res://audio/sfx/coin.ogg")
 	
 # plays a punch sfx
 func play_punch_sfx():

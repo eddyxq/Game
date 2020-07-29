@@ -1296,7 +1296,7 @@ glow_enabled = true
 glow_intensity = 0.12
 
 [sub_resource type="CircleShape2D" id=103]
-radius = 93.7913
+radius = 88.7015
 
 [node name="Player" type="KinematicBody2D"]
 script = ExtResource( 2 )
@@ -1407,7 +1407,10 @@ texture_scale = 0.2
 shadow_enabled = true
 
 [node name="Area2D" type="Area2D" parent="."]
-visible = false
+linear_damp = 1.0
+__meta__ = {
+"_edit_group_": true
+}
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 shape = SubResource( 103 )
@@ -1423,12 +1426,18 @@ position = Vector2( 0, -1 )
 enabled = true
 cast_to = Vector2( 7, 0 )
 collision_mask = 4
+__meta__ = {
+"_edit_group_": true
+}
 
 [node name="HigherEdgeDetect" type="RayCast2D" parent="."]
 position = Vector2( 0, -6 )
 enabled = true
 cast_to = Vector2( 7, 0 )
 collision_mask = 4
+__meta__ = {
+"_edit_group_": true
+}
 [connection signal="timeout" from="HealthRecovery" to="." method="_on_HealthRecovery_timeout"]
 [connection signal="timeout" from="ManaRecovery" to="." method="_on_ManaRecovery_timeout"]
 [connection signal="timeout" from="AnimationDelay" to="." method="_on_AnimationDelay_timeout"]
