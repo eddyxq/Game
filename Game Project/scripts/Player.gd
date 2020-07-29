@@ -324,7 +324,6 @@ func reset_skill_cooldown(skill_slot_num):
 
 # toggles the player's stance between fist and sword
 func toggle_stance():
-	print(stance)
 	if stance_change_off_cooldown:
 
 		if stance == STANCE.FIST:
@@ -611,7 +610,7 @@ func is_ledge_detected():
 				new_y += 16
 			highRayCast.y = new_y - 32
 			self.position = highRayCast 
-			print("new position:", highRayCast)
+			#print("new position:", highRayCast)
 			return true
 	return false
 	
