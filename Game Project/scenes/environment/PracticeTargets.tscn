@@ -1,8 +1,9 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://scripts/Controller_PracticeTargets.gd" type="Script" id=1]
 [ext_resource path="res://scenes/ui/HUD.tscn" type="PackedScene" id=2]
 [ext_resource path="res://scenes/environment/ForestStage.tscn" type="PackedScene" id=3]
+[ext_resource path="res://scenes/item/Coin.tscn" type="PackedScene" id=4]
 [ext_resource path="res://scenes/enemy/Goblin.tscn" type="PackedScene" id=5]
 [ext_resource path="res://scenes/player/Player.tscn" type="PackedScene" id=9]
 
@@ -28,3 +29,24 @@ position = Vector2( 412.486, 160.362 )
 
 [node name="Enemy2" parent="." instance=ExtResource( 5 )]
 position = Vector2( 337.651, 285.979 )
+
+[node name="Coin" parent="." instance=ExtResource( 4 )]
+position = Vector2( 440.294, 141.108 )
+
+[node name="Coin4" parent="." instance=ExtResource( 4 )]
+position = Vector2( 284.308, 187.778 )
+
+[node name="Coin5" parent="." instance=ExtResource( 4 )]
+position = Vector2( 250.252, 276.913 )
+
+[node name="Coin6" parent="." instance=ExtResource( 4 )]
+position = Vector2( 245.627, 269.766 )
+
+[node name="Coin7" parent="." instance=ExtResource( 4 )]
+position = Vector2( 242.263, 277.334 )
+
+[node name="Coin2" parent="." instance=ExtResource( 4 )]
+position = Vector2( 316.924, 237.247 )
+
+[node name="Coin3" parent="." instance=ExtResource( 4 )]
+position = Vector2( 389.338, 170.714 )
