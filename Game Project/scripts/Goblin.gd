@@ -46,10 +46,6 @@ var anim_finished = true
 var knockback_frames = 0
 var knockback_direction = Vector2.ZERO
 
-var is_stun = false
-var hit_react = true
-
-
 # called when the node enters the scene tree for the first time
 func _ready():
 	health = max_health
@@ -58,11 +54,6 @@ func _ready():
 	set_process(true)
 
 # called every delta
-var saved_position = Vector2.ZERO
-var t_interpolate = 0.0
-var interpolate_speed = 25
-var hit_direction = Vector2.ZERO
-var target_position = Vector2.ZERO
 func _physics_process(_delta):
 	# enemies dies when it falls down
 	if self.get_global_position().y > 440:
@@ -74,24 +65,6 @@ func _physics_process(_delta):
 
 	if is_dead:
 		set_physics_process(false)
-	elif is_stun:
-		if hit_react:
-			# move enemy away
-			t_interpolate += _delta * interpolate_speed
-			
-			position = position.linear_interpolate(target_position, t_interpolate)
-			if (t_interpolate >= 1.0):
-				hit_react = false
-				t_interpolate = 0.0
-		else:
-			# move enemy back to original position
-			t_interpolate += _delta * interpolate_speed
-			position = position.linear_interpolate(saved_position, t_interpolate)
-			if (t_interpolate >= 1.0):
-				hit_react = true
-				is_stun = false
-				t_interpolate = 0.0
-				velocity = Vector2.ZERO
 	else:
 		animation_loop()
 		movement_loop()
@@ -115,7 +88,7 @@ func animation_loop():
 			set_dir(0)
 			state_machine.travel("idle")
 	
-		if velocity.x == 0 && (abs(position.x - player.get_global_position().x) < target_player_dist) && (abs(position.y - player.get_global_position().y) < target_player_dist)  && health > -1:
+		if velocity.x == 0 && (abs(position.x - player.get_global_position().x) < 35) && (abs(position.y - player.get_global_position().y) < 35)  && health > -1:
 			state_machine.travel("attack")
 			anim_finished = false
 			$AnimationDelay.start()
@@ -180,13 +153,6 @@ func hurt(base_damage: int, knockback_intensity: int):
 	else:
 		react_to_hit(knockback_intensity)
 	
-	# calculate hit direction
-	hit_direction = transform.origin - player.transform.origin
-	hit_direction = hit_direction.normalized()
-	if not is_stun:
-		is_stun = true
-		saved_position = position
-		target_position = saved_position + (hit_direction * 5)
 	return crit
 # sets knockback_direction relative to 'other_body_origin'
 # general hit reaction
@@ -305,7 +271,4 @@ func drop_loot():
 	var _coin_amount = coin_dropper.drop(self)
 	
 func disable_movement():
-	eye_reach = -1
-	vision = -1
-	target_player_dist = 0
-	strength = 0
+	set_physics_process(false)
