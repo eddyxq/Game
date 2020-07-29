@@ -20,8 +20,9 @@ __meta__ = {
 collision_layer = 4
 collision_mask = 7
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Tile00/StaticBody2D"]
-shape = SubResource( 1 )
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Tile00/StaticBody2D"]
+build_mode = 1
+polygon = PoolVector2Array( -8, -8, -8, 0, 0, 8, 8, 8, 8, -8 )
 
 [node name="Tile01" type="Sprite" parent="."]
 texture = ExtResource( 1 )
@@ -51,8 +52,9 @@ __meta__ = {
 collision_layer = 4
 collision_mask = 7
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Tile02/StaticBody2D"]
-shape = SubResource( 1 )
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Tile02/StaticBody2D"]
+build_mode = 1
+polygon = PoolVector2Array( -8, -8, -8, 8, 0, 8, 8, 0, 8, -8, -8, -8 )
 
 [node name="Tile03" type="Sprite" parent="."]
 position = Vector2( 48, 0 )

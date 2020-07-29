@@ -65,6 +65,7 @@ var stance = STANCE.FIST # default fist stance
 const GRAVITY = 18
 
 # flags for player states
+var anim_finished = true # used to lock out player inputs for a short amount of time (0.2s) so prevent key spamming
 var invincible = false # true when player has invincible frames
 
 # flags that restrict usage of skills and items
@@ -75,6 +76,7 @@ var skill_slot3_off_cooldown = true
 var skill_slot4_off_cooldown = true
 var item_slot1_off_cooldown = true
 var item_slot2_off_cooldown = true
+var stance_change_off_cooldown = true
 
 # mana cost of each skill
 var skill0_mana_cost = 1
@@ -109,18 +111,19 @@ func _ready():
 # animation logic
 func animation_loop(attack,skill0, skill1, skill2, skill3, skill4, item1, item2, switch):
 	# DEBUG: used to display current animation state, uncomment line below to use
-	# print(tree_state.get_current_node())
+	#print(tree_state.get_current_node())
 	
 	# disable animations while player is attacking
-	move() # moving state
-	jump() # jumping state
-	fall() # falling state
-	idle() # idle state
-	attack(attack) # attacking state
-	detect_skill_activation(skill0, skill1, skill2, skill3, skill4) # pass input
-	item(item1, item2) # item activation
-	grab_ledge()
-	stance_update(switch) # stance change
+	if anim_finished: 
+		move() # moving state
+		jump() # jumping state
+		fall() # falling state
+		idle() # idle state
+		attack(attack) # attacking state
+		detect_skill_activation(skill0, skill1, skill2, skill3, skill4) # pass input
+		item(item1, item2) # item activation
+		grab_ledge()
+		stance_update(switch) # stance change
 
 # movement logic
 func movement_loop(attack, up, left, right, skill3):
@@ -163,16 +166,20 @@ func horizontal_movement(right, left):
 
 # update player's y velocity
 func vertical_movement(up):
-	if is_on_floor():
-		velocity.y = 0
-		if up: # jump
-			emit_foot_dust()
-			velocity.y = -jump_speed
-			play_footstep_sfx()
+	if anim_finished:
+		if is_on_floor():
+			velocity.y = 0
+			if up: # jump
+				velocity.y = -jump_speed
+				play_footstep_sfx()
 
 # travel to input state in animation tree
 func play_animation(anim):
 	state_machine.travel(anim)
+
+# apply delay to prevents attack spamming
+func apply_delay():
+	$AnimationDelay.start()
 
 # enables normal attack hitbox
 func toggle_hitbox_on():
@@ -240,6 +247,10 @@ func _on_ManaRecovery_timeout():
 		mana += 1
 		UI.mana_bar.update_bar(mana)
 
+# timer used to manage attaking state, preventing animation overlap
+func _on_AnimationDelay_timeout():
+	anim_finished = true
+
 # loads player profile from database
 func _on_HTTPRequest_request_completed(_result, response_code, _headers, body):
 	var result_body := JSON.parse(body.get_string_from_ascii()).result as Dictionary
@@ -281,11 +292,14 @@ func set_light_enabled(status):
 
 # changes center of gravity to player so coins will be attracted to it
 func _on_Area2D_body_entered(body):
-	if body.name == "Coin":
-		$Area2D.set_space_override_mode(3)
-		$Area2D.set_gravity_is_point(true)
-		$Area2D.set_gravity_vector(Vector2(0, 0))
-		play_coin_sfx()
+	if body.get_filename() == "res://scenes/item/Coin.tscn":
+		#$Area2D.set_space_override_mode(3)
+		#$Area2D.set_gravity_is_point(true)
+		#$Area2D.set_gravity_vector(Vector2(0, 0))
+		#$Area2D.set_gravity(98.0 * 8)
+		# disable coin's environment interaction
+		body.start_chase(self)
+
 
 # resets the cooldown of slot utilized allowing reuse
 func reset_skill_cooldown(skill_slot_num):
@@ -310,10 +324,13 @@ func reset_skill_cooldown(skill_slot_num):
 
 # toggles the player's stance between fist and sword
 func toggle_stance():
-	if stance == STANCE.FIST:
-		draw_sword()
-	elif stance == STANCE.SWORD:
-		sheath_sword()
+	if stance_change_off_cooldown:
+
+		if stance == STANCE.FIST:
+			draw_sword()
+		elif stance == STANCE.SWORD:
+			sheath_sword()
+		stance_change_off_cooldown = false
 
 # draws sword weapon
 func draw_sword():
@@ -325,12 +342,15 @@ func sheath_sword():
 	stance = STANCE.FIST
 	play_animation("idle_fist")
 
+# on timeout player is allowed to change stance again
+func _on_StanceChangeCooldown_timeout():
+	stance_change_off_cooldown = true
+
 # left and right movement
 func move():
 	if velocity.x != 0 && is_on_floor():
 		if !skill_slot0_off_cooldown:
 			play_animation("sprint")
-			emit_foot_dust()
 		else:
 			if stance == STANCE.FIST:
 				play_animation("run")
@@ -349,7 +369,7 @@ func fall():
 
 # player is in idle state when they are not moving
 func idle():
-	if velocity.length() == 0: 
+	if velocity.length() == 0 && stance_change_off_cooldown == true: 
 		if stance == STANCE.FIST:
 			play_animation("idle_fist")
 		elif stance == STANCE.SWORD:
@@ -360,29 +380,34 @@ func attack(attack):
 	if !attack:
 		toggle_hitbox_off()
 	if attack && is_on_floor():
+		# anim_finished is set to true right before the animation ends using animation_done()
+		anim_finished = false  
 		if stance == STANCE.FIST:
 			play_animation("fist_attack4")
 		elif stance == STANCE.SWORD:
 			play_animation("sword_attack3")
+		
+		#apply_delay()
 
 # sends skill input 
 func detect_skill_activation(skill0, skill1, skill2, skill3, skill4):
 	skill0(skill0)
+	skill1(skill1)
+	skill2(skill2)
 	skill3(skill3)
-	if stance == STANCE.SWORD:
-		skill1(skill1)
-		skill2(skill2)
-		skill4(skill4)
+	skill4(skill4)
 
 # sprint buff
 func skill0(skill0):
 	if skill0 && skill_slot0_off_cooldown:
 		if mana >= skill0_mana_cost:
 			UI.skill_slot0.start_cooldown()
+			anim_finished = false
 			skill_slot0_off_cooldown = false
 			$GhostInterval.start()
 			movement_speed = max_speed * boost_speed_modifier
 			play_animation("buff")
+			apply_delay()
 		else:
 			play_invalid_sfx()
 			invalid_sfx = false
@@ -392,8 +417,10 @@ func skill1(skill1):
 	if skill1 && skill_slot1_off_cooldown:
 		if mana >= skill1_mana_cost:
 			UI.skill_slot1.start_cooldown()
+			anim_finished = false
 			skill_slot1_off_cooldown = false
 			play_animation("distance_blade")
+			apply_delay()
 		else:
 			play_invalid_sfx()
 			invalid_sfx = false
@@ -403,8 +430,10 @@ func skill2(skill2):
 	if skill2 && skill_slot2_off_cooldown:
 		if mana >= skill2_mana_cost && is_on_floor():
 			UI.skill_slot2.start_cooldown()
+			anim_finished = false
 			skill_slot2_off_cooldown = false
 			play_animation("rock_strike")
+			apply_delay()
 		else:
 			play_invalid_sfx()
 			invalid_sfx = false
@@ -414,7 +443,9 @@ func skill3(skill3):
 	if skill3 && skill_slot3_off_cooldown:
 		if mana >= skill3_mana_cost:
 			#UI.skill_slot3.start_cooldown()
+			anim_finished = false
 			play_animation("bow_attack")
+			apply_delay()
 		else:
 			play_invalid_sfx()
 			invalid_sfx = false
@@ -442,15 +473,17 @@ func item(item1, item2):
 		play_potion_sfx()
 		# potion fully heals the player's mana
 		mana = max_mp
-		UI.mana_bar.update_bar(mana)
 
 # changes the stance and weapon of the player
 func stance_update(switch):
-	if switch:
+	if switch && stance_change_off_cooldown:
+		$StanceChangeCooldown.start()
+		stance_change_off_cooldown = false
 		if stance == STANCE.FIST:
 			play_animation("sword_draw")
 		elif stance == STANCE.SWORD:
 			play_animation("sword_sheath")
+		UI.mana_bar.update_bar(mana)
 
 # translates the player downwards every frame at the rate of gravity
 func apply_gravity():
@@ -527,10 +560,6 @@ func play_death_sfx():
 func play_potion_sfx():
 	SoundManager.play("res://audio/sfx/potion.ogg")
 	
-# plays a coin sfx
-func play_coin_sfx():
-	SoundManager.play("res://audio/sfx/coin.ogg")
-	
 # plays a punch sfx
 func play_punch_sfx():
 	SoundManager.play("res://audio/sfx/punch.ogg")
@@ -592,9 +621,11 @@ func move_forward_after_climb():
 		self.position.x -= 8
 	
 	isTouchingLedge = false
+	animation_done()
 
 func grab_ledge():
 	if isTouchingLedge:
+		apply_delay()
 		play_animation("ledge_grab_placeholder")
 		
 # freezes the frame if the player hit something
@@ -603,14 +634,6 @@ func freeze_hit_frame():
 	if recentHit:
 		OS.delay_msec(50)
 		recentHit = false
-
-# creates dust particles after player movements
-func emit_foot_dust():
-	var dust_particles = preload("res://scenes/player/DustParticle.tscn").instance()
-	dust_particles.set_as_toplevel(true)
-	if dir == DIRECTION.E:
-		dust_particles.scale.x = 1
-	elif dir == DIRECTION.W:
-		dust_particles.scale.x = -1
-	dust_particles.global_position = $FeetPosition.global_position
-	add_child(dust_particles)
+		
+func animation_done():
+	anim_finished = true
