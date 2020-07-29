@@ -281,14 +281,11 @@ func set_light_enabled(status):
 
 # changes center of gravity to player so coins will be attracted to it
 func _on_Area2D_body_entered(body):
-	if body.get_filename() == "res://scenes/item/Coin.tscn":
-		#$Area2D.set_space_override_mode(3)
-		#$Area2D.set_gravity_is_point(true)
-		#$Area2D.set_gravity_vector(Vector2(0, 0))
-		#$Area2D.set_gravity(98.0 * 8)
-		# disable coin's environment interaction
-		body.start_chase(self)
-
+	if body.name == "Coin":
+		$Area2D.set_space_override_mode(3)
+		$Area2D.set_gravity_is_point(true)
+		$Area2D.set_gravity_vector(Vector2(0, 0))
+		play_coin_sfx()
 
 # resets the cooldown of slot utilized allowing reuse
 func reset_skill_cooldown(skill_slot_num):
@@ -529,6 +526,10 @@ func play_death_sfx():
 # plays a potion sfx
 func play_potion_sfx():
 	SoundManager.play("res://audio/sfx/potion.ogg")
+	
+# plays a coin sfx
+func play_coin_sfx():
+	SoundManager.play("res://audio/sfx/coin.ogg")
 	
 # plays a punch sfx
 func play_punch_sfx():
