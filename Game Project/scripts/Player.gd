@@ -281,12 +281,13 @@ func set_light_enabled(status):
 
 # changes center of gravity to player so coins will be attracted to it
 func _on_Area2D_body_entered(body):
-	if body.name == "Coin":
-		$Area2D.set_space_override_mode(3)
-		$Area2D.set_gravity_is_point(true)
-		$Area2D.set_gravity_vector(Vector2(0, 0))
-		play_coin_sfx()
-
+	if body.get_filename() == "res://scenes/item/Coin.tscn":
+		#$Area2D.set_space_override_mode(3)
+		#$Area2D.set_gravity_is_point(true)
+		#$Area2D.set_gravity_vector(Vector2(0, 0))
+		#play_coin_sfx()
+		body.start_chase(self)
+		
 # resets the cooldown of slot utilized allowing reuse
 func reset_skill_cooldown(skill_slot_num):
 	# skill num 0 thruough 4 are skill slots
