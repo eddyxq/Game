@@ -100,6 +100,7 @@ var lowRayCast = null   # not used at the moment, likely remove in the future
 # flag use to signal that the player hit an enemy
 var recentHit = false
 
+var movement_enabled = true
 # called when the node enters the scene tree for the first time
 func _ready():
 	# Firebase.get_document("users/%s" % Firebase.user_info.id, http)
@@ -124,16 +125,17 @@ func animation_loop(attack,skill0, skill1, skill2, skill3, skill4, item1, item2,
 
 # movement logic
 func movement_loop(attack, up, left, right, skill3):
-	# this function has a built in: 'if not isTouchingLedge'
-	ledge_grab_update()
-	if not isTouchingLedge:
-		apply_gravity() # pull player downwards
-		update_hitbox_location() # update hitbox
+	
+	if movement_enabled:
 		horizontal_movement(right, left) # horizontal translation
-		vertical_movement(up) # vertical translation
-		update_speed_modifier(attack) # restricts movement during certain actions
-		apply_accel_decel(left, right) # acceleration effect
-		apply_translation(left, right, attack, skill3)
+		update_hitbox_location() # update hitbox
+		detect_ledge()
+		if not isTouchingLedge:
+			apply_gravity() # pull player downwards
+			vertical_movement(up) # vertical translation
+			update_speed_modifier(attack) # restricts movement during certain actions
+			apply_accel_decel(left, right) # acceleration effect
+			apply_translation(left, right, attack, skill3)
 
 # applies a blinking damage effect to the player
 func hurt(dmg):
@@ -546,11 +548,7 @@ func play_invalid_sfx():
 		SoundManager.play("res://audio/sfx/invalid.ogg")
 		$InvalidSFX.start()
 	
-func ledge_grab_update():
-	if (not isTouchingLedge):
-		update_ledge_grab_direction()
-		isTouchingLedge = is_ledge_detected()
-	
+
 func update_ledge_grab_direction():
 	# flip raycast if it does not correspond to player direction
 	var lowRayCastDirection = $LowerEdgeDetect.get_cast_to()
@@ -585,6 +583,14 @@ func is_ledge_detected():
 			#print("new position:", highRayCast)
 			return true
 	return false
+
+func detect_ledge():
+	update_ledge_grab_direction()
+	isTouchingLedge = is_ledge_detected()
+	# if player is touching ledge then movement is disabled
+	# hence opposite boolean values
+	movement_enabled = not isTouchingLedge
+	
 	
 func move_forward_after_climb():
 	if dir == DIRECTION.E:
@@ -593,6 +599,7 @@ func move_forward_after_climb():
 		self.position.x -= 8
 	
 	isTouchingLedge = false
+	movement_enabled = true
 
 func grab_ledge():
 	if isTouchingLedge:
