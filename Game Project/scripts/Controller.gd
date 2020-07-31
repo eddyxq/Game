@@ -10,6 +10,7 @@ var down   # s / down arrrow
 var left   # a / left arrow
 var right  # d / right arrow
 var attack # space bar
+var dash 	# shift key
 
 var skill0 # left/right shift 
 var skill1 # 1 number key
@@ -38,7 +39,8 @@ func _physics_process(_delta):
 	left = Input.is_action_pressed("ui_left")
 	right = Input.is_action_pressed("ui_right")
 	attack = Input.is_action_pressed("ui_attack")
-
+	dash = Input.is_action_just_pressed("ui_dash")
+	
 	skill0 = Input.is_action_pressed("ui_skill_slot0")
 	skill1 = Input.is_action_pressed("ui_skill_slot1")
 	skill2 = Input.is_action_pressed("ui_skill_slot2")
@@ -53,7 +55,7 @@ func _physics_process(_delta):
 	if $HUD/DialogBox.visible == false:
 		# update player state
 		player.animation_loop(attack, skill0, skill1, skill2, skill3, skill4, item1, item2, switch)
-		player.movement_loop(attack, up, left, right, skill3)
+		player.movement_loop(attack, up, left, right, skill3, dash)
 	else:
 		player.play_animation("idle")
 	

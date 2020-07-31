@@ -101,6 +101,10 @@ var lowRayCast = null   # not used at the moment, likely remove in the future
 var recentHit = false
 
 var movement_enabled = true
+var dash_enabled = false
+var dash_velocity = 0
+var canDash = true
+
 # called when the node enters the scene tree for the first time
 func _ready():
 	# Firebase.get_document("users/%s" % Firebase.user_info.id, http)
@@ -121,21 +125,47 @@ func animation_loop(attack,skill0, skill1, skill2, skill3, skill4, item1, item2,
 	detect_skill_activation(skill0, skill1, skill2, skill3, skill4) # pass input
 	item(item1, item2) # item activation
 	grab_ledge()
+	animate_dash()
 	stance_update(switch) # stance change
 
 # movement logic
-func movement_loop(attack, up, left, right, skill3):
+# TODO refactor movement loop to reduce condition checks
+func movement_loop(attack, up, left, right, skill3, dash):
 	
 	if movement_enabled:
 		horizontal_movement(right, left) # horizontal translation
 		update_hitbox_location() # update hitbox
+		enable_dash(dash)
 		detect_ledge()
 		if not isTouchingLedge:
-			apply_gravity() # pull player downwards
-			vertical_movement(up) # vertical translation
-			update_speed_modifier(attack) # restricts movement during certain actions
-			apply_accel_decel(left, right) # acceleration effect
+			if not dash_enabled:
+				apply_gravity() # pull player downwards
+				vertical_movement(up) # vertical translation
+				update_speed_modifier(attack) # restricts movement during certain actions
+				apply_accel_decel(left, right) # acceleration effect
+				
 			apply_translation(left, right, attack, skill3)
+
+func animate_dash():
+	if dash_enabled:
+		play_animation("dash_placeholder")
+
+func enable_dash(dash):
+	if not canDash and is_on_floor():
+		canDash = true
+	
+	if canDash and dash:
+		if not dash_enabled and velocity.y != 0:
+			#print("dash enabled")
+			canDash = false
+			dash_enabled = true
+			dash_velocity = DASH_SPEED
+			if dir == DIRECTION.W:
+				dash_velocity *= -1
+			# freezes the player midair in the y axis
+			velocity.y = 0
+			$DashTimer.start()
+			
 
 # applies a blinking damage effect to the player
 func hurt(dmg):
@@ -470,21 +500,28 @@ func apply_accel_decel(left, right):
 		if base_speed > max_speed:
 			base_speed = max_speed
 
+const DASH_SPEED = 50 * 12
 # restricts the movement ability of the player depending on actions
 func update_speed_modifier(attack):
 	if skill_slot0_off_cooldown:
 		if attack and is_on_floor():
 			movement_speed = base_speed * atkmove_speed_modifier
 		else:
-			 movement_speed = base_speed * run_speed_modifier
+			movement_speed = base_speed * run_speed_modifier
 
 # update velocity and vectors
+# TODO refactor function so it does not need to know about dash
 func apply_translation(left, right, attack, skill3):
+	
 	# translates player horizontally when left or right key is pressed
-	velocity.x = (-int(left) + int(right)) * movement_speed
-	# restrict movement during certain attack/skill
-	if attack or skill3:
-		velocity.x = 0
+	if not dash_enabled:
+		velocity.x = (-int(left) + int(right)) * movement_speed
+		# restrict movement during certain attack/skill
+		if attack or skill3:
+			velocity.x = 0
+	else:
+		velocity.x = dash_velocity
+		
 	# apply translations to the player
 	velocity = move_and_slide(velocity, Vector2(0,-1))
 
@@ -622,3 +659,8 @@ func emit_foot_dust():
 		dust_particles.scale.x = -1
 	dust_particles.global_position = $FeetPosition.global_position
 	add_child(dust_particles)
+
+
+func _on_DashTimer_timeout():
+	dash_enabled = false
+	velocity = Vector2.ZERO
