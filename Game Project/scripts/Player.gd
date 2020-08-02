@@ -109,6 +109,8 @@ var canDash = true
 func _ready():
 	# Firebase.get_document("users/%s" % Firebase.user_info.id, http)
 	$AnimationTree.active = true
+	$Sprite.offset.x = 0
+	$Sprite.offset.y = 0
 	setup_state_machine()
 
 # animation logic
@@ -131,7 +133,7 @@ func animation_loop(attack,skill0, skill1, skill2, skill3, skill4, item1, item2,
 # movement logic
 # TODO refactor movement loop to reduce condition checks
 func movement_loop(attack, up, left, right, skill3, dash):
-	
+	print("current pos:", self.position)
 	if movement_enabled:
 		horizontal_movement(right, left) # horizontal translation
 		update_hitbox_location() # update hitbox
@@ -610,12 +612,23 @@ func is_ledge_detected():
 		#print(lowerCollision.get_name())
 		if lowerCollision.get_name() == "Blocks":
 			highRayCast = $LowerEdgeDetect.get_collision_point()
+			# y translation
 			var absolute_y = abs(int(highRayCast.y))
 			var new_y = absolute_y + (16 - (absolute_y % 16))
 			if (highRayCast.y < 0):
 				new_y *= -1
 				new_y += 16
-			highRayCast.y = new_y - 32
+				
+			# x translation
+			var absolute_x = abs(int(highRayCast.x))
+			var new_x = absolute_x - (absolute_x % 16) - 16 + 8
+			if (highRayCast.x < 0):
+				new_x *= -1
+				new_x -= 16
+			
+			highRayCast.y = new_y - 2
+			highRayCast.x = new_x
+
 			self.position = highRayCast 
 			#print("new position:", highRayCast)
 			return true
@@ -630,17 +643,28 @@ func detect_ledge():
 	
 	
 func move_forward_after_climb():
+	var new_y = int(self.position.y)
+	new_y += 16 - (new_y % 16)
+	new_y -= 22
+	self.position.y = new_y
+	
 	if dir == DIRECTION.E:
-		self.position.x += 8
+		var new_x = int(position.x)
+		new_x += 16 - (new_x % 16)
+		new_x += 2
+		self.position.x = new_x 
+		
 	else:
 		self.position.x -= 8
 	
+	$Sprite.offset.y = 0
+	$Sprite.offset.x = 0
 	isTouchingLedge = false
 	movement_enabled = true
 
 func grab_ledge():
 	if isTouchingLedge:
-		play_animation("ledge_grab_placeholder")
+		play_animation("ledge_grab")
 		
 # freezes the frame if the player hit something
 # freezes frame for 100 milliseconds
