@@ -602,6 +602,7 @@ func update_ledge_grab_direction():
 		#print("raycast direction flipped")
 
 # TODO: needs a better way to identify blocks in the stage
+# TODO: refactor since this function does too much
 # detects whether an player is close to an edge
 # an edge is detected when lower raycast intersects with a block while upper ray cast does not
 func is_ledge_detected():
@@ -618,19 +619,23 @@ func is_ledge_detected():
 			if (highRayCast.y < 0):
 				new_y *= -1
 				new_y += 16
-				
-			# x translation
+			
 			var absolute_x = abs(int(highRayCast.x))
 			var new_x = absolute_x - (absolute_x % 16) - 16 + 8
+			if dir == DIRECTION.W:
+				new_x += 16
+				
 			if (highRayCast.x < 0):
 				new_x *= -1
 				new_x -= 16
+			
 			
 			highRayCast.y = new_y - 2
 			highRayCast.x = new_x
 
 			self.position = highRayCast 
 			#print("new position:", highRayCast)
+			velocity = Vector2.ZERO
 			return true
 	return false
 
@@ -641,22 +646,24 @@ func detect_ledge():
 	# hence opposite boolean values
 	movement_enabled = not isTouchingLedge
 	
-	
+
+# TODO: refactor since this function does too much 
 func move_forward_after_climb():
 	var new_y = int(self.position.y)
 	new_y += 16 - (new_y % 16)
 	new_y -= 22
 	self.position.y = new_y
 	
+	var new_x = int(position.x)
 	if dir == DIRECTION.E:
-		var new_x = int(position.x)
 		new_x += 16 - (new_x % 16)
-		new_x += 2
-		self.position.x = new_x 
+		new_x += 4
 		
 	else:
-		self.position.x -= 8
+		new_x -= (new_x % 16)
+		new_x -= 4
 	
+	self.position.x = new_x 
 	$Sprite.offset.y = 0
 	$Sprite.offset.x = 0
 	isTouchingLedge = false
