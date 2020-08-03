@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/adventurer_body.png-7cf3a61f884446464fcfa45111b0b50a.stex"
+path="res://.import/body_only_08-02.png-aa13871438443ec6f375c6583da3e2ee.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://images/warrior_sprites/adventurer_body.png"
-dest_files=[ "res://.import/adventurer_body.png-7cf3a61f884446464fcfa45111b0b50a.stex" ]
+source_file="res://images/warrior_sprites/modular_sprite_sheets/body_only_08-02.png"
+dest_files=[ "res://.import/body_only_08-02.png-aa13871438443ec6f375c6583da3e2ee.stex" ]
 
 [params]
 
@@ -20,7 +20,7 @@ compress/hdr_mode=0
 compress/bptc_ldr=0
 compress/normal_map=0
 flags/repeat=0
-flags/filter=false
+flags/filter=true
 flags/mipmaps=false
 flags/anisotropic=false
 flags/srgb=2

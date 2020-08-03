@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/adventurer_sword.png-d45e752da744c0c5e702daa69cd484da.stex"
+path="res://.import/wep_only_08-02.png-386148df63eb1e65ea19e0ef42a6422b.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://images/warrior_sprites/adventurer_sword.png"
-dest_files=[ "res://.import/adventurer_sword.png-d45e752da744c0c5e702daa69cd484da.stex" ]
+source_file="res://images/warrior_sprites/modular_sprite_sheets/wep_only_08-02.png"
+dest_files=[ "res://.import/wep_only_08-02.png-386148df63eb1e65ea19e0ef42a6422b.stex" ]
 
 [params]
 
@@ -20,7 +20,7 @@ compress/hdr_mode=0
 compress/bptc_ldr=0
 compress/normal_map=0
 flags/repeat=0
-flags/filter=false
+flags/filter=true
 flags/mipmaps=false
 flags/anisotropic=false
 flags/srgb=2

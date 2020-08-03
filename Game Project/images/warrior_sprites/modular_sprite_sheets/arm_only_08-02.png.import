@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/adventurer_front_arm.png-37b75ff0849a249152732b1c33b78229.stex"
+path="res://.import/arm_only_08-02.png-38c62336b8d85c1485959654afcc05e4.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://images/warrior_sprites/adventurer_front_arm.png"
-dest_files=[ "res://.import/adventurer_front_arm.png-37b75ff0849a249152732b1c33b78229.stex" ]
+source_file="res://images/warrior_sprites/modular_sprite_sheets/arm_only_08-02.png"
+dest_files=[ "res://.import/arm_only_08-02.png-38c62336b8d85c1485959654afcc05e4.stex" ]
 
 [params]
 
@@ -20,7 +20,7 @@ compress/hdr_mode=0
 compress/bptc_ldr=0
 compress/normal_map=0
 flags/repeat=0
-flags/filter=false
+flags/filter=true
 flags/mipmaps=false
 flags/anisotropic=false
 flags/srgb=2
