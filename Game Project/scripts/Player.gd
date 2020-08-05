@@ -590,15 +590,18 @@ func play_invalid_sfx():
 
 func update_ledge_grab_direction():
 	# flip raycast if it does not correspond to player direction
-	var lowRayCastDirection = $LowerEdgeDetect.get_cast_to()
+	var lowRayCastDirection = $CollisionShape2D/LowerEdgeDetect.get_cast_to()
 	# only checks one ray cast since both raycast should have the same direction
 	if (dir == DIRECTION.E and lowRayCastDirection.x < 0) or (dir == DIRECTION.W and lowRayCastDirection.x > 0):
 		lowRayCastDirection.x *= -1
-		$LowerEdgeDetect.set_cast_to(lowRayCastDirection)
+		$CollisionShape2D/LowerEdgeDetect.set_cast_to(lowRayCastDirection)
+		$CollisionShape2D/LowerEdgeDetect.position.x *= -1
 		
-		var highRayCastDirection = $HigherEdgeDetect.get_cast_to()
+		
+		var highRayCastDirection = $CollisionShape2D/HigherEdgeDetect.get_cast_to()
 		highRayCastDirection.x *= -1
-		$HigherEdgeDetect.set_cast_to(highRayCastDirection)
+		$CollisionShape2D/HigherEdgeDetect.set_cast_to(highRayCastDirection)
+		$CollisionShape2D/HigherEdgeDetect.position.x *= -1
 		#print("raycast direction flipped")
 
 # TODO: needs a better way to identify blocks in the stage
@@ -606,13 +609,13 @@ func update_ledge_grab_direction():
 # detects whether an player is close to an edge
 # an edge is detected when lower raycast intersects with a block while upper ray cast does not
 func is_ledge_detected():
-	var lowerCollision = $LowerEdgeDetect.get_collider()
-	var higherCollision = $HigherEdgeDetect.get_collider()
+	var lowerCollision = $CollisionShape2D/LowerEdgeDetect.get_collider()
+	var higherCollision = $CollisionShape2D/HigherEdgeDetect.get_collider()
 	
 	if lowerCollision != null and higherCollision == null:
 		#print(lowerCollision.get_name())
 		if lowerCollision.get_name() == "Blocks":
-			highRayCast = $LowerEdgeDetect.get_collision_point()
+			highRayCast = $CollisionShape2D/LowerEdgeDetect.get_collision_point()
 			# y translation
 			var absolute_y = abs(int(highRayCast.y))
 			var new_y = absolute_y + (16 - (absolute_y % 16))
@@ -695,3 +698,14 @@ func emit_foot_dust():
 func _on_DashTimer_timeout():
 	dash_enabled = false
 	velocity = Vector2.ZERO
+
+const RUN_OFFSET = 4
+func run_sprite_offset(offset):
+	if dir == DIRECTION.E:
+		$Sprite.offset.x = offset * -1
+	elif dir == DIRECTION.W:
+		$Sprite.offset.x = offset
+	
+	
+	
+	
