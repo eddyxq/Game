@@ -135,11 +135,11 @@ func animation_loop(attack,skill0, skill1, skill2, skill3, skill4, item1, item2,
 func movement_loop(attack, up, left, right, skill3, dash):
 	print("current pos:", self.position)
 	if movement_enabled:
-		horizontal_movement(right, left) # horizontal translation
-		update_hitbox_location() # update hitbox
-		enable_dash(dash)
 		detect_ledge()
 		if not isTouchingLedge:
+			horizontal_movement(right, left) # horizontal translation
+			update_hitbox_location() # update hitbox
+			enable_dash(dash)
 			if not dash_enabled:
 				apply_gravity() # pull player downwards
 				vertical_movement(up) # vertical translation
@@ -190,11 +190,27 @@ func update_hitbox_location():
 func horizontal_movement(right, left):
 	if right:
 		dir = DIRECTION.E 
-		$Sprite.flip_h = false
+		#$Sprite.flip_h = false
+		if $Sprite.scale.x < 0:
+			$Sprite.scale.x = 1
+		
+		if $CollisionShape2D.scale.x < 0:
+			$CollisionShape2D.scale.x *= -1
+			
+		
+			
 	elif left:
 		dir = DIRECTION.W
-		$Sprite.flip_h = true
-
+		#$Sprite.flip_h = true
+		# flips the sprite alongside key frame
+		if $Sprite.scale.x > 0:
+			$Sprite.scale.x = -1
+			
+		# flips the player hitbox and the raycasts
+		if $CollisionShape2D.scale.x > 0:
+			$CollisionShape2D.scale.x *= -1	
+		
+		
 # update player's y velocity
 func vertical_movement(up):
 	if is_on_floor():
@@ -611,8 +627,10 @@ func update_ledge_grab_direction():
 func is_ledge_detected():
 	var lowerCollision = $CollisionShape2D/LowerEdgeDetect.get_collider()
 	var higherCollision = $CollisionShape2D/HigherEdgeDetect.get_collider()
-	
-	if lowerCollision != null and higherCollision == null:
+	#$CollisionShape2D/LowerEdgeDetect.get_coll
+	if $CollisionShape2D/LowerEdgeDetect.is_colliding() and not $CollisionShape2D/HigherEdgeDetect.is_colliding():
+		print($CollisionShape2D/LowerEdgeDetect.get_collider())
+		print($CollisionShape2D/HigherEdgeDetect.get_collider())
 		#print(lowerCollision.get_name())
 		if lowerCollision.get_name() == "Blocks":
 			highRayCast = $CollisionShape2D/LowerEdgeDetect.get_collision_point()
@@ -637,13 +655,13 @@ func is_ledge_detected():
 			highRayCast.x = new_x
 
 			self.position = highRayCast 
-			#print("new position:", highRayCast)
+			print("new position:", highRayCast)
 			velocity = Vector2.ZERO
 			return true
 	return false
 
 func detect_ledge():
-	update_ledge_grab_direction()
+	#update_ledge_grab_direction()
 	isTouchingLedge = is_ledge_detected()
 	# if player is touching ledge then movement is disabled
 	# hence opposite boolean values
@@ -655,20 +673,23 @@ func move_forward_after_climb():
 	var new_y = int(self.position.y)
 	new_y += 16 - (new_y % 16)
 	new_y -= 22
-	self.position.y = new_y
+	self.position.y = new_y+2
+	print("new position:", self.position.y)	
 	
 	var new_x = int(position.x)
 	if dir == DIRECTION.E:
 		new_x += 16 - (new_x % 16)
-		new_x += 4
+		new_x += 2
 		
 	else:
 		new_x -= (new_x % 16)
-		new_x -= 4
+		new_x -= 2
+	
 	
 	self.position.x = new_x 
 	$Sprite.offset.y = 0
 	$Sprite.offset.x = 0
+
 	isTouchingLedge = false
 	movement_enabled = true
 
@@ -699,13 +720,31 @@ func _on_DashTimer_timeout():
 	dash_enabled = false
 	velocity = Vector2.ZERO
 
-const RUN_OFFSET = 4
-func run_sprite_offset(offset):
+
+func sprite_offset(x_offset, y_offset=0):
+	$Sprite.offset.y = y_offset
 	if dir == DIRECTION.E:
-		$Sprite.offset.x = offset * -1
+		$Sprite.offset.x = x_offset * -1
 	elif dir == DIRECTION.W:
-		$Sprite.offset.x = offset
+		$Sprite.offset.x = x_offset
 	
+func change_player_hitbox_position(x_position, y_position):
+	$CollisionShape2D.position.y = y_position
+	if dir == DIRECTION.E:
+		$CollisionShape2D.position.x = x_position
+	elif dir == DIRECTION.W:
+		$CollisionShape2D.position.x = x_position * -1
 	
+func change_player_hitbox_scale(x_scale, y_scale):
+	$CollisionShape2D.scale.y = y_scale
+	$CollisionShape2D.scale.x = x_scale
 	
-	
+	if dir == DIRECTION.W:
+		$CollisionShape2D.scale.x *= -1
+
+func set_player_hitbox_position(x_position, y_position):
+	$CollisionShape2D.position.y = y_position
+	$CollisionShape2D.position.x = x_position
+			
+	if dir == DIRECTION.W:
+		$CollisionShape2D.position.x *= -1
