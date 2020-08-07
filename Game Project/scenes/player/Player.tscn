@@ -1,4 +1,4 @@
-[gd_scene load_steps=120 format=2]
+[gd_scene load_steps=119 format=2]
 
 [ext_resource path="res://images/warrior_sprites/sprite_sheet.png" type="Texture" id=1]
 [ext_resource path="res://scripts/Player.gd" type="Script" id=2]
@@ -258,68 +258,28 @@ tracks/0/keys = {
 "values": [ 22, 23 ]
 }
 tracks/1/type = "value"
-tracks/1/path = NodePath("CollisionShape2D:position")
+tracks/1/path = NodePath("Sprite:offset")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/imported = false
 tracks/1/enabled = true
 tracks/1/keys = {
-"times": PoolRealArray(  ),
-"transitions": PoolRealArray(  ),
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
 "update": 0,
-"values": [  ]
+"values": [ Vector2( -3, 0 ) ]
 }
 tracks/2/type = "value"
-tracks/2/path = NodePath("CollisionShape2D:scale")
+tracks/2/path = NodePath("CollisionShape2D:position")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/imported = false
 tracks/2/enabled = true
 tracks/2/keys = {
-"times": PoolRealArray(  ),
-"transitions": PoolRealArray(  ),
-"update": 0,
-"values": [  ]
-}
-tracks/3/type = "value"
-tracks/3/path = NodePath("Sprite:offset")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/keys = {
 "times": PoolRealArray( 0 ),
 "transitions": PoolRealArray( 1 ),
 "update": 0,
-"values": [ Vector2( 0, 0 ) ]
-}
-tracks/4/type = "method"
-tracks/4/path = NodePath(".")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"values": [ {
-"args": [ 2.5, 3.0 ],
-"method": "set_player_hitbox_position"
-} ]
-}
-tracks/5/type = "method"
-tracks/5/path = NodePath(".")
-tracks/5/interp = 1
-tracks/5/loop_wrap = true
-tracks/5/imported = false
-tracks/5/enabled = true
-tracks/5/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"values": [ {
-"args": [ 0.8, 1.0 ],
-"method": "change_player_hitbox_scale"
-} ]
+"values": [ Vector2( 0, 3 ) ]
 }
 
 [sub_resource type="Animation" id=10]
@@ -578,9 +538,6 @@ tracks/3/keys = {
 } ]
 }
 
-[sub_resource type="RectangleShape2D" id=14]
-extents = Vector2( 4, 12 )
-
 [sub_resource type="Animation" id=15]
 length = 1.2
 loop = true
@@ -597,42 +554,6 @@ tracks/0/keys = {
 "update": 1,
 "values": [ 0, 1, 2, 3 ]
 }
-tracks/1/type = "value"
-tracks/1/path = NodePath("CollisionShape2D:position")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ Vector2( 0, 6 ) ]
-}
-tracks/2/type = "value"
-tracks/2/path = NodePath("Sprite:offset")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ Vector2( 0, 0 ) ]
-}
-tracks/3/type = "value"
-tracks/3/path = NodePath("CollisionShape2D:shape")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 1,
-"values": [ SubResource( 14 ) ]
-}
 
 [sub_resource type="Animation" id=16]
 loop = true
@@ -648,42 +569,6 @@ tracks/0/keys = {
 "transitions": PoolRealArray( 1, 1, 1, 1 ),
 "update": 1,
 "values": [ 38, 39, 40, 41 ]
-}
-tracks/1/type = "value"
-tracks/1/path = NodePath("Sprite:offset")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ Vector2( 0, 0 ) ]
-}
-tracks/2/type = "value"
-tracks/2/path = NodePath("CollisionShape2D:position")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ Vector2( 0, 6 ) ]
-}
-tracks/3/type = "value"
-tracks/3/path = NodePath("CollisionShape2D:shape")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 1,
-"values": [ SubResource( 14 ) ]
 }
 
 [sub_resource type="Animation" id=17]
@@ -706,74 +591,40 @@ tracks/1/path = NodePath("CollisionShape2D:position")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/imported = false
-tracks/1/enabled = false
+tracks/1/enabled = true
 tracks/1/keys = {
-"times": PoolRealArray(  ),
-"transitions": PoolRealArray(  ),
+"times": PoolRealArray( 0, 0.05, 0.1 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
 "update": 0,
-"values": [  ]
+"values": [ Vector2( 0, 3 ), Vector2( 0, 0 ), Vector2( 0, 0 ) ]
 }
 tracks/2/type = "value"
 tracks/2/path = NodePath("CollisionShape2D:scale")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/imported = false
-tracks/2/enabled = false
+tracks/2/enabled = true
 tracks/2/keys = {
-"times": PoolRealArray(  ),
-"transitions": PoolRealArray(  ),
+"times": PoolRealArray( 0, 0.05, 0.1 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
 "update": 0,
-"values": [  ]
+"values": [ Vector2( 1, 1 ), Vector2( 1, 0.8 ), Vector2( 1, 0.6 ) ]
 }
-tracks/3/type = "method"
-tracks/3/path = NodePath(".")
+tracks/3/type = "value"
+tracks/3/path = NodePath("Sprite:offset")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/imported = false
 tracks/3/enabled = true
 tracks/3/keys = {
-"times": PoolRealArray( 0, 0.05, 0.1 ),
-"transitions": PoolRealArray( 1, 1, 1 ),
-"values": [ {
-"args": [ 0.8, 1.0 ],
-"method": "change_player_hitbox_scale"
-}, {
-"args": [ 0.75, 0.8 ],
-"method": "change_player_hitbox_scale"
-}, {
-"args": [ 0.75, 0.6 ],
-"method": "change_player_hitbox_scale"
-} ]
-}
-tracks/4/type = "value"
-tracks/4/path = NodePath("Sprite:offset")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/keys = {
-"times": PoolRealArray( 0, 0.05 ),
-"transitions": PoolRealArray( 1, 1 ),
-"update": 0,
-"values": [ Vector2( 0, 0 ), Vector2( 0, 4 ) ]
-}
-tracks/5/type = "method"
-tracks/5/path = NodePath(".")
-tracks/5/interp = 1
-tracks/5/loop_wrap = true
-tracks/5/imported = false
-tracks/5/enabled = true
-tracks/5/keys = {
 "times": PoolRealArray( 0 ),
 "transitions": PoolRealArray( 1 ),
-"values": [ {
-"args": [ 3.0, 4.0 ],
-"method": "set_player_hitbox_position"
-} ]
+"update": 0,
+"values": [ Vector2( -3, 0 ) ]
 }
 
 [sub_resource type="Animation" id=18]
-length = 0.65
+length = 0.9
 step = 0.01
 tracks/0/type = "value"
 tracks/0/path = NodePath("Sprite:frame")
@@ -782,10 +633,10 @@ tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 0.05, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6 ),
-"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1 ),
+"times": PoolRealArray( 0, 0.05, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.75, 0.85 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ),
 "update": 1,
-"values": [ 29, 30, 31, 33, 34, 35, 36, 37 ]
+"values": [ 29, 30, 31, 33, 34, 35, 36, 37, 4, 5, 2 ]
 }
 tracks/1/type = "method"
 tracks/1/path = NodePath(".")
@@ -794,11 +645,11 @@ tracks/1/loop_wrap = true
 tracks/1/imported = false
 tracks/1/enabled = true
 tracks/1/keys = {
-"times": PoolRealArray( 0.65 ),
+"times": PoolRealArray( 0.88 ),
 "transitions": PoolRealArray( 1 ),
 "values": [ {
 "args": [  ],
-"method": "move_forward_after_climb"
+"method": "end_ledge_grab"
 } ]
 }
 tracks/2/type = "value"
@@ -808,40 +659,34 @@ tracks/2/loop_wrap = true
 tracks/2/imported = false
 tracks/2/enabled = true
 tracks/2/keys = {
-"times": PoolRealArray( 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6 ),
-"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1 ),
+"times": PoolRealArray( 0, 0.15, 0.2, 0.3, 0.4, 0.5, 0.6, 0.69, 0.7, 0.85, 0.87, 0.88 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ),
 "update": 0,
-"values": [ Vector2( 0, 0 ), Vector2( 0, 0 ), Vector2( 0, -8 ), Vector2( 0, -16 ), Vector2( 4, -20 ), Vector2( 4, -22 ), Vector2( 6, -22 ) ]
+"values": [ Vector2( -7, 0 ), Vector2( -7, 0 ), Vector2( -7, -8 ), Vector2( -5, -16 ), Vector2( -2, -20 ), Vector2( -2, -20 ), Vector2( 0, -20 ), Vector2( 0, -20 ), Vector2( 6, -32 ), Vector2( 7, -32 ), Vector2( 7, -32 ), Vector2( 0, 0 ) ]
 }
-
-[sub_resource type="Animation" id=19]
-length = 0.3
-step = 0.01
-tracks/0/type = "value"
-tracks/0/path = NodePath("Sprite:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0, 0.1, 0.2, 0.3 ),
-"transitions": PoolRealArray( 1, 1, 1, 1 ),
-"update": 1,
-"values": [ 19, 20, 21, 22 ]
+tracks/3/type = "value"
+tracks/3/path = NodePath("CollisionShape2D:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0, 0.15, 0.2, 0.3, 0.4, 0.5, 0.6, 0.85, 0.87, 0.88 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( -3, 4 ), Vector2( -3, 4 ), Vector2( -3, -4 ), Vector2( -1, -13 ), Vector2( 2, -17 ), Vector2( 2, -19 ), Vector2( 4, -19 ), Vector2( 7, -28 ), Vector2( 7, -28 ), Vector2( 0, 6 ) ]
 }
-tracks/1/type = "method"
-tracks/1/path = NodePath(".")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/keys = {
-"times": PoolRealArray( 0.3 ),
-"transitions": PoolRealArray( 1 ),
-"values": [ {
-"args": [  ],
-"method": "move_forward_after_climb"
-} ]
+tracks/4/type = "value"
+tracks/4/path = NodePath("CollisionShape2D:scale")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/keys = {
+"times": PoolRealArray( 0, 0.34, 0.4, 0.54, 0.6, 0.85 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 0.75, 1 ), Vector2( 0.75, 1 ), Vector2( 0.75, 0.85 ), Vector2( 0.75, 0.85 ), Vector2( 0.85, 0.75 ), Vector2( 1, 1 ) ]
 }
 
 [sub_resource type="Animation" id=20]
@@ -965,24 +810,12 @@ tracks/2/keys = {
 } ]
 }
 tracks/3/type = "value"
-tracks/3/path = NodePath("CollisionShape2D:position")
+tracks/3/path = NodePath("Sprite:offset")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/imported = false
 tracks/3/enabled = true
 tracks/3/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ Vector2( 0, 6 ) ]
-}
-tracks/4/type = "value"
-tracks/4/path = NodePath("Sprite:offset")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/keys = {
 "times": PoolRealArray( 0 ),
 "transitions": PoolRealArray( 1 ),
 "update": 0,
@@ -1408,6 +1241,9 @@ tracks/1/keys = {
 } ]
 }
 
+[sub_resource type="RectangleShape2D" id=14]
+extents = Vector2( 4, 12 )
+
 [sub_resource type="AnimationNodeAnimation" id=30]
 animation = "bow_attack"
 
@@ -1635,9 +1471,9 @@ states/idle_fist/position = Vector2( 679, 287.482 )
 states/idle_sword/node = SubResource( 42 )
 states/idle_sword/position = Vector2( 679, 809.287 )
 states/jump/node = SubResource( 43 )
-states/jump/position = Vector2( 141, 403.482 )
+states/jump/position = Vector2( 141, 387.479 )
 states/ledge_grab/node = SubResource( 44 )
-states/ledge_grab/position = Vector2( -169.218, 617.945 )
+states/ledge_grab/position = Vector2( -104.218, 630.945 )
 states/rock_strike/node = SubResource( 45 )
 states/rock_strike/position = Vector2( 141, 1015.9 )
 states/run/node = SubResource( 46 )
@@ -1659,7 +1495,7 @@ states/sword_sheath/position = Vector2( 927, 550.287 )
 transitions = [ "idle_fist", "jump", SubResource( 54 ), "fall", "idle_fist", SubResource( 55 ), "jump", "fall", SubResource( 56 ), "idle_fist", "sprint", SubResource( 57 ), "sprint", "idle_fist", SubResource( 58 ), "sword_attack1", "sword_attack2", SubResource( 59 ), "sword_attack2", "sword_attack3", SubResource( 60 ), "idle_fist", "dead", SubResource( 61 ), "idle_fist", "buff", SubResource( 62 ), "buff", "idle_fist", SubResource( 63 ), "bow_attack", "idle_fist", SubResource( 64 ), "idle_fist", "bow_attack", SubResource( 65 ), "idle_fist", "run", SubResource( 66 ), "idle_fist", "die", SubResource( 67 ), "idle_sword", "sprint", SubResource( 68 ), "sprint", "idle_sword", SubResource( 69 ), "sword_draw", "idle_sword", SubResource( 70 ), "idle_sword", "sword_sheath", SubResource( 71 ), "idle_fist", "sword_draw", SubResource( 72 ), "sword_sheath", "idle_fist", SubResource( 73 ), "fist_attack3", "idle_fist", SubResource( 74 ), "fist_attack2", "fist_attack3", SubResource( 75 ), "fist_attack1", "fist_attack2", SubResource( 76 ), "fist_attack1", "idle_fist", SubResource( 77 ), "idle_fist", "fist_attack1", SubResource( 78 ), "fist_attack2", "idle_fist", SubResource( 79 ), "sword_attack3", "idle_sword", SubResource( 80 ), "sword_attack2", "idle_sword", SubResource( 81 ), "sword_attack1", "idle_sword", SubResource( 82 ), "idle_sword", "sword_attack1", SubResource( 83 ), "fist_attack3", "fist_attack4", SubResource( 84 ), "fist_attack4", "idle_fist", SubResource( 85 ), "sword_run", "idle_sword", SubResource( 86 ), "idle_sword", "sword_run", SubResource( 87 ), "fall", "idle_sword", SubResource( 88 ), "idle_sword", "jump", SubResource( 89 ), "distance_blade", "idle_sword", SubResource( 90 ), "idle_sword", "distance_blade", SubResource( 91 ), "rock_strike", "idle_sword", SubResource( 92 ), "idle_sword", "rock_strike", SubResource( 93 ), "idle_sword", "die", SubResource( 94 ), "idle_sword", "dead", SubResource( 95 ), "jump", "ledge_grab", SubResource( 96 ), "fall", "ledge_grab", SubResource( 97 ), "ledge_grab", "idle_fist", SubResource( 98 ), "ledge_grab", "idle_sword", SubResource( 99 ), "idle_sword", "buff", SubResource( 100 ), "buff", "idle_sword", SubResource( 101 ), "run", "idle_fist", SubResource( 102 ), "sword_run", "distance_blade", SubResource( 103 ), "distance_blade", "sword_run", SubResource( 104 ), "sword_run", "rock_strike", SubResource( 105 ), "rock_strike", "sword_run", SubResource( 106 ), "jump", "dash_placeholder", SubResource( 107 ), "fall", "dash_placeholder", SubResource( 108 ), "dash_placeholder", "fall", SubResource( 109 ) ]
 start_node = "idle_fist"
 end_node = "die"
-graph_offset = Vector2( -408.72, 239.011 )
+graph_offset = Vector2( -365.72, 354.011 )
 
 [sub_resource type="AnimationNodeStateMachinePlayback" id=111]
 
@@ -1685,10 +1521,9 @@ visible = false
 light_mask = 0
 material = SubResource( 2 )
 texture = ExtResource( 1 )
-offset = Vector2( 6, -22 )
 vframes = 34
 hframes = 8
-frame = 37
+frame = 2
 region_rect = Rect2( 271, 114, 14, 34 )
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
@@ -1707,7 +1542,6 @@ anims/idle_fist = SubResource( 15 )
 anims/idle_sword = SubResource( 16 )
 anims/jump = SubResource( 17 )
 anims/ledge_grab = SubResource( 18 )
-anims/ledge_grab_placeholder = SubResource( 19 )
 anims/rock_strike = SubResource( 20 )
 anims/run = SubResource( 21 )
 anims/sprint = SubResource( 22 )
@@ -1720,8 +1554,7 @@ anims/sword_run = SubResource( 28 )
 anims/sword_sheath = SubResource( 29 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2( 2.5, 3 )
-scale = Vector2( -1, 1 )
+position = Vector2( 0, 6 )
 shape = SubResource( 14 )
 __meta__ = {
 "_edit_group_": true
@@ -1730,13 +1563,13 @@ __meta__ = {
 [node name="HigherEdgeDetect" type="RayCast2D" parent="CollisionShape2D"]
 position = Vector2( 4, -10 )
 enabled = true
-cast_to = Vector2( 3, 0 )
+cast_to = Vector2( 5, 0 )
 collision_mask = 4
 
 [node name="LowerEdgeDetect" type="RayCast2D" parent="CollisionShape2D"]
 position = Vector2( 4, -5 )
 enabled = true
-cast_to = Vector2( 3, 0 )
+cast_to = Vector2( 5, 0 )
 collision_mask = 4
 
 [node name="AnimationTree" type="AnimationTree" parent="."]

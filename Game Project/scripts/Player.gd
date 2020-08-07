@@ -105,13 +105,16 @@ var dash_enabled = false
 var dash_velocity = 0
 var canDash = true
 
+var oneTimeFlag = true
 # called when the node enters the scene tree for the first time
 func _ready():
 	# Firebase.get_document("users/%s" % Firebase.user_info.id, http)
-	$AnimationTree.active = true
-	$Sprite.offset.x = 0
-	$Sprite.offset.y = 0
+	if oneTimeFlag:
+		default_player_parameters()
+		oneTimeFlag = false
+		
 	setup_state_machine()
+	
 
 # animation logic
 func animation_loop(attack,skill0, skill1, skill2, skill3, skill4, item1, item2, switch):
@@ -133,12 +136,12 @@ func animation_loop(attack,skill0, skill1, skill2, skill3, skill4, item1, item2,
 # movement logic
 # TODO refactor movement loop to reduce condition checks
 func movement_loop(attack, up, left, right, skill3, dash):
-	print("current pos:", self.position)
+	#print("current pos:", self.position)
 	if movement_enabled:
 		detect_ledge()
 		if not isTouchingLedge:
 			horizontal_movement(right, left) # horizontal translation
-			update_hitbox_location() # update hitbox
+			#update_hitbox_location() # update hitbox
 			enable_dash(dash)
 			if not dash_enabled:
 				apply_gravity() # pull player downwards
@@ -187,28 +190,39 @@ func update_hitbox_location():
 		$HitBox.position.x *= -1
 
 # update player's direction and sprite orientation
+var flip = false
 func horizontal_movement(right, left):
+	#print("current player x scale:", scale.x)
 	if right:
 		dir = DIRECTION.E 
 		#$Sprite.flip_h = false
-		if $Sprite.scale.x < 0:
-			$Sprite.scale.x = 1
 		
-		if $CollisionShape2D.scale.x < 0:
-			$CollisionShape2D.scale.x *= -1
-			
+		if flip:
+			scale.x = -1
+			flip = false
 		
+		#if $Sprite.scale.x < 0:
+		#	$Sprite.scale.x = 1
+		
+		#if $CollisionShape2D.scale.x < 0:
+		#	$CollisionShape2D.scale.x *= -1
 			
 	elif left:
 		dir = DIRECTION.W
 		#$Sprite.flip_h = true
+	
+		if not flip:
+			#print("scaling player to negative")
+			scale.x = -1
+			flip = true
+			
 		# flips the sprite alongside key frame
-		if $Sprite.scale.x > 0:
-			$Sprite.scale.x = -1
+		#if $Sprite.scale.x > 0:
+			#$Sprite.scale.x = -1
 			
 		# flips the player hitbox and the raycasts
-		if $CollisionShape2D.scale.x > 0:
-			$CollisionShape2D.scale.x *= -1	
+		#if $CollisionShape2D.scale.x > 0:
+		#	$CollisionShape2D.scale.x *= -1	
 		
 		
 # update player's y velocity
@@ -222,6 +236,9 @@ func vertical_movement(up):
 
 # travel to input state in animation tree
 func play_animation(anim):
+	# reset character parameters default
+	default_player_hitbox_parameters()
+	default_player_sprite_parameters()
 	state_machine.travel(anim)
 
 # enables normal attack hitbox
@@ -604,95 +621,115 @@ func play_invalid_sfx():
 		$InvalidSFX.start()
 	
 
-func update_ledge_grab_direction():
-	# flip raycast if it does not correspond to player direction
-	var lowRayCastDirection = $CollisionShape2D/LowerEdgeDetect.get_cast_to()
-	# only checks one ray cast since both raycast should have the same direction
-	if (dir == DIRECTION.E and lowRayCastDirection.x < 0) or (dir == DIRECTION.W and lowRayCastDirection.x > 0):
-		lowRayCastDirection.x *= -1
-		$CollisionShape2D/LowerEdgeDetect.set_cast_to(lowRayCastDirection)
-		$CollisionShape2D/LowerEdgeDetect.position.x *= -1
-		
-		
-		var highRayCastDirection = $CollisionShape2D/HigherEdgeDetect.get_cast_to()
-		highRayCastDirection.x *= -1
-		$CollisionShape2D/HigherEdgeDetect.set_cast_to(highRayCastDirection)
-		$CollisionShape2D/HigherEdgeDetect.position.x *= -1
-		#print("raycast direction flipped")
+#func update_ledge_grab_direction():
+#	# flip raycast if it does not correspond to player direction
+#	var lowRayCastDirection = $CollisionShape2D/LowerEdgeDetect.get_cast_to()
+#	# only checks one ray cast since both raycast should have the same direction
+#	if (dir == DIRECTION.E and lowRayCastDirection.x < 0) or (dir == DIRECTION.W and lowRayCastDirection.x > 0):
+#		lowRayCastDirection.x *= -1
+#		$CollisionShape2D/LowerEdgeDetect.set_cast_to(lowRayCastDirection)
+#		#$CollisionShape2D/LowerEdgeDetect.position.x *= -1
+#
+#
+#		var highRayCastDirection = $CollisionShape2D/HigherEdgeDetect.get_cast_to()
+#		highRayCastDirection.x *= -1
+#		$CollisionShape2D/HigherEdgeDetect.set_cast_to(highRayCastDirection)
+#		#$CollisionShape2D/HigherEdgeDetect.position.x *= -1
+#		#print("raycast direction flipped")
 
+func detect_ledge():
+	isTouchingLedge = is_ledge_detected()
+	#print("ledge detect?", isTouchingLedge)
+	if isTouchingLedge:
+		start_ledge_grab()
+		movement_enabled = false
+	
 # TODO: needs a better way to identify blocks in the stage
 # TODO: refactor since this function does too much
 # detects whether an player is close to an edge
 # an edge is detected when lower raycast intersects with a block while upper ray cast does not
 func is_ledge_detected():
-	var lowerCollision = $CollisionShape2D/LowerEdgeDetect.get_collider()
-	var higherCollision = $CollisionShape2D/HigherEdgeDetect.get_collider()
-	#$CollisionShape2D/LowerEdgeDetect.get_coll
-	if $CollisionShape2D/LowerEdgeDetect.is_colliding() and not $CollisionShape2D/HigherEdgeDetect.is_colliding():
-		print($CollisionShape2D/LowerEdgeDetect.get_collider())
-		print($CollisionShape2D/HigherEdgeDetect.get_collider())
-		#print(lowerCollision.get_name())
-		if lowerCollision.get_name() == "Blocks":
-			highRayCast = $CollisionShape2D/LowerEdgeDetect.get_collision_point()
-			# y translation
-			var absolute_y = abs(int(highRayCast.y))
-			var new_y = absolute_y + (16 - (absolute_y % 16))
-			if (highRayCast.y < 0):
-				new_y *= -1
-				new_y += 16
-			
-			var absolute_x = abs(int(highRayCast.x))
-			var new_x = absolute_x - (absolute_x % 16) - 16 + 8
-			if dir == DIRECTION.W:
-				new_x += 16
-				
-			if (highRayCast.x < 0):
-				new_x *= -1
-				new_x -= 16
-			
-			
-			highRayCast.y = new_y - 2
-			highRayCast.x = new_x
+	return $CollisionShape2D/LowerEdgeDetect.is_colliding() and not $CollisionShape2D/HigherEdgeDetect.is_colliding()
 
-			self.position = highRayCast 
-			print("new position:", highRayCast)
-			velocity = Vector2.ZERO
-			return true
-	return false
 
-func detect_ledge():
-	#update_ledge_grab_direction()
-	isTouchingLedge = is_ledge_detected()
-	# if player is touching ledge then movement is disabled
-	# hence opposite boolean values
-	movement_enabled = not isTouchingLedge
+# ** PRECONDITION: this function should only be called if a ledge has been detected **
+# teleports the player to the edge of a platform then initiates the ledge grab animation
+func start_ledge_grab():
 	
-
-# TODO: refactor since this function does too much 
-func move_forward_after_climb():
-	var new_y = int(self.position.y)
-	new_y += 16 - (new_y % 16)
-	new_y -= 22
-	self.position.y = new_y+2
-	print("new position:", self.position.y)	
-	
-	var new_x = int(position.x)
-	if dir == DIRECTION.E:
-		new_x += 16 - (new_x % 16)
-		new_x += 2
+	var lowerRC = $CollisionShape2D/LowerEdgeDetect
+	if lowerRC.get_collider().get_name() == "Blocks":
+		var lowerCollisionPoint = lowerRC.get_collision_point()
+		print("intersected at:", lowerCollisionPoint)
+		# y translation
+		var new_y = 0
+		var int_y = int(lowerCollisionPoint.y)
+		print("int y:", int_y)
+		if lowerCollisionPoint.y >= 0:
+			new_y = int_y + 16 - (int_y % 16)
+		else:
+			var abs_y = abs(int_y)
+			new_y = int_y + (abs_y % 16)
 		
-	else:
-		new_x -= (new_x % 16)
-		new_x -= 2
-	
-	
-	self.position.x = new_x 
-	$Sprite.offset.y = 0
-	$Sprite.offset.x = 0
+		# x translation
+		var int_x = int(lowerCollisionPoint.x)
+		# pushes player to the closest left block
+		var new_x = int_x - (int_x % 16)
+		
+		if dir == DIRECTION.E:
+			new_x -= 1
+		else:
+			new_x += 1
+		#if dir == DIRECTION.E:
+		#	new_x += 16
+		
+		lowerCollisionPoint.y = new_y - 3
+		lowerCollisionPoint.x = new_x
 
+		self.position = lowerCollisionPoint 
+		print("teleport position:", lowerCollisionPoint)
+		velocity = Vector2.ZERO
+		#grab_ledge()
+	
+# TODO: refactor since this function does too much 
+func end_ledge_grab():
+	
+	var new_pos = self.position
+	new_pos.y -= 31
+	if dir == DIRECTION.E:
+		new_pos.x += 7
+	else:
+		new_pos.x -= 7
+	position = new_pos
 	isTouchingLedge = false
 	movement_enabled = true
-
+	
+	
+	
+#	var new_y = int(self.position.y)
+#	new_y += 16 - (new_y % 16)
+#	new_y -= 22
+#	self.position.y = new_y
+#	print("new position:", self.position.y)	
+#
+#	var new_x = int(position.x)
+#	if dir == DIRECTION.E:
+#		new_x += 16 - (new_x % 16)
+#		new_x += 4
+#
+#	else:
+#		new_x -= (new_x % 16)
+#		new_x -= 4
+#
+#
+#	self.position.x = new_x
+#	#$Sprite.offset.y = 0
+#	#$Sprite.offset.x = 0
+#
+#	isTouchingLedge = false
+#	movement_enabled = true
+#	play_animation("idle_fist")
+#
+	
 func grab_ledge():
 	if isTouchingLedge:
 		play_animation("ledge_grab")
@@ -720,31 +757,19 @@ func _on_DashTimer_timeout():
 	dash_enabled = false
 	velocity = Vector2.ZERO
 
+func default_player_parameters():
+	dir = DIRECTION.E
+	self.scale = Vector2(1, 1)
+	$AnimationTree.active = true
+	default_player_sprite_parameters()
+	default_player_hitbox_parameters()
 
-func sprite_offset(x_offset, y_offset=0):
-	$Sprite.offset.y = y_offset
-	if dir == DIRECTION.E:
-		$Sprite.offset.x = x_offset * -1
-	elif dir == DIRECTION.W:
-		$Sprite.offset.x = x_offset
-	
-func change_player_hitbox_position(x_position, y_position):
-	$CollisionShape2D.position.y = y_position
-	if dir == DIRECTION.E:
-		$CollisionShape2D.position.x = x_position
-	elif dir == DIRECTION.W:
-		$CollisionShape2D.position.x = x_position * -1
-	
-func change_player_hitbox_scale(x_scale, y_scale):
-	$CollisionShape2D.scale.y = y_scale
-	$CollisionShape2D.scale.x = x_scale
-	
-	if dir == DIRECTION.W:
-		$CollisionShape2D.scale.x *= -1
+func default_player_sprite_parameters():
+	$Sprite.offset = Vector2.ZERO
 
-func set_player_hitbox_position(x_position, y_position):
-	$CollisionShape2D.position.y = y_position
-	$CollisionShape2D.position.x = x_position
-			
-	if dir == DIRECTION.W:
-		$CollisionShape2D.position.x *= -1
+func default_player_hitbox_parameters():
+	$CollisionShape2D.position = Vector2(0, 6)
+	$CollisionShape2D.scale = Vector2(1, 1)
+
+
+
