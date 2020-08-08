@@ -1,0 +1,32 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://scripts/ItemBar.gd" type="Script" id=1]
+[ext_resource path="res://scenes/ui/SkillSlot.tscn" type="PackedScene" id=6]
+
+[node name="ItemBar" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+margin_right = 40.0
+margin_bottom = 40.0
+rect_scale = Vector2( 1.5, 1.5 )
+
+[node name="Item_Slot1" parent="HBoxContainer" instance=ExtResource( 6 )]
+margin_right = 19.0
+margin_bottom = 40.0
+rect_scale = Vector2( 1, 1 )
+skill_slot_num = 11
+cooldown = 10.0
+
+[node name="Item_Slot2" parent="HBoxContainer" instance=ExtResource( 6 )]
+margin_left = 23.0
+margin_right = 42.0
+margin_bottom = 40.0
+rect_scale = Vector2( 1, 1 )
+skill_slot_num = 12
+cooldown = 10.0

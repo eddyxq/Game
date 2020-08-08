@@ -1,0 +1,74 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://scripts/SkillBar.gd" type="Script" id=1]
+[ext_resource path="res://scenes/ui/SkillSlot.tscn" type="PackedScene" id=6]
+
+[node name="SkillBar" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+margin_right = 40.0
+margin_bottom = 40.0
+rect_scale = Vector2( 1.5, 1.5 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Skill_Slot1" parent="HBoxContainer" instance=ExtResource( 6 )]
+margin_right = 19.0
+margin_bottom = 40.0
+rect_scale = Vector2( 1, 1 )
+cooldown = 3.0
+
+[node name="Skill_Slot2" parent="HBoxContainer" instance=ExtResource( 6 )]
+margin_left = 23.0
+margin_right = 42.0
+margin_bottom = 40.0
+rect_scale = Vector2( 1, 1 )
+skill_slot_num = 2
+cooldown = 3.0
+
+[node name="Skill_Slot3" parent="HBoxContainer" instance=ExtResource( 6 )]
+margin_left = 46.0
+margin_right = 65.0
+margin_bottom = 40.0
+rect_scale = Vector2( 1, 1 )
+skill_slot_num = 3
+cooldown = 3.0
+
+[node name="Skill_Slot4" parent="HBoxContainer" instance=ExtResource( 6 )]
+margin_left = 69.0
+margin_right = 88.0
+margin_bottom = 40.0
+rect_scale = Vector2( 1, 1 )
+skill_slot_num = 4
+cooldown = 3.0
+
+[node name="Skill_Slot5" parent="HBoxContainer" instance=ExtResource( 6 )]
+margin_left = 92.0
+margin_right = 111.0
+margin_bottom = 40.0
+rect_scale = Vector2( 1, 1 )
+skill_slot_num = 5
+cooldown = 3.0
+
+[node name="Skill_Slot6" parent="HBoxContainer" instance=ExtResource( 6 )]
+margin_left = 115.0
+margin_right = 134.0
+margin_bottom = 40.0
+rect_scale = Vector2( 1, 1 )
+skill_slot_num = 6
+cooldown = 3.0
+
+[node name="Skill_Slot0" parent="HBoxContainer" instance=ExtResource( 6 )]
+margin_left = 138.0
+margin_right = 157.0
+margin_bottom = 40.0
+rect_scale = Vector2( 1, 1 )
+skill_slot_num = 0
+cooldown = 3.0

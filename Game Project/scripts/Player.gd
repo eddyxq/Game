@@ -5,6 +5,8 @@ extends KinematicBody2D
 ###############################################################################
 
 onready var UI = get_tree().get_root().get_node("/root/Controller/HUD/UI")
+onready var skill_bar = get_tree().get_root().get_node("/root/Controller/HUD/UI/SkillBar")
+onready var item_bar = get_tree().get_root().get_node("/root/Controller/HUD/UI/ItemBar")
 onready var http : HTTPRequest = $HTTPRequest
 onready var tree_state = $AnimationTree.get("parameters/playback")
 
@@ -49,6 +51,7 @@ const jump_speed = 330
 const run_speed_modifier = 1.3
 const boost_speed_modifier = 2.3
 const atkmove_speed_modifier = 0
+const dash_speed_modifier = 50
 var base_speed = 50
 var max_speed = 100
 var min_speed = 0
@@ -58,33 +61,22 @@ var movement_speed # final actual speed after calculations
 # player orientation
 var dir = DIRECTION.E # default right facing 
 
-# player orientation
-var stance = STANCE.FIST # default fist stance
+# player stance
+var stance = STANCE.SWORD # default stance
 
 # world constants
-const GRAVITY = 18
+var DEFAULT_GRAVITY = 18
+var gravity = 18
 
 # flags for player states
 var invincible = false # true when player has invincible frames
 
 # flags that restrict usage of skills and items
-var skill_slot0_off_cooldown = true
-var skill_slot1_off_cooldown = true
-var skill_slot2_off_cooldown = true
-var skill_slot3_off_cooldown = true
-var skill_slot4_off_cooldown = true
-var item_slot1_off_cooldown = true
-var item_slot2_off_cooldown = true
+var skill_slot_off_cooldown = [true, true, true, true, true, true, true]
+var item_slot_off_cooldown = [true, true]
 
 # mana cost of each skill
-var skill0_mana_cost = 1
-var skill1_mana_cost = 1
-var skill2_mana_cost = 1
-var skill3_mana_cost = 1
-var skill4_mana_cost = 1
-
-# flag to prevent spamming of invalid skill use sfx
-var invalid_sfx = true
+var skill_mana_cost = [1,1,1,1,1,1,1]
 
 # velocity vector
 var velocity = Vector2()
@@ -92,85 +84,48 @@ var velocity = Vector2()
 # animation tree
 var state_machine
 
-# variables used for ledge climbing
-var isTouchingLedge = false
-var highRayCast = null  # not used at the moment, likely remove in the future
-var lowRayCast = null   # not used at the moment, likely remove in the future
-
 # flag use to signal that the player hit an enemy
 var recentHit = false
 
-var movement_enabled = true
-var dash_enabled = false
-var dash_velocity = 0
-var canDash = true
+# special movement states
+var dashing = false
+var sprinting = false
 
-var oneTimeFlag = true
+# variables used for ledge climbing
+var isTouchingLedge = false
+var movement_enabled = true
+
 # called when the node enters the scene tree for the first time
 func _ready():
 	# Firebase.get_document("users/%s" % Firebase.user_info.id, http)
-	if oneTimeFlag:
-		default_player_parameters()
-		oneTimeFlag = false
-		
+	$AnimationTree.active = true
 	setup_state_machine()
-	
 
 # animation logic
-func animation_loop(attack,skill0, skill1, skill2, skill3, skill4, item1, item2, switch):
-	# DEBUG: used to display current animation state, uncomment line below to use
-	# print(tree_state.get_current_node())
-	
-	# disable animations while player is attacking
+func animation_loop(attack, skill, item, switch):
 	move() # moving state
 	jump() # jumping state
 	fall() # falling state
 	idle() # idle state
 	attack(attack) # attacking state
-	detect_skill_activation(skill0, skill1, skill2, skill3, skill4) # pass input
-	item(item1, item2) # item activation
+	detect_skill_activation(skill) # pass input
+	detect_item_usage(item) # item activation
 	grab_ledge()
-	animate_dash()
 	stance_update(switch) # stance change
 
 # movement logic
-# TODO refactor movement loop to reduce condition checks
-func movement_loop(attack, up, left, right, skill3, dash):
-	#print("current pos:", self.position)
-	if movement_enabled:
-		detect_ledge()
-		if not isTouchingLedge:
-			horizontal_movement(right, left) # horizontal translation
-			#update_hitbox_location() # update hitbox
-			enable_dash(dash)
-			if not dash_enabled:
-				apply_gravity() # pull player downwards
-				vertical_movement(up) # vertical translation
-				update_speed_modifier(attack) # restricts movement during certain actions
-				apply_accel_decel(left, right) # acceleration effect
-				
-			apply_translation(left, right, attack, skill3)
-
-func animate_dash():
-	if dash_enabled:
-		play_animation("dash_placeholder")
-
-func enable_dash(dash):
-	if not canDash and is_on_floor():
-		canDash = true
+func movement_loop(attack, up, left, right):
+	detect_ledge()
 	
-	if canDash and dash:
-		if not dash_enabled and velocity.y != 0:
-			#print("dash enabled")
-			canDash = false
-			dash_enabled = true
-			dash_velocity = DASH_SPEED
-			if dir == DIRECTION.W:
-				dash_velocity *= -1
-			# freezes the player midair in the y axis
-			velocity.y = 0
-			$DashTimer.start()
-			
+	
+	if !dashing:
+		apply_gravity() # pull player downwards
+	#update_hitbox_location() # update hitbox
+	horizontal_movement(right, left) # horizontal translation
+	vertical_movement(up) # vertical translation
+	update_speed_modifier(attack) # restricts movement during certain actions
+	apply_accel_decel(left, right) # acceleration effect
+	apply_translation(left, right, attack)
 
 # applies a blinking damage effect to the player
 func hurt(dmg):
@@ -192,39 +147,17 @@ func update_hitbox_location():
 # update player's direction and sprite orientation
 var flip = false
 func horizontal_movement(right, left):
-	#print("current player x scale:", scale.x)
 	if right:
 		dir = DIRECTION.E 
-		#$Sprite.flip_h = false
-		
 		if flip:
 			scale.x = -1
 			flip = false
-		
-		#if $Sprite.scale.x < 0:
-		#	$Sprite.scale.x = 1
-		
-		#if $CollisionShape2D.scale.x < 0:
-		#	$CollisionShape2D.scale.x *= -1
-			
 	elif left:
 		dir = DIRECTION.W
-		#$Sprite.flip_h = true
-	
 		if not flip:
-			#print("scaling player to negative")
 			scale.x = -1
 			flip = true
-			
-		# flips the sprite alongside key frame
-		#if $Sprite.scale.x > 0:
-			#$Sprite.scale.x = -1
-			
-		# flips the player hitbox and the raycasts
-		#if $CollisionShape2D.scale.x > 0:
-		#	$CollisionShape2D.scale.x *= -1	
-		
-		
+
 # update player's y velocity
 func vertical_movement(up):
 	if is_on_floor():
@@ -249,25 +182,14 @@ func toggle_hitbox_on():
 func toggle_hitbox_off():
 	$HitBox/CollisionShape2D.disabled = true
 
-# activates skill 1 shooting a ranged projectile
+# activates sword skill 1 shooting a ranged projectile
 func distance_blade():
 	var projectile = preload("res://scenes/player/BladeProjectile.tscn").instance()
 	get_parent().add_child(projectile)
 	projectile.position = $PositionCenter.global_position
 	projectile.set_projectile_direction(dir)
 
-# activates skill 2 summoning rock pillars from below
-func rock_strike():
-	var projectile = preload("res://scenes/player/RockStrike.tscn").instance()
-	get_parent().add_child(projectile)
-	if dir == DIRECTION.E:
-		projectile.position.x = $PositionCenter.global_position.x + 64
-	else: 
-		projectile.position.x = $PositionCenter.global_position.x - 64
-	projectile.position.y = $PositionCenter.global_position.y + 36
-	projectile.set_projectile_direction(dir) 
-	
-# activates skill 3 shooting a ranged projectile
+# activates bow skill 1 shooting a ranged projectile
 func piercing_arrow():
 	var projectile = preload("res://scenes/player/ArrowProjectile.tscn").instance()
 	get_parent().add_child(projectile)
@@ -319,10 +241,6 @@ func _on_HTTPRequest_request_completed(_result, response_code, _headers, body):
 # player becomes invicible for a moment after getting hurt
 func _on_IFrame_timeout():
 	invincible = false
-	
-# allows another invalid sfx to be played
-func _on_InvalidSFX_timeout():
-	invalid_sfx = true
 
 # applies damage when hitbox collide with enemies
 # calls screen shaker whenever damage was critical
@@ -331,10 +249,9 @@ func _on_HitBox_body_entered(body):
 		recentHit = true
 		var is_crit = body.hurt(5, 0)
 		if is_crit:
-			#pass
 			$Camera2D/ScreenShaker.start()
 
-# time used to countdown the animation of skill0 buff
+# timer used to countdown the animation of sprint buff
 func _on_ghost_timer_timeout():
 	var ghost_sprite = preload("res://scenes/player/PlayerGhost.tscn").instance()
 	get_parent().add_child(ghost_sprite)
@@ -346,35 +263,33 @@ func _on_ghost_timer_timeout():
 func set_light_enabled(status):
 	$Light2D.set_enabled(status)
 
-# changes center of gravity to player so coins will be attracted to it
+# moves coins towards player when it is within auto pick up range
 func _on_Area2D_body_entered(body):
 	if body.get_filename() == "res://scenes/item/Coin.tscn":
-		#$Area2D.set_space_override_mode(3)
-		#$Area2D.set_gravity_is_point(true)
-		#$Area2D.set_gravity_vector(Vector2(0, 0))
-		#play_coin_sfx()
 		body.start_chase(self)
-		
+
 # resets the cooldown of slot utilized allowing reuse
 func reset_skill_cooldown(skill_slot_num):
-	# skill num 0 thruough 4 are skill slots
-	# skill num 5 and 6 are item slots
+	# skill num 1 thruough 6 are skill slots
+	# skill num 11 and 12 are item slots
 	if skill_slot_num == 0:
-		skill_slot0_off_cooldown = true
-		$GhostInterval.stop()
-		movement_speed = max_speed * run_speed_modifier
+		skill_slot_off_cooldown[skill_slot_num] = true
 	elif skill_slot_num == 1:
-		skill_slot1_off_cooldown = true
+		skill_slot_off_cooldown[skill_slot_num] = true
 	elif skill_slot_num == 2:
-		skill_slot2_off_cooldown = true
+		skill_slot_off_cooldown[skill_slot_num] = true
 	elif skill_slot_num == 3:
-		skill_slot3_off_cooldown = true
+		skill_slot_off_cooldown[skill_slot_num] = true
 	elif skill_slot_num == 4:
-		skill_slot4_off_cooldown = true
+		skill_slot_off_cooldown[skill_slot_num] = true
 	elif skill_slot_num == 5:
-		item_slot1_off_cooldown = true
+		skill_slot_off_cooldown[skill_slot_num] = true
 	elif skill_slot_num == 6:
-		item_slot2_off_cooldown = true
+		skill_slot_off_cooldown[skill_slot_num] = true
+	elif skill_slot_num == 11:
+		item_slot_off_cooldown[0] = true
+	elif skill_slot_num == 12:
+		item_slot_off_cooldown[1] = true
 
 # toggles the player's stance between fist and sword
 func toggle_stance():
@@ -396,7 +311,7 @@ func sheath_sword():
 # left and right movement
 func move():
 	if velocity.x != 0 && is_on_floor():
-		if !skill_slot0_off_cooldown:
+		if sprinting:
 			play_animation("sprint")
 			emit_foot_dust()
 		else:
@@ -433,80 +348,64 @@ func attack(attack):
 		elif stance == STANCE.SWORD:
 			play_animation("sword_attack3")
 
-# sends skill input 
-func detect_skill_activation(skill0, skill1, skill2, skill3, skill4):
-	skill0(skill0)
-	skill3(skill3)
+# send skill inputs
+func detect_skill_activation(skill):	
 	if stance == STANCE.SWORD:
-		skill1(skill1)
-		skill2(skill2)
-		skill4(skill4)
-
-# sprint buff
-func skill0(skill0):
-	if skill0 && skill_slot0_off_cooldown:
-		if mana >= skill0_mana_cost:
-			UI.skill_slot0.start_cooldown()
-			skill_slot0_off_cooldown = false
-			$GhostInterval.start()
-			movement_speed = max_speed * boost_speed_modifier
-			play_animation("buff")
-		else:
-			play_invalid_sfx()
-			invalid_sfx = false
+		skill0(skill[0])
+		skill1(skill[1])
+		skill2(skill[2])
+		skill3(skill[3])
+		skill4(skill[4])
+		skill5(skill[5])
+		skill6(skill[6])
 
 # distance blade
 func skill1(skill1):
-	if skill1 && skill_slot1_off_cooldown:
-		if mana >= skill1_mana_cost:
-			UI.skill_slot1.start_cooldown()
-			skill_slot1_off_cooldown = false
+	if skill1 && skill_slot_off_cooldown[1]:
+		if mana >= skill_mana_cost[1]:
+			skill_bar.skill_slot1.start_cooldown()
+			skill_slot_off_cooldown[1] = false
 			play_animation("distance_blade")
-		else:
-			play_invalid_sfx()
-			invalid_sfx = false
-	
-# rock strike
+
 func skill2(skill2):
-	if skill2 && skill_slot2_off_cooldown:
-		if mana >= skill2_mana_cost && is_on_floor():
-			UI.skill_slot2.start_cooldown()
-			skill_slot2_off_cooldown = false
-			play_animation("rock_strike")
-		else:
-			play_invalid_sfx()
-			invalid_sfx = false
+	var _placeholder = skill2
+	pass
 
-# piercing arrow
 func skill3(skill3):
-	if skill3 && skill_slot3_off_cooldown:
-		if mana >= skill3_mana_cost:
-			#UI.skill_slot3.start_cooldown()
-			play_animation("bow_attack")
-		else:
-			play_invalid_sfx()
-			invalid_sfx = false
+	var _placeholder = skill3
+	pass
 
-# not yet implemented
 func skill4(skill4):
-	if skill4 && skill_slot4_off_cooldown:
-		if mana >= skill4_mana_cost:
-			pass
-		else:
-			pass
+	var _placeholder = skill4
+	pass
+
+func skill5(skill5):
+	var _placeholder = skill5
+	pass
+
+func skill6(skill6):
+	var _placeholder = skill6
+	pass
+
+# ultimate move
+func skill0(skill0):
+	var _placeholder = skill0
+	pass
 
 # item consumables for status recovery
-func item(item1, item2):
-	if item1 && item_slot1_off_cooldown:
-		UI.item_slot1.start_cooldown()
-		item_slot1_off_cooldown = false
+func detect_item_usage(item):
+	var item1 = item[0]
+	var item2 = item[1]
+	if item1 && item_slot_off_cooldown[0]:
+		item_bar.item_slot1.start_cooldown()
+		item_slot_off_cooldown[0] = false
 		play_potion_sfx()
 		# potion fully heals the player's health
 		UI.health_bar.increase(health, max_hp - health)
 		health = max_hp
-	elif item2 && item_slot2_off_cooldown:
-		UI.item_slot2.start_cooldown()
-		item_slot2_off_cooldown = false
+	elif item2 && item_slot_off_cooldown[1]:
+		item_bar.item_slot2.start_cooldown()
+		item_slot_off_cooldown[1] = false
 		play_potion_sfx()
 		# potion fully heals the player's mana
 		mana = max_mp
@@ -522,7 +421,7 @@ func stance_update(switch):
 
 # translates the player downwards every frame at the rate of gravity
 func apply_gravity():
-	velocity.y += GRAVITY
+	velocity.y += gravity
 
 # applies a acceleration and deceeleration effect
 func apply_accel_decel(left, right):
@@ -535,27 +434,23 @@ func apply_accel_decel(left, right):
 		if base_speed > max_speed:
 			base_speed = max_speed
 
-const DASH_SPEED = 50 * 12
 # restricts the movement ability of the player depending on actions
 func update_speed_modifier(attack):
-	if skill_slot0_off_cooldown:
+	if !sprinting:
 		if attack and is_on_floor():
 			movement_speed = base_speed * atkmove_speed_modifier
 		else:
-			movement_speed = base_speed * run_speed_modifier
+			 movement_speed = base_speed * run_speed_modifier
 
 # update velocity and vectors
-# TODO refactor function so it does not need to know about dash
-func apply_translation(left, right, attack, skill3):
-	
+func apply_translation(left, right, attack):
 	# translates player horizontally when left or right key is pressed
-	if not dash_enabled:
-		velocity.x = (-int(left) + int(right)) * movement_speed
-		# restrict movement during certain attack/skill
-		if attack or skill3:
-			velocity.x = 0
-	else:
-		velocity.x = dash_velocity
+	velocity.x = (-int(left) + int(right)) * movement_speed
+	# restrict movement during certain attack/skill
+	if attack and !dashing:
+		velocity.x = 0
+	elif dashing:
+		velocity.x = 500 if dir == DIRECTION.E else -500
 		
 	# apply translations to the player
 	velocity = move_and_slide(velocity, Vector2(0,-1))
@@ -602,10 +497,6 @@ func play_death_sfx():
 func play_potion_sfx():
 	SoundManager.play("res://audio/sfx/potion.ogg")
 	
-# plays a coin sfx
-func play_coin_sfx():
-	SoundManager.play("res://audio/sfx/coin.ogg")
-	
 # plays a punch sfx
 func play_punch_sfx():
 	SoundManager.play("res://audio/sfx/punch.ogg")
@@ -614,12 +505,60 @@ func play_punch_sfx():
 func play_buff_sfx():
 	SoundManager.play("res://audio/sfx/buff.ogg")
 	
-# plays a invalid sfx
-func play_invalid_sfx():
-	if invalid_sfx:
-		SoundManager.play("res://audio/sfx/invalid.ogg")
-		$InvalidSFX.start()
+# plays a dash sfx
+func play_dash_sfx():
+	SoundManager.play("res://audio/sfx/dash.ogg")
+
+# freezes the frame if the player hit something
+# freezes frame for 100 milliseconds
+func freeze_hit_frame():
+	if recentHit:
+		OS.delay_msec(50)
+		recentHit = false
+
+# creates dust particles after player movements
+func emit_foot_dust():
+	var dust_particles = preload("res://scenes/player/DustParticle.tscn").instance()
+	dust_particles.set_as_toplevel(true)
+	if dir == DIRECTION.E:
+		dust_particles.scale.x = 1
+	elif dir == DIRECTION.W:
+		dust_particles.scale.x = -1
+	dust_particles.global_position = $FeetPosition.global_position
+	add_child(dust_particles)
+
+func dash():
+	if !sprinting and mana > 0 and is_on_floor():
+		play_dash_sfx()
+		consume_mp(1)
+		gravity = 0
+		velocity.y = 0
+		movement_speed = base_speed * dash_speed_modifier
+		dashing = true
+		$DashTimer.start()
+
+func _on_DashTimer_timeout():
+	gravity = DEFAULT_GRAVITY
+	dashing = false
 	
+func sprint():
+	if !sprinting:
+		sprinting = true
+		$GhostInterval.start()
+		movement_speed = max_speed * boost_speed_modifier
+		play_animation("buff")
+		$SprintTimer.start()
+ 
+func _on_SprintTimer_timeout():
+	sprinting = false
+	$GhostInterval.stop()
+	movement_speed = max_speed * run_speed_modifier
+	
+func activate_special_movement_skill(left, right):
+	if stance == STANCE.FIST:
+		sprint()
+	elif stance == STANCE.SWORD and (left or right):
+		dash()
 
 #func update_ledge_grab_direction():
 #	# flip raycast if it does not correspond to player direction
@@ -733,29 +672,6 @@ func end_ledge_grab():
 func grab_ledge():
 	if isTouchingLedge:
 		play_animation("ledge_grab")
-		
-# freezes the frame if the player hit something
-# freezes frame for 100 milliseconds
-func freeze_hit_frame():
-	if recentHit:
-		OS.delay_msec(50)
-		recentHit = false
-
-# creates dust particles after player movements
-func emit_foot_dust():
-	var dust_particles = preload("res://scenes/player/DustParticle.tscn").instance()
-	dust_particles.set_as_toplevel(true)
-	if dir == DIRECTION.E:
-		dust_particles.scale.x = 1
-	elif dir == DIRECTION.W:
-		dust_particles.scale.x = -1
-	dust_particles.global_position = $FeetPosition.global_position
-	add_child(dust_particles)
-
-
-func _on_DashTimer_timeout():
-	dash_enabled = false
-	velocity = Vector2.ZERO
 
 func default_player_parameters():
 	dir = DIRECTION.E
@@ -770,6 +686,3 @@ func default_player_sprite_parameters():
 func default_player_hitbox_parameters():
 	$CollisionShape2D.position = Vector2(0, 6)
 	$CollisionShape2D.scale = Vector2(1, 1)
-
-
-
