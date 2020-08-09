@@ -560,22 +560,6 @@ func activate_special_movement_skill(left, right):
 	elif stance == STANCE.SWORD and (left or right):
 		dash()
 
-#func update_ledge_grab_direction():
-#	# flip raycast if it does not correspond to player direction
-#	var lowRayCastDirection = $CollisionShape2D/LowerEdgeDetect.get_cast_to()
-#	# only checks one ray cast since both raycast should have the same direction
-#	if (dir == DIRECTION.E and lowRayCastDirection.x < 0) or (dir == DIRECTION.W and lowRayCastDirection.x > 0):
-#		lowRayCastDirection.x *= -1
-#		$CollisionShape2D/LowerEdgeDetect.set_cast_to(lowRayCastDirection)
-#		#$CollisionShape2D/LowerEdgeDetect.position.x *= -1
-#
-#
-#		var highRayCastDirection = $CollisionShape2D/HigherEdgeDetect.get_cast_to()
-#		highRayCastDirection.x *= -1
-#		$CollisionShape2D/HigherEdgeDetect.set_cast_to(highRayCastDirection)
-#		#$CollisionShape2D/HigherEdgeDetect.position.x *= -1
-#		#print("raycast direction flipped")
-
 func detect_ledge():
 	if not isTouchingLedge:
 		isTouchingLedge = is_ledge_detected()
@@ -599,11 +583,11 @@ func start_ledge_grab():
 	var lowerRC = $CollisionShape2D/LowerEdgeDetect
 	if lowerRC.get_collider().get_name() == "Blocks":
 		var lowerCollisionPoint = lowerRC.get_collision_point()
-		print("intersected at:", lowerCollisionPoint)
+		#print("intersected at:", lowerCollisionPoint)
 		# y translation
 		var new_y = 0
 		var int_y = int(lowerCollisionPoint.y)
-		print("int y:", int_y)
+		#print("int y:", int_y)
 		if lowerCollisionPoint.y >= 0:
 			new_y = int_y + 16 - (int_y % 16)
 		else:
@@ -619,16 +603,13 @@ func start_ledge_grab():
 			new_x -= 1
 		else:
 			new_x += 1
-		#if dir == DIRECTION.E:
-		#	new_x += 16
 		
 		lowerCollisionPoint.y = new_y - 3
 		lowerCollisionPoint.x = new_x
 
 		self.position = lowerCollisionPoint 
-		print("teleport position:", lowerCollisionPoint)
+		#print("teleport position:", lowerCollisionPoint)
 		velocity = Vector2.ZERO
-		#grab_ledge()
 	
 # TODO: refactor since this function does too much 
 func end_ledge_grab():
