@@ -98,6 +98,7 @@ var movement_enabled = true
 # called when the node enters the scene tree for the first time
 func _ready():
 	# Firebase.get_document("users/%s" % Firebase.user_info.id, http)
+	default_player_parameters()
 	$AnimationTree.active = true
 	setup_state_machine()
 
@@ -116,16 +117,15 @@ func animation_loop(attack, skill, item, switch):
 # movement logic
 func movement_loop(attack, up, left, right):
 	detect_ledge()
-	
-	
-	if !dashing:
-		apply_gravity() # pull player downwards
-	#update_hitbox_location() # update hitbox
-	horizontal_movement(right, left) # horizontal translation
-	vertical_movement(up) # vertical translation
-	update_speed_modifier(attack) # restricts movement during certain actions
-	apply_accel_decel(left, right) # acceleration effect
-	apply_translation(left, right, attack)
+	if movement_enabled:
+		if !dashing:
+			apply_gravity() # pull player downwards
+		#update_hitbox_location() # update hitbox
+		horizontal_movement(right, left) # horizontal translation
+		vertical_movement(up) # vertical translation
+		update_speed_modifier(attack) # restricts movement during certain actions
+		apply_accel_decel(left, right) # acceleration effect
+		apply_translation(left, right, attack)
 
 # applies a blinking damage effect to the player
 func hurt(dmg):
@@ -577,11 +577,12 @@ func activate_special_movement_skill(left, right):
 #		#print("raycast direction flipped")
 
 func detect_ledge():
-	isTouchingLedge = is_ledge_detected()
-	#print("ledge detect?", isTouchingLedge)
-	if isTouchingLedge:
-		start_ledge_grab()
-		movement_enabled = false
+	if not isTouchingLedge:
+		isTouchingLedge = is_ledge_detected()
+		#print("ledge detect?", isTouchingLedge)
+		if isTouchingLedge:
+			start_ledge_grab()
+			movement_enabled = false
 	
 # TODO: needs a better way to identify blocks in the stage
 # TODO: refactor since this function does too much
@@ -641,33 +642,6 @@ func end_ledge_grab():
 	position = new_pos
 	isTouchingLedge = false
 	movement_enabled = true
-	
-	
-	
-#	var new_y = int(self.position.y)
-#	new_y += 16 - (new_y % 16)
-#	new_y -= 22
-#	self.position.y = new_y
-#	print("new position:", self.position.y)	
-#
-#	var new_x = int(position.x)
-#	if dir == DIRECTION.E:
-#		new_x += 16 - (new_x % 16)
-#		new_x += 4
-#
-#	else:
-#		new_x -= (new_x % 16)
-#		new_x -= 4
-#
-#
-#	self.position.x = new_x
-#	#$Sprite.offset.y = 0
-#	#$Sprite.offset.x = 0
-#
-#	isTouchingLedge = false
-#	movement_enabled = true
-#	play_animation("idle_fist")
-#
 	
 func grab_ledge():
 	if isTouchingLedge:
