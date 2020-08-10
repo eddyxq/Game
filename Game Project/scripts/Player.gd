@@ -118,10 +118,8 @@ func animation_loop(attack, skill, item, switch):
 func movement_loop(attack, up, left, right):
 	detect_ledge()
 	if movement_enabled:
-		if !dashing:
-			apply_gravity() # pull player downwards
-		#update_hitbox_location() # update hitbox
-		horizontal_movement(right, left) # horizontal translation
+		apply_gravity() # pull player downwards
+		update_sprite_direction(right, left) # flips sprite to corresponding direction
 		vertical_movement(up) # vertical translation
 		update_speed_modifier(attack) # restricts movement during certain actions
 		apply_accel_decel(left, right) # acceleration effect
@@ -146,7 +144,7 @@ func update_hitbox_location():
 
 # update player's direction and sprite orientation
 var flip = false
-func horizontal_movement(right, left):
+func update_sprite_direction(right, left):
 	if right:
 		dir = DIRECTION.E 
 		if flip:
@@ -421,7 +419,8 @@ func stance_update(switch):
 
 # translates the player downwards every frame at the rate of gravity
 func apply_gravity():
-	velocity.y += gravity
+	if !dashing:
+		velocity.y += gravity
 
 # applies a acceleration and deceeleration effect
 func apply_accel_decel(left, right):
