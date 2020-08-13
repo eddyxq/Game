@@ -1646,9 +1646,12 @@ position = Vector2( 0, 14 )
 
 [node name="DashTimer" type="Timer" parent="."]
 wait_time = 0.1
-one_shot = true
 
 [node name="SprintTimer" type="Timer" parent="."]
+
+[node name="DashCD" type="Timer" parent="."]
+wait_time = 3.0
+one_shot = true
 [connection signal="timeout" from="HealthRecovery" to="." method="_on_HealthRecovery_timeout"]
 [connection signal="timeout" from="ManaRecovery" to="." method="_on_ManaRecovery_timeout"]
 [connection signal="timeout" from="IFrame" to="." method="_on_IFrame_timeout"]
@@ -1659,3 +1662,4 @@ one_shot = true
 [connection signal="body_entered" from="Area2D" to="." method="_on_Area2D_body_entered"]
 [connection signal="timeout" from="DashTimer" to="." method="_on_DashTimer_timeout"]
 [connection signal="timeout" from="SprintTimer" to="." method="_on_SprintTimer_timeout"]
+[connection signal="timeout" from="DashCD" to="." method="_on_DashCD_timeout"]

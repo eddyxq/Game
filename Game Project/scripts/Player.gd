@@ -74,6 +74,7 @@ var invincible = false # true when player has invincible frames
 # flags that restrict usage of skills and items
 var skill_slot_off_cooldown = [true, true, true, true, true, true, true]
 var item_slot_off_cooldown = [true, true]
+var dash_off_cooldown = true
 
 # mana cost of each skill
 var skill_mana_cost = [1,1,1,1,1,1,1]
@@ -527,7 +528,8 @@ func emit_foot_dust():
 	add_child(dust_particles)
 
 func dash():
-	if !sprinting and mana > 0 and is_on_floor():
+	if mana > 0 and is_on_floor() and dash_off_cooldown:
+		dash_off_cooldown = false
 		play_dash_sfx()
 		consume_mp(1)
 		gravity = 0
@@ -535,6 +537,7 @@ func dash():
 		movement_speed = base_speed * dash_speed_modifier
 		dashing = true
 		$DashTimer.start()
+		$DashCD.start()
 
 func _on_DashTimer_timeout():
 	gravity = DEFAULT_GRAVITY
@@ -640,3 +643,6 @@ func default_player_sprite_parameters():
 func default_player_hitbox_parameters():
 	$CollisionShape2D.position = Vector2(0, 6)
 	$CollisionShape2D.scale = Vector2(1, 1)
+
+func _on_DashCD_timeout():
+	dash_off_cooldown = true
