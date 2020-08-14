@@ -539,7 +539,7 @@ func emit_foot_dust():
 	add_child(dust_particles)
 
 func dash():
-	if mana > 0:
+	if mana > 0 and movement_enabled:
 		play_dash_sfx()
 		consume_mp(1)
 		gravity = 0
