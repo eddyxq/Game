@@ -51,14 +51,13 @@ func _physics_process(_delta):
 			Input.is_action_pressed("ui_item_slot2")]
 
 	switch = Input.is_action_pressed("ui_switch")
-	
-	if Input.is_action_just_pressed("ui_special_movement"):
-		player.activate_special_movement_skill(left, right)
 
 	if !$HUD/DialogBox.visible:
 		# update player state
 		player.animation_loop(attack, skill, item, switch)
 		player.movement_loop(attack, up, left, right)
+		if Input.is_action_just_pressed("ui_special_movement"):
+			player.activate_special_movement_skill(left, right)
 	else:
 		player.play_animation("idle")
 	

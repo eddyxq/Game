@@ -1,4 +1,4 @@
-[gd_scene load_steps=119 format=2]
+[gd_scene load_steps=125 format=2]
 
 [ext_resource path="res://images/warrior_sprites/sprite_sheet.png" type="Texture" id=1]
 [ext_resource path="res://scripts/Player.gd" type="Script" id=2]
@@ -166,6 +166,85 @@ tracks/0/keys = {
 "transitions": PoolRealArray( 1, 1 ),
 "update": 1,
 "values": [ 17, 18 ]
+}
+
+[sub_resource type="Animation" id=114]
+resource_name = "dash_slash"
+length = 0.4
+step = 0.05
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:frame")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1, 0.15, 0.2, 0.25, 0.3 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 53, 54, 55, 56, 57, 58 ]
+}
+tracks/1/type = "method"
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0.15 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [  ],
+"method": "play_atk_sfx"
+} ]
+}
+tracks/2/type = "method"
+tracks/2/path = NodePath(".")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0.15, 0.25 ),
+"transitions": PoolRealArray( 1, 1 ),
+"values": [ {
+"args": [  ],
+"method": "toggle_hitbox_on"
+}, {
+"args": [  ],
+"method": "toggle_hitbox_off"
+} ]
+}
+tracks/3/type = "method"
+tracks/3/path = NodePath(".")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0.19, 0.4 ),
+"transitions": PoolRealArray( 1, 1 ),
+"values": [ {
+"args": [  ],
+"method": "freeze_hit_frame"
+}, {
+"args": [  ],
+"method": "animation_done"
+} ]
+}
+tracks/4/type = "method"
+tracks/4/path = NodePath(".")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [  ],
+"method": "dash_slash"
+} ]
 }
 
 [sub_resource type="Animation" id=7]
@@ -1254,6 +1333,9 @@ animation = "buff"
 [sub_resource type="AnimationNodeAnimation" id=31]
 animation = "dash_placeholder"
 
+[sub_resource type="AnimationNodeAnimation" id=115]
+animation = "dash_slash"
+
 [sub_resource type="AnimationNodeAnimation" id=32]
 animation = "dead"
 
@@ -1444,6 +1526,16 @@ switch_mode = 2
 
 [sub_resource type="AnimationNodeStateMachineTransition" id=108]
 
+[sub_resource type="AnimationNodeStateMachineTransition" id=116]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=117]
+switch_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=118]
+switch_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=119]
+
 [sub_resource type="AnimationNodeStateMachine" id=109]
 states/bow_attack/node = SubResource( 29 )
 states/bow_attack/position = Vector2( 164, 183.183 )
@@ -1451,6 +1543,8 @@ states/buff/node = SubResource( 30 )
 states/buff/position = Vector2( 1361.43, 550.287 )
 states/dash_placeholder/node = SubResource( 31 )
 states/dash_placeholder/position = Vector2( -243.899, 411.479 )
+states/dash_slash/node = SubResource( 115 )
+states/dash_slash/position = Vector2( 829.412, 981.9 )
 states/dead/node = SubResource( 32 )
 states/dead/position = Vector2( 738, 550.287 )
 states/die/node = SubResource( 33 )
@@ -1493,10 +1587,10 @@ states/sword_run/node = SubResource( 51 )
 states/sword_run/position = Vector2( 141, 802.287 )
 states/sword_sheath/node = SubResource( 52 )
 states/sword_sheath/position = Vector2( 927, 550.287 )
-transitions = [ "idle_fist", "jump", SubResource( 53 ), "fall", "idle_fist", SubResource( 54 ), "jump", "fall", SubResource( 55 ), "idle_fist", "sprint", SubResource( 56 ), "sprint", "idle_fist", SubResource( 57 ), "sword_attack1", "sword_attack2", SubResource( 58 ), "sword_attack2", "sword_attack3", SubResource( 59 ), "idle_fist", "dead", SubResource( 60 ), "idle_fist", "buff", SubResource( 61 ), "buff", "idle_fist", SubResource( 62 ), "bow_attack", "idle_fist", SubResource( 63 ), "idle_fist", "bow_attack", SubResource( 64 ), "idle_fist", "run", SubResource( 65 ), "idle_fist", "die", SubResource( 66 ), "idle_sword", "sprint", SubResource( 67 ), "sprint", "idle_sword", SubResource( 68 ), "sword_draw", "idle_sword", SubResource( 69 ), "idle_sword", "sword_sheath", SubResource( 70 ), "idle_fist", "sword_draw", SubResource( 71 ), "sword_sheath", "idle_fist", SubResource( 72 ), "fist_attack3", "idle_fist", SubResource( 73 ), "fist_attack2", "fist_attack3", SubResource( 74 ), "fist_attack1", "fist_attack2", SubResource( 75 ), "fist_attack1", "idle_fist", SubResource( 76 ), "idle_fist", "fist_attack1", SubResource( 77 ), "fist_attack2", "idle_fist", SubResource( 78 ), "sword_attack3", "idle_sword", SubResource( 79 ), "sword_attack2", "idle_sword", SubResource( 80 ), "sword_attack1", "idle_sword", SubResource( 81 ), "idle_sword", "sword_attack1", SubResource( 82 ), "fist_attack3", "fist_attack4", SubResource( 83 ), "fist_attack4", "idle_fist", SubResource( 84 ), "sword_run", "idle_sword", SubResource( 85 ), "idle_sword", "sword_run", SubResource( 86 ), "fall", "idle_sword", SubResource( 87 ), "idle_sword", "jump", SubResource( 88 ), "distance_blade", "idle_sword", SubResource( 89 ), "idle_sword", "distance_blade", SubResource( 90 ), "rock_strike", "idle_sword", SubResource( 91 ), "idle_sword", "rock_strike", SubResource( 92 ), "idle_sword", "die", SubResource( 93 ), "idle_sword", "dead", SubResource( 94 ), "jump", "ledge_grab", SubResource( 95 ), "fall", "ledge_grab", SubResource( 96 ), "ledge_grab", "idle_fist", SubResource( 97 ), "ledge_grab", "idle_sword", SubResource( 98 ), "idle_sword", "buff", SubResource( 99 ), "buff", "idle_sword", SubResource( 100 ), "run", "idle_fist", SubResource( 101 ), "sword_run", "distance_blade", SubResource( 102 ), "distance_blade", "sword_run", SubResource( 103 ), "sword_run", "rock_strike", SubResource( 104 ), "rock_strike", "sword_run", SubResource( 105 ), "jump", "dash_placeholder", SubResource( 106 ), "fall", "dash_placeholder", SubResource( 107 ), "dash_placeholder", "fall", SubResource( 108 ) ]
+transitions = [ "idle_fist", "jump", SubResource( 53 ), "fall", "idle_fist", SubResource( 54 ), "jump", "fall", SubResource( 55 ), "idle_fist", "sprint", SubResource( 56 ), "sprint", "idle_fist", SubResource( 57 ), "sword_attack1", "sword_attack2", SubResource( 58 ), "sword_attack2", "sword_attack3", SubResource( 59 ), "idle_fist", "dead", SubResource( 60 ), "idle_fist", "buff", SubResource( 61 ), "buff", "idle_fist", SubResource( 62 ), "bow_attack", "idle_fist", SubResource( 63 ), "idle_fist", "bow_attack", SubResource( 64 ), "idle_fist", "run", SubResource( 65 ), "idle_fist", "die", SubResource( 66 ), "idle_sword", "sprint", SubResource( 67 ), "sprint", "idle_sword", SubResource( 68 ), "sword_draw", "idle_sword", SubResource( 69 ), "idle_sword", "sword_sheath", SubResource( 70 ), "idle_fist", "sword_draw", SubResource( 71 ), "sword_sheath", "idle_fist", SubResource( 72 ), "fist_attack3", "idle_fist", SubResource( 73 ), "fist_attack2", "fist_attack3", SubResource( 74 ), "fist_attack1", "fist_attack2", SubResource( 75 ), "fist_attack1", "idle_fist", SubResource( 76 ), "idle_fist", "fist_attack1", SubResource( 77 ), "fist_attack2", "idle_fist", SubResource( 78 ), "sword_attack3", "idle_sword", SubResource( 79 ), "sword_attack2", "idle_sword", SubResource( 80 ), "sword_attack1", "idle_sword", SubResource( 81 ), "idle_sword", "sword_attack1", SubResource( 82 ), "fist_attack3", "fist_attack4", SubResource( 83 ), "fist_attack4", "idle_fist", SubResource( 84 ), "sword_run", "idle_sword", SubResource( 85 ), "idle_sword", "sword_run", SubResource( 86 ), "fall", "idle_sword", SubResource( 87 ), "idle_sword", "jump", SubResource( 88 ), "distance_blade", "idle_sword", SubResource( 89 ), "idle_sword", "distance_blade", SubResource( 90 ), "rock_strike", "idle_sword", SubResource( 91 ), "idle_sword", "rock_strike", SubResource( 92 ), "idle_sword", "die", SubResource( 93 ), "idle_sword", "dead", SubResource( 94 ), "jump", "ledge_grab", SubResource( 95 ), "fall", "ledge_grab", SubResource( 96 ), "ledge_grab", "idle_fist", SubResource( 97 ), "ledge_grab", "idle_sword", SubResource( 98 ), "idle_sword", "buff", SubResource( 99 ), "buff", "idle_sword", SubResource( 100 ), "run", "idle_fist", SubResource( 101 ), "sword_run", "distance_blade", SubResource( 102 ), "distance_blade", "sword_run", SubResource( 103 ), "sword_run", "rock_strike", SubResource( 104 ), "rock_strike", "sword_run", SubResource( 105 ), "jump", "dash_placeholder", SubResource( 106 ), "fall", "dash_placeholder", SubResource( 107 ), "dash_placeholder", "fall", SubResource( 108 ), "idle_sword", "dash_slash", SubResource( 116 ), "dash_slash", "idle_sword", SubResource( 117 ), "dash_slash", "sword_run", SubResource( 118 ), "sword_run", "dash_slash", SubResource( 119 ) ]
 start_node = "idle_fist"
 end_node = "die"
-graph_offset = Vector2( -365.72, 354.011 )
+graph_offset = Vector2( -63.0818, 362.096 )
 
 [sub_resource type="AnimationNodeStateMachinePlayback" id=110]
 
@@ -1525,7 +1619,7 @@ texture = ExtResource( 1 )
 offset = Vector2( -1, 1 )
 vframes = 34
 hframes = 8
-frame = 23
+frame = 53
 region_rect = Rect2( 271, 114, 14, 34 )
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
@@ -1533,6 +1627,7 @@ anims/bow_attack = SubResource( 3 )
 anims/buff = SubResource( 4 )
 anims/crouch = SubResource( 5 )
 anims/dash_placeholder = SubResource( 6 )
+anims/dash_slash = SubResource( 114 )
 anims/die = SubResource( 7 )
 anims/distance_blade = SubResource( 8 )
 anims/fall = SubResource( 9 )
@@ -1646,12 +1741,9 @@ position = Vector2( 0, 14 )
 
 [node name="DashTimer" type="Timer" parent="."]
 wait_time = 0.1
+one_shot = true
 
 [node name="SprintTimer" type="Timer" parent="."]
-
-[node name="DashCD" type="Timer" parent="."]
-wait_time = 3.0
-one_shot = true
 [connection signal="timeout" from="HealthRecovery" to="." method="_on_HealthRecovery_timeout"]
 [connection signal="timeout" from="ManaRecovery" to="." method="_on_ManaRecovery_timeout"]
 [connection signal="timeout" from="IFrame" to="." method="_on_IFrame_timeout"]
@@ -1662,4 +1754,3 @@ one_shot = true
 [connection signal="body_entered" from="Area2D" to="." method="_on_Area2D_body_entered"]
 [connection signal="timeout" from="DashTimer" to="." method="_on_DashTimer_timeout"]
 [connection signal="timeout" from="SprintTimer" to="." method="_on_SprintTimer_timeout"]
-[connection signal="timeout" from="DashCD" to="." method="_on_DashCD_timeout"]

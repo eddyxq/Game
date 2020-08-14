@@ -74,7 +74,6 @@ var invincible = false # true when player has invincible frames
 # flags that restrict usage of skills and items
 var skill_slot_off_cooldown = [true, true, true, true, true, true, true]
 var item_slot_off_cooldown = [true, true]
-var dash_off_cooldown = true
 
 # mana cost of each skill
 var skill_mana_cost = [1,1,1,1,1,1,1]
@@ -187,6 +186,15 @@ func distance_blade():
 	get_parent().add_child(projectile)
 	projectile.position = $PositionCenter.global_position
 	projectile.set_projectile_direction(dir)
+	
+# activates sword skill 4 damaging enemies in dash path
+func dash_slash():
+	dash()
+	var projectile = preload("res://scenes/player/DashHitBox.tscn").instance()
+	if dir == DIRECTION.W:
+		projectile.scale.x = -1
+	get_parent().add_child(projectile)
+	projectile.position = $PositionCenter.global_position
 
 # activates bow skill 1 shooting a ranged projectile
 func piercing_arrow():
@@ -375,8 +383,11 @@ func skill3(skill3):
 	pass
 
 func skill4(skill4):
-	var _placeholder = skill4
-	pass
+	if skill4 && skill_slot_off_cooldown[4]:
+		if mana >= skill_mana_cost[4]:
+			skill_bar.skill_slot4.start_cooldown()
+			skill_slot_off_cooldown[4] = false
+			play_animation("dash_slash")
 
 func skill5(skill5):
 	var _placeholder = skill5
@@ -420,8 +431,7 @@ func stance_update(switch):
 
 # translates the player downwards every frame at the rate of gravity
 func apply_gravity():
-	if !dashing:
-		velocity.y += gravity
+	velocity.y += gravity
 
 # applies a acceleration and deceeleration effect
 func apply_accel_decel(left, right):
@@ -447,10 +457,11 @@ func apply_translation(left, right, attack):
 	# translates player horizontally when left or right key is pressed
 	velocity.x = (-int(left) + int(right)) * movement_speed
 	# restrict movement during certain attack/skill
-	if attack and !dashing:
-		velocity.x = 0
-	elif dashing:
+	if dashing:
 		velocity.x = 500 if dir == DIRECTION.E else -500
+	if attack:
+		velocity.x = 0
+
 		
 	# apply translations to the player
 	velocity = move_and_slide(velocity, Vector2(0,-1))
@@ -528,8 +539,7 @@ func emit_foot_dust():
 	add_child(dust_particles)
 
 func dash():
-	if mana > 0 and is_on_floor() and dash_off_cooldown:
-		dash_off_cooldown = false
+	if mana > 0:
 		play_dash_sfx()
 		consume_mp(1)
 		gravity = 0
@@ -537,7 +547,6 @@ func dash():
 		movement_speed = base_speed * dash_speed_modifier
 		dashing = true
 		$DashTimer.start()
-		$DashCD.start()
 
 func _on_DashTimer_timeout():
 	gravity = DEFAULT_GRAVITY
@@ -581,7 +590,6 @@ func is_ledge_detected():
 # ** PRECONDITION: this function should only be called if a ledge has been detected **
 # teleports the player to the edge of a platform then initiates the ledge grab animation
 func start_ledge_grab():
-	
 	var lowerRC = $CollisionShape2D/LowerEdgeDetect
 	if lowerRC.get_collider().get_name() == "Blocks":
 		var lowerCollisionPoint = lowerRC.get_collision_point()
@@ -644,5 +652,3 @@ func default_player_hitbox_parameters():
 	$CollisionShape2D.position = Vector2(0, 6)
 	$CollisionShape2D.scale = Vector2(1, 1)
 
-func _on_DashCD_timeout():
-	dash_off_cooldown = true
