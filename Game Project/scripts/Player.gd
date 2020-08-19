@@ -189,14 +189,25 @@ func distance_blade():
 	projectile.position = $PositionCenter.global_position
 	projectile.set_projectile_direction(dir)
 	
+# activates sword skill 3 applying bleed to an enemy
+func bleed_slash():
+	dash()
+	var hitBox = preload("res://scenes/player/DashHitBox.tscn").instance()
+	if dir == DIRECTION.W:
+		hitBox.scale.x = -1
+	hitBox.has_bleed_effect()
+	get_parent().add_child(hitBox)
+	hitBox.position = $PositionCenter.global_position
+	
 # activates sword skill 4 damaging enemies in dash path
 func dash_slash():
 	dash()
-	var projectile = preload("res://scenes/player/DashHitBox.tscn").instance()
+	var hitBox2 = preload("res://scenes/player/DashHitBox.tscn").instance()
 	if dir == DIRECTION.W:
-		projectile.scale.x = -1
-	get_parent().add_child(projectile)
-	projectile.position = $PositionCenter.global_position
+		hitBox2.scale.x = -1
+	hitBox2.has_stun_effect()
+	get_parent().add_child(hitBox2)
+	hitBox2.position = $PositionCenter.global_position
 
 # activates bow skill 1 shooting a ranged projectile
 func piercing_arrow():
@@ -406,16 +417,16 @@ func skill1(skill1):
 			play_animation("skill_placeholder")
 
 func skill2(skill2):
-	if skill2 && skill_slot_off_cooldown[2]:
-		if mana >= skill_mana_cost[2]:
-			skill_bar.skill_slot2.start_cooldown()
-			skill_slot_off_cooldown[2] = false
-			skillAnimationNode.set_animation("distance_blade")
-			play_animation("skill_placeholder")
+	var _placeholder = skill2
+	pass
 
 func skill3(skill3):
-	var _placeholder = skill3
-	pass
+	if skill3 && skill_slot_off_cooldown[3]:
+		if mana >= skill_mana_cost[3]:
+			skill_bar.skill_slot3.start_cooldown()
+			skill_slot_off_cooldown[3] = false
+			skillAnimationNode.set_animation("bleed_slash")
+			play_animation("skill_placeholder")
 
 func skill4(skill4):
 	if skill4 && skill_slot_off_cooldown[4]:
@@ -461,9 +472,9 @@ func detect_item_usage(item):
 func stance_update(switch):
 	if switch:
 		if stance == STANCE.FIST:
-			play_animation("sword_draw2")
+			play_animation("sword_draw")
 		elif stance == STANCE.SWORD:
-			play_animation("sword_sheath2")
+			play_animation("sword_sheath")
 
 # translates the player downwards every frame at the rate of gravity
 func apply_gravity():

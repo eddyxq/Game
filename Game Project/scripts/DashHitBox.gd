@@ -12,6 +12,8 @@ extends Area2D
 
 const SPEED = 400
 var velocity = Vector2()
+var stun = false
+var bleed = false
 
 # detect collision with enemies
 func _on_HitBox_body_entered(body):
@@ -19,11 +21,10 @@ func _on_HitBox_body_entered(body):
 		var base_damage = 15
 		var knockback_intensity = 0
 		body.hurt(base_damage, knockback_intensity)
-		#queue_free()
-#		play_explosion_sfx()
-#		$CollisionShape2D.queue_free()
-#		$CPUParticles2D.queue_free()
-#		$ProjectileSprite.visible = false
+		if bleed: 
+			body.apply_bleed()
+		if stun:
+			body.apply_stun()
 
 # plays a explosion sfx
 func play_explosion_sfx():
@@ -32,4 +33,9 @@ func play_explosion_sfx():
 # despawn timer
 func _on_Timer_timeout():
 	queue_free()
-	pass
+	
+func has_bleed_effect():
+	bleed = true
+	
+func has_stun_effect():
+	stun = true
