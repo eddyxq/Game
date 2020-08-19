@@ -406,8 +406,12 @@ func skill1(skill1):
 			play_animation("skill_placeholder")
 
 func skill2(skill2):
-	var _placeholder = skill2
-	pass
+	if skill2 && skill_slot_off_cooldown[2]:
+		if mana >= skill_mana_cost[2]:
+			skill_bar.skill_slot2.start_cooldown()
+			skill_slot_off_cooldown[2] = false
+			skillAnimationNode.set_animation("distance_blade")
+			play_animation("skill_placeholder")
 
 func skill3(skill3):
 	var _placeholder = skill3

@@ -46,6 +46,10 @@ var anim_finished = true
 var knockback_frames = 0
 var knockback_direction = Vector2.ZERO
 
+# status states
+var bleed = false
+var stun = false
+
 # called when the node enters the scene tree for the first time
 func _ready():
 	health = max_health
@@ -66,8 +70,12 @@ func _physics_process(_delta):
 	if is_dead:
 		set_physics_process(false)
 	else:
-		animation_loop()
-		movement_loop()
+		if !stun:
+			animation_loop()
+			movement_loop()
+		else:
+			state_machine.travel("idle")
+			
 
 # animation logic
 func animation_loop():
@@ -272,3 +280,18 @@ func drop_loot():
 	
 func disable_movement():
 	set_physics_process(false)
+
+func apply_bleed():
+	$BleedTimer.start()
+	bleed = true
+	
+func _on_BleedTimer_timeout():
+	if bleed and !is_dead:
+		hurt(5, 0)
+		
+func apply_stun():
+	$StunTimer.start()
+	stun = true
+
+func _on_StunTimer_timeout():
+	stun = false
