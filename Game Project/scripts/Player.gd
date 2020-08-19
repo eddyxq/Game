@@ -8,7 +8,7 @@ onready var UI = get_tree().get_root().get_node("/root/Controller/HUD/UI")
 onready var skill_bar = get_tree().get_root().get_node("/root/Controller/HUD/UI/SkillBar")
 onready var item_bar = get_tree().get_root().get_node("/root/Controller/HUD/UI/ItemBar")
 onready var http : HTTPRequest = $HTTPRequest
-onready var tree_state = $AnimationTree.get("parameters/playback")
+onready var tree_state = $SwordAnimationTree.get("parameters/playback")
 
 # player direction
 enum DIRECTION {
@@ -62,7 +62,7 @@ var movement_speed # final actual speed after calculations
 var dir = DIRECTION.E # default right facing 
 
 # player stance
-var stance = STANCE.SWORD # default stance
+var stance = STANCE.FIST # default stance
 
 # world constants
 var DEFAULT_GRAVITY = 18
@@ -95,11 +95,13 @@ var sprinting = false
 var isTouchingLedge = false
 var movement_enabled = true
 
+var current_animation_tree = null
+var skillAnimationNode = null
+
 # called when the node enters the scene tree for the first time
 func _ready():
 	# Firebase.get_document("users/%s" % Firebase.user_info.id, http)
 	default_player_parameters()
-	$AnimationTree.active = true
 	setup_state_machine()
 
 # animation logic
@@ -205,7 +207,17 @@ func piercing_arrow():
 
 # initializes the state machine for managing animation state transitions
 func setup_state_machine():
-	state_machine = $AnimationTree.get("parameters/playback")
+	current_animation_tree = $FistAnimationTree
+	state_machine = current_animation_tree.get("parameters/playback")
+	skillAnimationNode = get_skill_animation_node()
+#	print(skillAnimationNode)
+#	skillAnimationNode.set_animation("dash_slash")
+	current_animation_tree.active = true
+	
+func get_skill_animation_node():
+	var animation_root = current_animation_tree.get("tree_root")
+	
+	return animation_root.get_node("skill_placeholder")
 
 # decreases player mp by integer amount passed in as amount
 func consume_mp(amount):
@@ -307,11 +319,29 @@ func toggle_stance():
 
 # draws sword weapon
 func draw_sword():
+	current_animation_tree.active = false
+	
+	current_animation_tree = $SwordAnimationTree
+	state_machine = current_animation_tree.get("parameters/playback")
+	
+	skillAnimationNode = get_skill_animation_node()
+	
+	current_animation_tree.active = true
+	
 	stance = STANCE.SWORD
 	play_animation("idle_sword")
 
 # put away sword
 func sheath_sword():
+	current_animation_tree.active = false
+	
+	current_animation_tree = $FistAnimationTree
+	state_machine = current_animation_tree.get("parameters/playback")
+	
+	skillAnimationNode = get_skill_animation_node()
+	
+	current_animation_tree.active = true
+	
 	stance = STANCE.FIST
 	play_animation("idle_fist")
 
@@ -372,7 +402,8 @@ func skill1(skill1):
 		if mana >= skill_mana_cost[1]:
 			skill_bar.skill_slot1.start_cooldown()
 			skill_slot_off_cooldown[1] = false
-			play_animation("distance_blade")
+			skillAnimationNode.set_animation("distance_blade")
+			play_animation("skill_placeholder")
 
 func skill2(skill2):
 	var _placeholder = skill2
@@ -387,7 +418,8 @@ func skill4(skill4):
 		if mana >= skill_mana_cost[4]:
 			skill_bar.skill_slot4.start_cooldown()
 			skill_slot_off_cooldown[4] = false
-			play_animation("dash_slash")
+			skillAnimationNode.set_animation("dash_slash")
+			play_animation("skill_placeholder")
 
 func skill5(skill5):
 	var _placeholder = skill5
@@ -425,9 +457,9 @@ func detect_item_usage(item):
 func stance_update(switch):
 	if switch:
 		if stance == STANCE.FIST:
-			play_animation("sword_draw")
+			play_animation("sword_draw2")
 		elif stance == STANCE.SWORD:
-			play_animation("sword_sheath")
+			play_animation("sword_sheath2")
 
 # translates the player downwards every frame at the rate of gravity
 func apply_gravity():
@@ -631,6 +663,7 @@ func end_ledge_grab():
 	else:
 		new_pos.x -= 7
 	position = new_pos
+	position = new_pos
 	isTouchingLedge = false
 	movement_enabled = true
 	
@@ -641,7 +674,6 @@ func grab_ledge():
 func default_player_parameters():
 	dir = DIRECTION.E
 	self.scale = Vector2(1, 1)
-	$AnimationTree.active = true
 	default_player_sprite_parameters()
 	default_player_hitbox_parameters()
 
