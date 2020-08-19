@@ -174,7 +174,7 @@ position = Vector2( -17.5, 0 )
 texture = ExtResource( 1 )
 vframes = 5
 hframes = 7
-frame = 2
+frame = 3
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 anims/attack = SubResource( 1 )
@@ -219,10 +219,6 @@ position = Vector2( -16, 0 )
 shape = SubResource( 18 )
 disabled = true
 
-[node name="AnimationDelay" type="Timer" parent="."]
-wait_time = 0.5
-one_shot = true
-
 [node name="DespawnTimer" type="Timer" parent="."]
 wait_time = 3.0
 one_shot = true
@@ -234,7 +230,6 @@ wait_time = 3.0
 one_shot = true
 [connection signal="body_entered" from="Area2D" to="." method="_on_Area2D_body_entered"]
 [connection signal="body_entered" from="HitBox" to="." method="_on_HitBox_body_entered"]
-[connection signal="timeout" from="AnimationDelay" to="." method="_on_AnimationDelay_timeout"]
 [connection signal="timeout" from="DespawnTimer" to="." method="_on_DespawnTimer_timeout"]
 [connection signal="timeout" from="BleedTimer" to="." method="_on_BleedTimer_timeout"]
 [connection signal="timeout" from="StunTimer" to="." method="_on_StunTimer_timeout"]

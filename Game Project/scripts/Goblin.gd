@@ -39,7 +39,6 @@ var direction_facing = DIRECTION.W # default left facing
 
 # animation states
 var state_machine = null
-var anim_finished = true
 
 # knockback variables
 # TODO: change knockback_direction to local
@@ -79,27 +78,24 @@ func _physics_process(_delta):
 
 # animation logic
 func animation_loop():
-	if anim_finished:
-		if player.get_global_position().x < $Position2D.get_global_position().x - target_player_dist and sees_player():
-			set_dir(-1)
-			$Sprite.flip_h = false
-			$Sprite.position.x = -17.5
-			direction_facing = DIRECTION.W
-			state_machine.travel("run")
-		elif player.get_global_position().x > $Position2D.get_global_position().x + target_player_dist and sees_player():
-			set_dir(1)
-			$Sprite.flip_h = true
-			$Sprite.position.x = 17.5
-			direction_facing = DIRECTION.E
-			state_machine.travel("run")
-		else:
-			set_dir(0)
-			state_machine.travel("idle")
-	
-		if velocity.x == 0 && (abs(position.x - player.get_global_position().x) < 35) && (abs(position.y - player.get_global_position().y) < 35)  && health > -1:
-			state_machine.travel("attack")
-			anim_finished = false
-			$AnimationDelay.start()
+	if player.get_global_position().x < $Position2D.get_global_position().x - target_player_dist and sees_player():
+		set_dir(-1)
+		$Sprite.flip_h = false
+		$Sprite.position.x = -17.5
+		direction_facing = DIRECTION.W
+		state_machine.travel("run")
+	elif player.get_global_position().x > $Position2D.get_global_position().x + target_player_dist and sees_player():
+		set_dir(1)
+		$Sprite.flip_h = true
+		$Sprite.position.x = 17.5
+		direction_facing = DIRECTION.E
+		state_machine.travel("run")
+	else:
+		set_dir(0)
+		state_machine.travel("idle")
+
+	if velocity.x == 0 && (abs(position.x - player.get_global_position().x) < 35) && (abs(position.y - player.get_global_position().y) < 35)  && health > -1:
+		state_machine.travel("attack")
 
 # movement logic
 func movement_loop():
@@ -126,7 +122,7 @@ func movement_loop():
 		velocity = knockback_direction.normalized() * base_speed * 3
 		knockback_frames -= 1
 		
-	elif (anim_finished):
+	else:
 		# apply regular horizontal movement
 		velocity.x = dir * base_speed
 
@@ -224,10 +220,6 @@ func sees_player():
 # initializes the state machine for managing animation state transitions
 func setup_state_machine():
 	state_machine = $AnimationTree.get("parameters/playback")
-
-# timer use to manage attaking state, preventing animation overlap
-func _on_AnimationDelay_timeout():
-	anim_finished = true
 
 # deal damage to player when attacking hitbox collides with player
 func _on_HitBox_body_entered(body):
