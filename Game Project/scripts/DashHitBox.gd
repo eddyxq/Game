@@ -5,7 +5,7 @@ extends Area2D
 ###############################################################################
 
 # skill description:
-# range: low
+# range: medium
 # damage: low
 # mana cost: low
 # aoe piercing: yes
@@ -18,12 +18,15 @@ var bleed = false
 # detect collision with enemies
 func _on_HitBox_body_entered(body):
 	if "Enemy" in body.name:
-		var base_damage = 15
-		var knockback_intensity = 0
-		body.hurt(base_damage, knockback_intensity)
 		if bleed: 
+			var base_damage = 15
+			var knockback_intensity = 0
+			body.hurt(base_damage, knockback_intensity, 30, "default")
 			body.apply_bleed()
 		if stun:
+			var base_damage = 15
+			var knockback_intensity = 0
+			body.hurt(base_damage, knockback_intensity, 30, "default")
 			body.apply_stun()
 
 # plays a explosion sfx
@@ -33,9 +36,11 @@ func play_explosion_sfx():
 # despawn timer
 func _on_Timer_timeout():
 	queue_free()
-	
+
+# triggers a bleeding effect
 func has_bleed_effect():
 	bleed = true
-	
+
+# trigers a stunning effect
 func has_stun_effect():
 	stun = true

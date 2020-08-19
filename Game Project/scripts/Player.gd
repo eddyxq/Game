@@ -189,6 +189,15 @@ func distance_blade():
 	projectile.position = $PositionCenter.global_position
 	projectile.set_projectile_direction(dir)
 	
+# activates sword skill 2 doing a spinning rapid attack
+func whiirlwind_slash():
+	var hitBox = preload("res://scenes/player/DashHitBox.tscn").instance()
+	if dir == DIRECTION.W:
+		hitBox.scale.x = -1
+	hitBox.has_bleed_effect()
+	get_parent().add_child(hitBox)
+	hitBox.position = $PositionCenter.global_position
+	
 # activates sword skill 3 applying bleed to an enemy
 func bleed_slash():
 	dash()
@@ -277,7 +286,7 @@ func _on_IFrame_timeout():
 func _on_HitBox_body_entered(body):
 	if "Enemy" in body.name:
 		recentHit = true
-		var is_crit = body.hurt(5, 0)
+		var is_crit = body.hurt(5, 0, 30, "default")
 		if is_crit:
 			$Camera2D/ScreenShaker.start()
 
@@ -417,8 +426,12 @@ func skill1(skill1):
 			play_animation("skill_placeholder")
 
 func skill2(skill2):
-	var _placeholder = skill2
-	pass
+	if skill2 && skill_slot_off_cooldown[2]:
+		if mana >= skill_mana_cost[2]:
+			skill_bar.skill_slot2.start_cooldown()
+			skill_slot_off_cooldown[2] = false
+			skillAnimationNode.set_animation("whirlwind_slash")
+			play_animation("skill_placeholder")
 
 func skill3(skill3):
 	if skill3 && skill_slot_off_cooldown[3]:

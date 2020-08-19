@@ -61,7 +61,7 @@ func _ready():
 func _physics_process(_delta):
 	# enemies dies when it falls down
 	if self.get_global_position().y > 440:
-		hurt(health, 0)
+		hurt(health, 0, 0, "default")
 		
 	# aggro range increase upon getting hit
 	if health < max_health:
@@ -136,18 +136,18 @@ func movement_loop():
 
 # update health bar
 # returns boolean: true if damage was critical, false otherwise
-func hurt(base_damage: int, knockback_intensity: int):
+func hurt(base_damage: int, knockback_intensity: int, crit_rate: int, text_color: String):
 	play_hurt_sfx()
 	var dmg = (randi() % int(player.strength) + base_damage) 
 	var crit = false
 	# critical when random number rolled out of 100 is within critical value
-	if randi() % 100+1 <= int(player.crit_rate):
+	if randi() % 100+1 <= int(crit_rate):
 		crit = true
 		dmg *= 2 # critical hits do double damage
 	health -= dmg
 	var health_percent = health / max_health * 100.0
 	health_bar.value = health_percent
-	$FCTMgr.show_value(dmg, crit)
+	$FCTMgr.show_value(dmg, crit, text_color)
 	
 	# check if enemy is alive
 	if health < 1:
@@ -287,7 +287,7 @@ func apply_bleed():
 	
 func _on_BleedTimer_timeout():
 	if bleed and !is_dead:
-		hurt(5, 0)
+		hurt(1, 0, 0, "green")
 		
 func apply_stun():
 	$StunTimer.start()
