@@ -74,6 +74,7 @@ var invincible = false # true when player has invincible frames
 # flags that restrict usage of skills and items
 var skill_slot_off_cooldown = [true, true, true, true, true, true, true]
 var item_slot_off_cooldown = [true, true]
+var weapon_change_off_cooldown = true
 
 # mana cost of each skill
 var skill_mana_cost = [1,1,1,1,1,1,1]
@@ -230,8 +231,6 @@ func setup_state_machine():
 	current_animation_tree = $FistAnimationTree
 	state_machine = current_animation_tree.get("parameters/playback")
 	skillAnimationNode = get_skill_animation_node()
-#	print(skillAnimationNode)
-#	skillAnimationNode.set_animation("dash_slash")
 	current_animation_tree.active = true
 	
 func get_skill_animation_node():
@@ -286,7 +285,12 @@ func _on_IFrame_timeout():
 func _on_HitBox_body_entered(body):
 	if "Enemy" in body.name:
 		recentHit = true
-		var is_crit = body.hurt(5, 0, 30, "default")
+		var is_crit
+		# fists have lower damage and crit rate
+		if stance == STANCE.FIST:
+			is_crit = body.hurt(1, 0, 20, "default")
+		elif stance == STANCE.SWORD:
+			is_crit = body.hurt(5, 0, 30, "default")
 		if is_crit:
 			$Camera2D/ScreenShaker.start()
 
@@ -332,36 +336,31 @@ func reset_skill_cooldown(skill_slot_num):
 
 # toggles the player's stance between fist and sword
 func toggle_stance():
-	if stance == STANCE.FIST:
-		draw_sword()
-	elif stance == STANCE.SWORD:
-		sheath_sword()
+	if weapon_change_off_cooldown and is_on_floor():
+		$WeaponChangeCD.start()
+		weapon_change_off_cooldown = false
+		if stance == STANCE.FIST and movement_enabled and !isTouchingLedge:
+			draw_sword()
+		elif stance == STANCE.SWORD and movement_enabled and !isTouchingLedge:
+			sheath_sword()
 
 # draws sword weapon
 func draw_sword():
 	current_animation_tree.active = false
-	
 	current_animation_tree = $SwordAnimationTree
 	state_machine = current_animation_tree.get("parameters/playback")
-	
 	skillAnimationNode = get_skill_animation_node()
-	
 	current_animation_tree.active = true
-	
 	stance = STANCE.SWORD
 	play_animation("idle_sword")
 
 # put away sword
 func sheath_sword():
 	current_animation_tree.active = false
-	
 	current_animation_tree = $FistAnimationTree
 	state_machine = current_animation_tree.get("parameters/playback")
-	
 	skillAnimationNode = get_skill_animation_node()
-	
 	current_animation_tree.active = true
-	
 	stance = STANCE.FIST
 	play_animation("idle_fist")
 
@@ -483,7 +482,7 @@ func detect_item_usage(item):
 
 # changes the stance and weapon of the player
 func stance_update(switch):
-	if switch:
+	if switch and weapon_change_off_cooldown and movement_enabled and !isTouchingLedge and is_on_floor():
 		if stance == STANCE.FIST:
 			play_animation("sword_draw")
 		elif stance == STANCE.SWORD:
@@ -632,9 +631,8 @@ func activate_special_movement_skill(left, right):
 		dash()
 
 func detect_ledge():
-	if not isTouchingLedge:
+	if not isTouchingLedge and stance == STANCE.FIST:
 		isTouchingLedge = is_ledge_detected()
-		#print("ledge detect?", isTouchingLedge)
 		if isTouchingLedge:
 			start_ledge_grab()
 			movement_enabled = false
@@ -653,17 +651,14 @@ func start_ledge_grab():
 	var lowerRC = $CollisionShape2D/LowerEdgeDetect
 	if lowerRC.get_collider().get_name() == "Blocks":
 		var lowerCollisionPoint = lowerRC.get_collision_point()
-		#print("intersected at:", lowerCollisionPoint)
 		# y translation
 		var new_y = 0
 		var int_y = int(lowerCollisionPoint.y)
-		#print("int y:", int_y)
 		if lowerCollisionPoint.y >= 0:
 			new_y = int_y + 16 - (int_y % 16)
 		else:
 			var abs_y = abs(int_y)
 			new_y = int_y + (abs_y % 16)
-		
 		# x translation
 		var int_x = int(lowerCollisionPoint.x)
 		# pushes player to the closest left block
@@ -678,12 +673,10 @@ func start_ledge_grab():
 		lowerCollisionPoint.x = new_x
 
 		self.position = lowerCollisionPoint 
-		#print("teleport position:", lowerCollisionPoint)
 		velocity = Vector2.ZERO
 	
 # TODO: refactor since this function does too much 
 func end_ledge_grab():
-	
 	var new_pos = self.position
 	new_pos.y -= 31
 	if dir == DIRECTION.E:
@@ -691,12 +684,11 @@ func end_ledge_grab():
 	else:
 		new_pos.x -= 7
 	position = new_pos
-	position = new_pos
 	isTouchingLedge = false
 	movement_enabled = true
 	
 func grab_ledge():
-	if isTouchingLedge:
+	if isTouchingLedge and stance == STANCE.FIST:
 		play_animation("ledge_grab")
 
 func default_player_parameters():
@@ -712,3 +704,6 @@ func default_player_hitbox_parameters():
 	$CollisionShape2D.position = Vector2(0, 6)
 	$CollisionShape2D.scale = Vector2(1, 1)
 
+# timer that countsdown until player can switch stances again, currently set at 2 seconds
+func _on_WeaponChangeCD_timeout():
+	weapon_change_off_cooldown = true

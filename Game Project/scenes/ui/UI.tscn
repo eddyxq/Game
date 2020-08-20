@@ -59,7 +59,7 @@ __meta__ = {
 position = Vector2( 20, 7 )
 scale = Vector2( 2.5, 2.5 )
 frames = SubResource( 1 )
-frame = 3
+frame = 2
 playing = true
 __meta__ = {
 "_edit_lock_": true
@@ -73,7 +73,7 @@ margin_bottom = 67.7848
 
 [node name="ItemBar" parent="." instance=ExtResource( 7 )]
 margin_left = 16.0
-margin_top = 280.0
+margin_top = 268.202
 margin_right = 16.0
-margin_bottom = 280.0
+margin_bottom = 268.202
 [connection signal="pressed" from="TextureButton" to="." method="_on_TextureButton_pressed"]

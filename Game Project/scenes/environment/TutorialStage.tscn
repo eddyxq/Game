@@ -68,19 +68,19 @@ position = Vector2( 2500, 0 )
 check_point_id = 6
 
 [node name="TutorialMovement" parent="." instance=ExtResource( 9 )]
-position = Vector2( -2592, 336 )
+position = Vector2( -2549.57, 340 )
 
 [node name="TutorialJump" parent="." instance=ExtResource( 10 )]
-position = Vector2( -1728, 328 )
+position = Vector2( -1672.38, 340 )
 
 [node name="TutorialSprint" parent="." instance=ExtResource( 4 )]
-position = Vector2( -460, 360 )
+position = Vector2( -481.418, 361.245 )
 
 [node name="TutorialAttack" parent="." instance=ExtResource( 11 )]
-position = Vector2( 250, 336 )
+position = Vector2( 321.735, 342.607 )
 
 [node name="TutorialItems" parent="." instance=ExtResource( 7 )]
-position = Vector2( 1250, 228 )
+position = Vector2( 1213.03, 345.599 )
 
 [node name="Portal" parent="." instance=ExtResource( 12 )]
 position = Vector2( 2525, 350 )

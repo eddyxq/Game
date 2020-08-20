@@ -41,7 +41,7 @@ font_data = ExtResource( 2 )
 [node name="TutorialItems" type="Node2D"]
 
 [node name="q" type="AnimatedSprite" parent="."]
-position = Vector2( 31, 28.5 )
+position = Vector2( 17.6214, 13.3376 )
 frames = SubResource( 3 )
 playing = true
 
@@ -51,10 +51,10 @@ frames = SubResource( 6 )
 playing = true
 
 [node name="health" type="Label" parent="."]
-margin_left = -12.2987
-margin_top = 20.5
-margin_right = 27.7013
-margin_bottom = 49.5
+margin_left = 26.0532
+margin_top = 5.04031
+margin_right = 66.0532
+margin_bottom = 34.0403
 custom_fonts/font = SubResource( 7 )
 text = "Health
 "
