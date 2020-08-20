@@ -287,3 +287,9 @@ func apply_stun():
 
 func _on_StunTimer_timeout():
 	stun = false
+	
+func show_hit_splat():
+	var hit_splat = preload("res://scenes/player/HitSplat.tscn").instance()
+	get_tree().get_root().add_child(hit_splat)
+	hit_splat.global_position = $Position2D.global_position
+	hit_splat.show_hit_effect()

@@ -28,6 +28,7 @@ func _on_HitBox_body_entered(body):
 			var knockback_intensity = 0
 			body.hurt(base_damage, knockback_intensity, 30, "default")
 			body.apply_stun()
+		body.show_hit_splat()
 
 # plays a explosion sfx
 func play_explosion_sfx():

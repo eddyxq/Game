@@ -37,6 +37,7 @@ func _on_Projectile_body_entered(body):
 		$CollisionShape2D.queue_free()
 		$CPUParticles2D.queue_free()
 		$ProjectileSprite.visible = false
+		body.show_hit_splat()
 
 # shoots the projectile
 func shoot_projectile(delta, dir):
