@@ -29,7 +29,7 @@ void fragment()
 
 [sub_resource type="ShaderMaterial" id=2]
 shader = SubResource( 1 )
-shader_param/glow_color = Color( 1, 0, 0, 1 )
+shader_param/glow_color = Color( 0.619608, 0.262745, 0.262745, 1 )
 shader_param/emission_teture = ExtResource( 3 )
 
 [sub_resource type="Animation" id=3]
@@ -1688,7 +1688,7 @@ graph_offset = Vector2( -279.401, -84.1213 )
 [sub_resource type="RectangleShape2D" id=125]
 extents = Vector2( 12.1624, 14.7347 )
 
-[sub_resource type="CircleShape2D" id=127]
+[sub_resource type="CircleShape2D" id=126]
 radius = 93.7913
 
 [node name="Player" type="KinematicBody2D"]
@@ -1817,7 +1817,7 @@ shadow_enabled = true
 visible = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
-shape = SubResource( 127 )
+shape = SubResource( 126 )
 
 [node name="FeetPosition" type="Position2D" parent="."]
 visible = false
