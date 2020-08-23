@@ -99,11 +99,13 @@ var movement_enabled = true
 var current_animation_tree = null
 var skillAnimationNode = null
 
+#var jumpEnabled = true
 # called when the node enters the scene tree for the first time
 func _ready():
 	# Firebase.get_document("users/%s" % Firebase.user_info.id, http)
 	default_player_parameters()
 	setup_state_machine()
+
 
 # animation logic
 func animation_loop(attack, skill, item, switch):
@@ -111,22 +113,80 @@ func animation_loop(attack, skill, item, switch):
 	jump() # jumping state
 	fall() # falling state
 	idle() # idle state
-	attack(attack) # attacking state
-	detect_skill_activation(skill) # pass input
-	detect_item_usage(item) # item activation
+	attack() # attacking state
+	detect_skill_activation() # pass input
+#	detect_item_usage(item) # item activation
 	grab_ledge()
-	stance_update(switch) # stance change
+#	stance_update(switch) # stance change
+
 
 # movement logic
 func movement_loop(attack, up, left, right):
+	pass
 	detect_ledge()
 	if movement_enabled:
 		apply_gravity() # pull player downwards
-		update_sprite_direction(right, left) # flips sprite to corresponding direction
-		vertical_movement(up) # vertical translation
-		update_speed_modifier(attack) # restricts movement during certain actions
-		apply_accel_decel(left, right) # acceleration effect
+#		update_sprite_direction(right, left) # flips sprite to corresponding direction
+#		vertical_movement() # vertical translation
+#		update_speed_modifier(attack) # restricts movement during certain actions
+#		apply_accel_decel(left, right) # acceleration effect
 		apply_translation(left, right, attack)
+
+#func update_sprite_direction(right, left):
+#	if right:
+#		dir = DIRECTION.E 
+#		if flip:
+#			scale.x = -1
+#			flip = false
+#
+#	elif left:
+#		dir = DIRECTION.W
+#		if not flip:
+#			scale.x = -1
+#			flip = true
+
+#var is_flip = false
+#func flip_x_scale():
+#	if dir == DIRECTION.E and is_flip:
+#		scale.x = -1
+#		is_flip = false
+#
+#	elif dir == DIRECTION.W and not is_flip:
+#		if not flip:
+#			scale.x = -1
+#			flip = true
+
+
+func move_left():
+	# change direction when necessary
+	if dir != DIRECTION.W:
+		dir = DIRECTION.W
+		base_speed = min_speed 
+			
+	# accelerate to the left
+	base_speed += acceleration_rate
+	if base_speed > max_speed:
+		base_speed = max_speed
+	
+	velocity.x = base_speed * run_speed_modifier * -1
+	
+	
+func move_right():
+	# change direction when necessary
+	if dir != DIRECTION.E:
+		dir = DIRECTION.E 
+		base_speed = min_speed
+	
+	# accelerate to the right
+	base_speed += acceleration_rate
+	if base_speed > max_speed:
+		base_speed = max_speed
+	
+	velocity.x = base_speed * run_speed_modifier 
+	
+# TODO: let player fall through platforms
+func move_down():
+	pass
 
 # applies a blinking damage effect to the player
 func hurt(dmg):
@@ -146,27 +206,33 @@ func update_hitbox_location():
 		$HitBox.position.x *= -1
 
 # update player's direction and sprite orientation
-var flip = false
-func update_sprite_direction(right, left):
-	if right:
-		dir = DIRECTION.E 
-		if flip:
-			scale.x = -1
-			flip = false
-	elif left:
-		dir = DIRECTION.W
-		if not flip:
-			scale.x = -1
-			flip = true
+#var flip = false
+#func update_sprite_direction(right, left):
+#	if right:
+#		dir = DIRECTION.E 
+#		if flip:
+#			scale.x = -1
+#			flip = false
+#
+#	elif left:
+#		dir = DIRECTION.W
+#		if not flip:
+#			scale.x = -1
+#			flip = true
 
-# update player's y velocity
-func vertical_movement(up):
-	if is_on_floor():
-		velocity.y = 0
-		if up: # jump
-			emit_foot_dust()
-			velocity.y = -jump_speed
-			play_footstep_sfx()
+## update player's y velocity
+#func vertical_movement():
+#	if is_on_floor():
+#		velocity.y = 0
+#
+#		if jumpEnabled: # jump
+#			jumpEnabled = false
+#
+#			emit_foot_dust()
+#			velocity.y = -jump_speed
+#			play_footstep_sfx()
+
+		
 
 # travel to input state in animation tree
 func play_animation(anim):
@@ -376,15 +442,34 @@ func move():
 			elif stance == STANCE.SWORD:
 				play_animation("sword_run")
 
+func play_run_animation():
+	if stance == STANCE.FIST:
+		play_animation("run")
+	elif stance == STANCE.SWORD:
+		play_animation("sword_run")
+				
+
+
+## player jumps in air 
+#func jump():
+#	if velocity.y < 0 && !is_on_floor():
+#		play_animation("jump")
+#
+
 # player jumps in air 
 func jump():
-	if velocity.y < 0 && !is_on_floor():
-		play_animation("jump")
+	if is_on_floor():
+		velocity.y = -jump_speed
+			
 
 # player enters fall state while mid air
 func fall():
-	if velocity.y > 0 && !is_on_floor():
+	var isOnFloor = is_on_floor()
+	if velocity.y > 0 && !isOnFloor:
 		play_animation("fall")
+#	elif isOnFloor and :
+#		$JumpCooldown.start()
+		
 
 # player is in idle state when they are not moving
 func idle():
@@ -394,85 +479,113 @@ func idle():
 		elif stance == STANCE.SWORD:
 			play_animation("idle_sword")
 
+func play_idle_animation():
+	if stance == STANCE.FIST:
+		play_animation("idle_fist")
+	elif stance == STANCE.SWORD:
+		play_animation("idle_sword")
+
 # regular attacking skills
-func attack(attack):
-	if !attack:
-		toggle_hitbox_off()
-	if attack && is_on_floor():
+func attack():
+	if is_on_floor():
 		if stance == STANCE.FIST:
 			play_animation("fist_attack4")
 		elif stance == STANCE.SWORD:
 			play_animation("sword_attack3")
 
 # send skill inputs
-func detect_skill_activation(skill):	
-	if stance == STANCE.SWORD:
-		skill0(skill[0])
-		skill1(skill[1])
-		skill2(skill[2])
-		skill3(skill[3])
-		skill4(skill[4])
-		skill5(skill[5])
-		skill6(skill[6])
+func detect_skill_activation():	
+	pass
+#	if stance == STANCE.SWORD:
+#		skill0(skill[0])
+#		skill1(skill[1])
+#		skill2(skill[2])
+#		skill3(skill[3])
+#		skill4(skill[4])
+#		skill5(skill[5])
+#		skill6(skill[6])
 
 # distance blade
-func skill1(skill1):
-	if skill1 && skill_slot_off_cooldown[1]:
+func skill1():
+	if stance == STANCE.SWORD and skill_slot_off_cooldown[1]:
 		if mana >= skill_mana_cost[1]:
 			skill_bar.skill_slot1.start_cooldown()
 			skill_slot_off_cooldown[1] = false
 			skillAnimationNode.set_animation("distance_blade")
 			play_animation("skill_placeholder")
 
-func skill2(skill2):
-	if skill2 && skill_slot_off_cooldown[2]:
+func skill2():
+	if stance == STANCE.SWORD and skill_slot_off_cooldown[2]:
 		if mana >= skill_mana_cost[2]:
 			skill_bar.skill_slot2.start_cooldown()
 			skill_slot_off_cooldown[2] = false
 			skillAnimationNode.set_animation("whirlwind_slash")
 			play_animation("skill_placeholder")
 
-func skill3(skill3):
-	if skill3 && skill_slot_off_cooldown[3]:
+func skill3():
+	if stance == STANCE.SWORD and skill_slot_off_cooldown[3]:
 		if mana >= skill_mana_cost[3]:
 			skill_bar.skill_slot3.start_cooldown()
 			skill_slot_off_cooldown[3] = false
 			skillAnimationNode.set_animation("bleed_slash")
 			play_animation("skill_placeholder")
 
-func skill4(skill4):
-	if skill4 && skill_slot_off_cooldown[4]:
+func skill4():
+	if stance == STANCE.SWORD and skill_slot_off_cooldown[4]:
 		if mana >= skill_mana_cost[4]:
 			skill_bar.skill_slot4.start_cooldown()
 			skill_slot_off_cooldown[4] = false
 			skillAnimationNode.set_animation("dash_slash")
 			play_animation("skill_placeholder")
 
-func skill5(skill5):
-	var _placeholder = skill5
+func skill5():
+#	var _placeholder = skill5
 	pass
 
-func skill6(skill6):
-	var _placeholder = skill6
+func skill6():
+#	var _placeholder = skill6
 	pass
 
 # ultimate move
-func skill0(skill0):
-	var _placeholder = skill0
+func skill0():
+#	var _placeholder = skill0
 	pass
 
-# item consumables for status recovery
-func detect_item_usage(item):
-	var item1 = item[0]
-	var item2 = item[1]
-	if item1 && item_slot_off_cooldown[0]:
+## item consumables for status recovery
+#func detect_item_usage(item):
+#	var item1 = item[0]
+#	var item2 = item[1]
+#	if item1 && item_slot_off_cooldown[0]:
+#		item_bar.item_slot1.start_cooldown()
+#		item_slot_off_cooldown[0] = false
+#		play_potion_sfx()
+#		# potion fully heals the player's health
+#		UI.health_bar.increase(health, max_hp - health)
+#		health = max_hp
+#
+#	elif item2 && item_slot_off_cooldown[1]:
+#		item_bar.item_slot2.start_cooldown()
+#		item_slot_off_cooldown[1] = false
+#		play_potion_sfx()
+#		# potion fully heals the player's mana
+#		mana = max_mp
+#		UI.mana_bar.update_bar(mana)
+
+# restore player health when not in cooldown
+func use_health_potion():
+	
+	if item_slot_off_cooldown[0]:
 		item_bar.item_slot1.start_cooldown()
 		item_slot_off_cooldown[0] = false
 		play_potion_sfx()
 		# potion fully heals the player's health
 		UI.health_bar.increase(health, max_hp - health)
 		health = max_hp
-	elif item2 && item_slot_off_cooldown[1]:
+	
+# restore player mana when not in cooldown	
+func use_mana_potion():
+	
+	if item_slot_off_cooldown[1]:
 		item_bar.item_slot2.start_cooldown()
 		item_slot_off_cooldown[1] = false
 		play_potion_sfx()
@@ -480,18 +593,38 @@ func detect_item_usage(item):
 		mana = max_mp
 		UI.mana_bar.update_bar(mana)
 
-# changes the stance and weapon of the player
-func stance_update(switch):
-	if switch and weapon_change_off_cooldown and movement_enabled and !isTouchingLedge and is_on_floor():
-		if stance == STANCE.FIST:
+
+## changes the stance and weapon of the player
+#func stance_update(switch):
+#	if switch and weapon_change_off_cooldown and movement_enabled and !isTouchingLedge and is_on_floor():
+#		if stance == STANCE.FIST:
+#			play_animation("sword_draw")
+#		elif stance == STANCE.SWORD:
+#			play_animation("sword_sheath")
+
+func switch_to_sword():
+	if stance != STANCE.SWORD:
+		if weapon_change_off_cooldown and movement_enabled and !isTouchingLedge and is_on_floor():
 			play_animation("sword_draw")
-		elif stance == STANCE.SWORD:
+
+func switch_to_fist():
+	if stance != STANCE.FIST:
+		if weapon_change_off_cooldown and movement_enabled and !isTouchingLedge and is_on_floor():
 			play_animation("sword_sheath")
+
 
 # translates the player downwards every frame at the rate of gravity
 func apply_gravity():
 	velocity.y += gravity
 
+func apply_horizontal_deceleration():
+#	base_speed -= acceleration_rate *2
+#	if base_speed < min_speed:
+#	if base_speed < min_speed:
+#		base_speed = min_speed
+	
+	base_speed = min_speed
+		
 # applies a acceleration and deceeleration effect
 func apply_accel_decel(left, right):
 	if !left && !right:
@@ -522,6 +655,19 @@ func apply_translation(left, right, attack):
 		velocity.x = 0
 
 		
+	# apply translations to the player
+	velocity = move_and_slide(velocity, Vector2(0,-1))
+
+var is_flip = false
+func update_horizontal_scale():
+	if dir == DIRECTION.E and is_flip:
+		is_flip = false
+		scale.x = -1
+	elif dir == DIRECTION.W and not is_flip:
+		is_flip = true
+		scale.x = -1
+
+func apply_movement():
 	# apply translations to the player
 	velocity = move_and_slide(velocity, Vector2(0,-1))
 
@@ -607,6 +753,20 @@ func dash():
 		dashing = true
 		$DashTimer.start()
 
+# new player dash
+func do_dash():
+	play_dash_sfx()
+	gravity = 0
+	velocity.y = 0
+	velocity.x = 500
+	if dir == DIRECTION.W:
+		velocity.x *= -1
+	dashing = true
+	$DashTimer.start()
+
+func is_dashing():
+	return dashing
+	
 func _on_DashTimer_timeout():
 	gravity = DEFAULT_GRAVITY
 	dashing = false
@@ -638,12 +798,16 @@ func detect_ledge():
 			movement_enabled = false
 	
 # TODO: needs a better way to identify blocks in the stage
-# TODO: refactor since this function does too much
 # detects whether an player is close to an edge
 # an edge is detected when lower raycast intersects with a block while upper ray cast does not
 func is_ledge_detected():
 	return $CollisionShape2D/LowerEdgeDetect.is_colliding() and not $CollisionShape2D/HigherEdgeDetect.is_colliding()
 
+# TODO: needs a better way to identify blocks in the stage
+# detects whether an player is close to an edge
+# an edge is detected when lower raycast intersects with a block while upper ray cast does not
+func is_touching_ledge():
+	return $CollisionShape2D/LowerEdgeDetect.is_colliding() and not $CollisionShape2D/HigherEdgeDetect.is_colliding()
 
 # ** PRECONDITION: this function should only be called if a ledge has been detected **
 # teleports the player to the edge of a platform then initiates the ledge grab animation
@@ -659,6 +823,7 @@ func start_ledge_grab():
 		else:
 			var abs_y = abs(int_y)
 			new_y = int_y + (abs_y % 16)
+			
 		# x translation
 		var int_x = int(lowerCollisionPoint.x)
 		# pushes player to the closest left block
@@ -707,3 +872,14 @@ func default_player_hitbox_parameters():
 # timer that countsdown until player can switch stances again, currently set at 2 seconds
 func _on_WeaponChangeCD_timeout():
 	weapon_change_off_cooldown = true
+ 
+func set_label(label):
+	$Label.set_text(label)
+
+func get_animation_state_machine():
+	return state_machine
+	
+#func _on_JumpCooldown_timeout():
+#	print("jump timer timed out")
+#	jumpEnabled = true
+
