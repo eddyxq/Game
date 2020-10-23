@@ -23,8 +23,10 @@ var dialog3 = [
 var dialog4 = [
 	'Watch out! There is a dangerous monster ahead.',
 	'You must overcome this enemy with your sword!',
-	'Hold Tab to draw your sword.',
-	'The effects of your shift key speed skill changes based on your weapon.'
+	'Hold Tab to draw your sword. Equipping a weapon will grant you access to new skills.', 
+	'Activate sword skills with the number keys.',
+	'The effects of your shift key speed skill changes based on your weapon.',
+	'Skills require mana, use them wisely!'
 ]
 var dialog5 = [
 	'Your health and mana had depleted from battle and skill usage.',

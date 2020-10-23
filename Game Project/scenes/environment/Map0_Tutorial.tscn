@@ -13,6 +13,8 @@ script = ExtResource( 9 )
 
 [node name="Enemy" parent="." instance=ExtResource( 2 )]
 position = Vector2( 4073, 361.02 )
+max_health = 100.0
+strength = 5
 
 [node name="Player" parent="." instance=ExtResource( 3 )]
 position = Vector2( 1000, 367 )
