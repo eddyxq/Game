@@ -6,7 +6,7 @@ extends Area2D
 
 # skill description:
 # range: medium
-# damage: low
+# damage: medium
 # mana cost: low
 # aoe piercing: no
 
@@ -30,7 +30,7 @@ func _physics_process(delta):
 # detect collision with enemies
 func _on_Projectile_body_entered(body):
 	if "Enemy" in body.name:
-		var base_damage = 15
+		var base_damage = 20
 		var knockback_intensity = 10
 		body.hurt(base_damage, knockback_intensity, 30, "default")
 		play_explosion_sfx()

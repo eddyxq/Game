@@ -5,10 +5,10 @@ extends Area2D
 ###############################################################################
 
 # skill description:
-# range: short
-# damage: medium
+# range: long
+# damage: low
 # mana cost:  medium
-# aoe piercing: no
+# aoe piercing: yes
 
 const SPEED = 120
 var velocity = Vector2()
@@ -30,13 +30,10 @@ func _physics_process(delta):
 # detect collision with enemies
 func _on_Projectile_body_entered(body):
 	if "Enemy" in body.name:
-		var base_damage = 15
-		var knockback_intensity = 10
+		var base_damage = 1
+		var knockback_intensity = 5
 		body.hurt(base_damage, knockback_intensity, 30, "default")
 		play_explosion_sfx()
-		$CollisionShape2D.queue_free()
-		$CPUParticles2D.queue_free()
-		$ProjectileSprite.visible = false
 		body.show_hit_splat()
 
 # shoots the projectile

@@ -18,10 +18,10 @@ onready var health_bar = $HealthBar
 export var is_boss = false
 
 # enemy speed and state variables
-export var max_health = 100.0
+export var max_health = 300.0
 var health = max_health
 var base_speed = 100
-var strength = 10
+export var strength = 10
 var velocity = Vector2(0, 0)
 var is_dead = false
 var gravity = 18
@@ -272,14 +272,19 @@ func drop_loot():
 	
 func disable_movement():
 	set_physics_process(false)
-
+	
 func apply_bleed():
 	$BleedTimer.start()
 	bleed = true
 	
+var  bleed_ticks = 0
 func _on_BleedTimer_timeout():
 	if bleed and !is_dead:
 		hurt(1, 0, 0, "green")
+		bleed_ticks += 1
+	if  bleed_ticks > 4:
+		$BleedTimer.stop()
+		bleed_ticks = 0
 		
 func apply_stun():
 	$StunTimer.start()

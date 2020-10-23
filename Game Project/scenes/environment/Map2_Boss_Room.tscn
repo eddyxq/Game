@@ -17,7 +17,7 @@ script = ExtResource( 9 )
 position = Vector2( 311, 330 )
 scale = Vector2( 2.5, 2.5 )
 is_boss = true
-max_health = 300.0
+max_health = 1000.0
 
 [node name="Player" parent="." instance=ExtResource( 3 )]
 position = Vector2( 150, 350 )
