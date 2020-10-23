@@ -58,8 +58,6 @@ func _physics_process(_delta):
 		player.movement_loop(attack, up, left, right)
 		if Input.is_action_just_pressed("ui_special_movement"):
 			player.activate_special_movement_skill(left, right)
-	else:
-		player.play_animation("idle")
 	
 	# player dies when he falls down
 	if player.get_global_position().y > 442:

@@ -1281,19 +1281,19 @@ tracks/1/keys = {
 
 [sub_resource type="Animation" id=29]
 resource_name = "whirlwind_slash"
-length = 3.0
-step = 0.25
+length = 0.35
+step = 0.01
 tracks/0/type = "value"
 tracks/0/path = NodePath("Sprite:frame")
-tracks/0/interp = 2
+tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 2.25, 2.5, 2.75, 3, 3.25, 3.5, 3.75, 4, 4.25, 4.5, 4.75 ),
-"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ),
+"times": PoolRealArray( 0, 0.04, 0.08, 0.13, 0.19 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1 ),
 "update": 1,
-"values": [ 55, 56, 55, 56, 55, 56, 55, 56, 55, 56, 55, 56, 55, 56, 55, 56, 55, 56, 55, 56 ]
+"values": [ 48, 49, 50, 51, 52 ]
 }
 tracks/1/type = "method"
 tracks/1/path = NodePath(".")
@@ -1302,11 +1302,11 @@ tracks/1/loop_wrap = true
 tracks/1/imported = false
 tracks/1/enabled = true
 tracks/1/keys = {
-"times": PoolRealArray( 0 ),
+"times": PoolRealArray( 0.08 ),
 "transitions": PoolRealArray( 1 ),
 "values": [ {
 "args": [  ],
-"method": "toggle_hitbox_on"
+"method": "play_wind_sfx"
 } ]
 }
 tracks/2/type = "method"
@@ -1316,38 +1316,11 @@ tracks/2/loop_wrap = true
 tracks/2/imported = false
 tracks/2/enabled = true
 tracks/2/keys = {
-"times": PoolRealArray( 0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5 ),
-"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ),
+"times": PoolRealArray( 0.08 ),
+"transitions": PoolRealArray( 1 ),
 "values": [ {
-"args": [  ],
-"method": "whiirlwind_slash"
-}, {
-"args": [  ],
-"method": "whiirlwind_slash"
-}, {
-"args": [  ],
-"method": "whiirlwind_slash"
-}, {
-"args": [  ],
-"method": "whiirlwind_slash"
-}, {
-"args": [  ],
-"method": "whiirlwind_slash"
-}, {
-"args": [  ],
-"method": "whiirlwind_slash"
-}, {
-"args": [  ],
-"method": "whiirlwind_slash"
-}, {
-"args": [  ],
-"method": "whiirlwind_slash"
-}, {
-"args": [  ],
-"method": "whiirlwind_slash"
-}, {
-"args": [  ],
-"method": "whiirlwind_slash"
+"args": [ 1 ],
+"method": "consume_mp"
 } ]
 }
 tracks/3/type = "method"
@@ -1357,22 +1330,11 @@ tracks/3/loop_wrap = true
 tracks/3/imported = false
 tracks/3/enabled = true
 tracks/3/keys = {
-"times": PoolRealArray(  ),
-"transitions": PoolRealArray(  ),
-"values": [  ]
-}
-tracks/4/type = "method"
-tracks/4/path = NodePath(".")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/keys = {
-"times": PoolRealArray( 0 ),
+"times": PoolRealArray( 0.08 ),
 "transitions": PoolRealArray( 1 ),
 "values": [ {
-"args": [ 1 ],
-"method": "consume_mp"
+"args": [  ],
+"method": "whiirlwind_slash"
 } ]
 }
 
@@ -1526,7 +1488,7 @@ states/sword_sheath/position = Vector2( 739.565, 600.287 )
 transitions = [ "jump", "fall", SubResource( 45 ), "sword_attack1", "sword_attack2", SubResource( 46 ), "sword_attack2", "sword_attack3", SubResource( 47 ), "idle_sword", "sprint", SubResource( 48 ), "sprint", "idle_sword", SubResource( 49 ), "sword_attack3", "idle_sword", SubResource( 50 ), "sword_attack2", "idle_sword", SubResource( 51 ), "sword_attack1", "idle_sword", SubResource( 52 ), "idle_sword", "sword_attack1", SubResource( 53 ), "sword_run", "idle_sword", SubResource( 54 ), "idle_sword", "sword_run", SubResource( 55 ), "fall", "idle_sword", SubResource( 56 ), "idle_sword", "jump", SubResource( 57 ), "skill_placeholder", "idle_sword", SubResource( 58 ), "idle_sword", "skill_placeholder", SubResource( 59 ), "idle_sword", "die", SubResource( 60 ), "jump", "ledge_grab", SubResource( 61 ), "fall", "ledge_grab", SubResource( 62 ), "ledge_grab", "idle_sword", SubResource( 63 ), "idle_sword", "buff", SubResource( 64 ), "buff", "idle_sword", SubResource( 65 ), "sword_run", "skill_placeholder", SubResource( 66 ), "skill_placeholder", "sword_run", SubResource( 67 ), "jump", "dash_placeholder", SubResource( 68 ), "fall", "dash_placeholder", SubResource( 69 ), "sword_attack1", "skill_placeholder", SubResource( 70 ), "sword_attack2", "skill_placeholder", SubResource( 71 ), "sword_attack3", "skill_placeholder", SubResource( 72 ), "dash_placeholder", "idle_sword", SubResource( 73 ), "idle_sword", "sword_sheath", SubResource( 74 ) ]
 start_node = "idle_sword"
 end_node = "die"
-graph_offset = Vector2( -193.435, 496.902 )
+graph_offset = Vector2( -193.435, 508.957 )
 
 [sub_resource type="AnimationNodeStateMachinePlayback" id=76]
 
@@ -1704,7 +1666,7 @@ texture = ExtResource( 1 )
 offset = Vector2( -7, 0 )
 vframes = 34
 hframes = 8
-frame = 39
+frame = 48
 region_rect = Rect2( 271, 114, 14, 34 )
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]

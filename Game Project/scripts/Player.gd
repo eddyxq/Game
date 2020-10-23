@@ -190,14 +190,12 @@ func distance_blade():
 	projectile.position = $PositionCenter.global_position
 	projectile.set_projectile_direction(dir)
 	
-# activates sword skill 2 doing a spinning rapid attack
+# activates sword skill 2 doing a tornado attack
 func whiirlwind_slash():
-	var hitBox = preload("res://scenes/player/DashHitBox.tscn").instance()
-	if dir == DIRECTION.W:
-		hitBox.scale.x = -1
-	hitBox.has_bleed_effect()
-	get_parent().add_child(hitBox)
-	hitBox.position = $PositionCenter.global_position
+	var projectile = preload("res://scenes/player/WindProjectile.tscn").instance()
+	get_parent().add_child(projectile)
+	projectile.position = $PositionCenter.global_position
+	projectile.set_projectile_direction(dir)
 	
 # activates sword skill 3 applying bleed to an enemy
 func bleed_slash():
@@ -578,6 +576,10 @@ func play_buff_sfx():
 # plays a dash sfx
 func play_dash_sfx():
 	SoundManager.play("res://audio/sfx/dash.ogg")
+	
+# plays a wind sfx
+func play_wind_sfx():
+	SoundManager.play("res://audio/sfx/wind.ogg")
 
 # freezes the frame if the player hit something
 # freezes frame for 100 milliseconds

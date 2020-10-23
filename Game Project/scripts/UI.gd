@@ -12,13 +12,13 @@ onready var item_Bar = $ItemBar
 # called when the node enters the scene tree for the first time
 func _ready():
 	# set skill texture
-	skill_bar.skill_slot0.set_texture_from_path("res://images/skill_icons/warrior/icon0.png")
+	skill_bar.skill_slot0.set_texture_from_path("res://images/skill_icons/blank_icon.png")    # not implmented, icon0
 	skill_bar.skill_slot1.set_texture_from_path("res://images/skill_icons/warrior/icon1.png")
 	skill_bar.skill_slot2.set_texture_from_path("res://images/skill_icons/warrior/icon2.png")
 	skill_bar.skill_slot3.set_texture_from_path("res://images/skill_icons/warrior/icon3.png")
 	skill_bar.skill_slot4.set_texture_from_path("res://images/skill_icons/warrior/icon4.png")
-	skill_bar.skill_slot5.set_texture_from_path("res://images/skill_icons/warrior/icon5.png")
-	skill_bar.skill_slot6.set_texture_from_path("res://images/skill_icons/warrior/icon6.png")
+	skill_bar.skill_slot5.set_texture_from_path("res://images/skill_icons/blank_icon.png")    # not implmented, icon5
+	skill_bar.skill_slot6.set_texture_from_path("res://images/skill_icons/blank_icon.png")    # not implmented, icon6
 	item_Bar.item_slot1.set_texture_from_path("res://images/items/potions/hp_pot_small.png")
 	item_Bar.item_slot2.set_texture_from_path("res://images/items/potions/mp_pot_small.png")
 
