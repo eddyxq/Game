@@ -43,7 +43,6 @@ animations = [ {
 [node name="w" type="AnimatedSprite" parent="."]
 position = Vector2( -8, 0 )
 frames = SubResource( 3 )
-frame = 1
 playing = true
 
 [node name="Label" type="Label" parent="."]
@@ -71,4 +70,5 @@ __meta__ = {
 [node name="^" type="AnimatedSprite" parent="."]
 position = Vector2( -8, 32 )
 frames = SubResource( 7 )
+frame = 1
 playing = true

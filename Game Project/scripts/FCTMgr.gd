@@ -12,7 +12,7 @@ export var spread = PI/2
 
 # param value is the number that will be displayed
 # crit is a flag that determines if it gets the red critical effect
-func show_value(value, crit):
+func show_value(value, crit, text_color):
 	var fct = FCT.instance()
 	add_child(fct)
-	fct.show_value(str(value), travel, duration, spread, crit)
+	fct.show_value(str(value), travel, duration, spread, crit, text_color)

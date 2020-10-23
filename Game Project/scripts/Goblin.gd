@@ -18,14 +18,13 @@ onready var health_bar = $HealthBar
 export var is_boss = false
 
 # enemy speed and state variables
-export var max_health = 100.0
+export var max_health = 300.0
 var health = max_health
 var base_speed = 100
+export var strength = 10
 var velocity = Vector2(0, 0)
 var is_dead = false
 var gravity = 18
-var despawn_timer = 1
-var timer = null
 
 # variables related to AI pathfinding
 var react_time = 100
@@ -40,20 +39,20 @@ var direction_facing = DIRECTION.W # default left facing
 
 # animation states
 var state_machine = null
-var anim_finished = true
-
-signal loot_done
 
 # knockback variables
 # TODO: change knockback_direction to local
 var knockback_frames = 0
 var knockback_direction = Vector2.ZERO
 
+# status states
+var bleed = false
+var stun = false
+
 # called when the node enters the scene tree for the first time
 func _ready():
 	health = max_health
 	health_bar.value = 100
-	setup_timer() 
 	setup_state_machine()
 	set_process(true)
 
@@ -61,7 +60,7 @@ func _ready():
 func _physics_process(_delta):
 	# enemies dies when it falls down
 	if self.get_global_position().y > 440:
-		hurt(health, 0)
+		hurt(health, 0, 0, "default")
 		
 	# aggro range increase upon getting hit
 	if health < max_health:
@@ -70,32 +69,33 @@ func _physics_process(_delta):
 	if is_dead:
 		set_physics_process(false)
 	else:
-		animation_loop()
-		movement_loop()
+		if !stun:
+			animation_loop()
+			movement_loop()
+		else:
+			state_machine.travel("idle")
+			
 
 # animation logic
 func animation_loop():
-	if anim_finished:
-		if player.get_global_position().x < $Position2D.get_global_position().x - target_player_dist and sees_player():
-			set_dir(-1)
-			$Sprite.flip_h = false
-			$Sprite.position.x = -17.5
-			direction_facing = DIRECTION.W
-			state_machine.travel("run")
-		elif player.get_global_position().x > $Position2D.get_global_position().x + target_player_dist and sees_player():
-			set_dir(1)
-			$Sprite.flip_h = true
-			$Sprite.position.x = 17.5
-			direction_facing = DIRECTION.E
-			state_machine.travel("run")
-		else:
-			set_dir(0)
-			state_machine.travel("idle")
-	
-		if velocity.x == 0 && (abs(position.x - player.get_global_position().x) < 35) && (abs(position.y - player.get_global_position().y) < 35)  && health > -1:
-			state_machine.travel("attack")
-			anim_finished = false
-			$AnimationDelay.start()
+	if player.get_global_position().x < $Position2D.get_global_position().x - target_player_dist and sees_player():
+		set_dir(-1)
+		$Sprite.flip_h = false
+		$Sprite.position.x = -17.5
+		direction_facing = DIRECTION.W
+		state_machine.travel("run")
+	elif player.get_global_position().x > $Position2D.get_global_position().x + target_player_dist and sees_player():
+		set_dir(1)
+		$Sprite.flip_h = true
+		$Sprite.position.x = 17.5
+		direction_facing = DIRECTION.E
+		state_machine.travel("run")
+	else:
+		set_dir(0)
+		state_machine.travel("idle")
+
+	if velocity.x == 0 && (abs(position.x - player.get_global_position().x) < 35) && (abs(position.y - player.get_global_position().y) < 35)  && health > -1:
+		state_machine.travel("attack")
 
 # movement logic
 func movement_loop():
@@ -122,7 +122,7 @@ func movement_loop():
 		velocity = knockback_direction.normalized() * base_speed * 3
 		knockback_frames -= 1
 		
-	elif (anim_finished):
+	else:
 		# apply regular horizontal movement
 		velocity.x = dir * base_speed
 
@@ -131,23 +131,24 @@ func movement_loop():
 	velocity = move_and_slide(velocity, Vector2(0, -1))
 
 # update health bar
-func hurt(base_damage: int, knockback_intensity: int):
+# returns boolean: true if damage was critical, false otherwise
+func hurt(base_damage: int, knockback_intensity: int, crit_rate: int, text_color: String):
 	play_hurt_sfx()
 	var dmg = (randi() % int(player.strength) + base_damage) 
 	var crit = false
 	# critical when random number rolled out of 100 is within critical value
-	if randi() % 100+1 <= int(player.crit_rate):
+	if randi() % 100+1 <= int(crit_rate):
 		crit = true
 		dmg *= 2 # critical hits do double damage
 	health -= dmg
 	var health_percent = health / max_health * 100.0
 	health_bar.value = health_percent
-	$FCTMgr.show_value(dmg, crit)
+	$FCTMgr.show_value(dmg, crit, text_color)
 	
 	# check if enemy is alive
 	if health < 1:
 		is_dead = true
-		timer.start()
+		$DespawnTimer.start()
 		state_machine.travel("dead")
 		play_death_sfx()
 		$CollisionShape2D.queue_free()
@@ -155,7 +156,8 @@ func hurt(base_damage: int, knockback_intensity: int):
 	# apply knockback effect if any
 	else:
 		react_to_hit(knockback_intensity)
-
+	
+	return crit
 # sets knockback_direction relative to 'other_body_origin'
 # general hit reaction
 
@@ -166,23 +168,11 @@ func react_to_hit(intensity):
 		knockback_frames = intensity
 		knockback_direction = transform.origin - player.transform.origin
 
-# init timer 
-func setup_timer():
-	timer = Timer.new()
-	timer.set_wait_time(despawn_timer)
-	timer.connect("timeout", self, "on_timeout_complete")
-	add_child(timer)
-
 # despawns and removes sprite
-func on_timeout_complete():
+func _on_DespawnTimer_timeout():
 	$Sprite.visible = false
-	# wait 0.5 seconds then try to spawn loot
-	wait_and_execute(0.5, "drop_loot")
-	# wait until loot is done then queue_free
-	yield(self, "loot_done")
 	if is_boss:
 		UI.stage_clear_menu.visible = true
-		UI.bg_music.queue_free()
 	queue_free()
 
 # plays a enemy dying sfx
@@ -231,14 +221,11 @@ func sees_player():
 func setup_state_machine():
 	state_machine = $AnimationTree.get("parameters/playback")
 
-# timer use to manage attaking state, preventing animation overlap
-func _on_AnimationDelay_timeout():
-	anim_finished = true
-
 # deal damage to player when attacking hitbox collides with player
 func _on_HitBox_body_entered(body):
 	if "Player" in body.name:
-		body.hurt(20)
+		var dmg = (randi() % int(strength) + 5) 
+		body.hurt(dmg)
 
 # called when attacking, toggles the hitbox on/off
 func toggle_hitbox():
@@ -282,13 +269,32 @@ func drop_loot():
 	spawn_chest()
 	var coin_dropper = preload("res://scenes/item/CoinDropper.tscn").instance()
 	var _coin_amount = coin_dropper.drop(self)
-	emit_signal("loot_done")
 	
-# wait_time: in seconds
-# function: function to execute
-func wait_and_execute(wait_time, function):
-	var my_timer = Timer.new()
-	my_timer.set_wait_time(wait_time)
-	my_timer.connect("timeout", self, function)
-	add_child(my_timer)
-	my_timer.start()
+func disable_movement():
+	set_physics_process(false)
+	
+func apply_bleed():
+	$BleedTimer.start()
+	bleed = true
+	
+var  bleed_ticks = 0
+func _on_BleedTimer_timeout():
+	if bleed and !is_dead:
+		hurt(1, 0, 0, "green")
+		bleed_ticks += 1
+	if  bleed_ticks > 4:
+		$BleedTimer.stop()
+		bleed_ticks = 0
+		
+func apply_stun():
+	$StunTimer.start()
+	stun = true
+
+func _on_StunTimer_timeout():
+	stun = false
+	
+func show_hit_splat():
+	var hit_splat = preload("res://scenes/player/HitSplat.tscn").instance()
+	get_tree().get_root().add_child(hit_splat)
+	hit_splat.global_position = $Position2D.global_position
+	hit_splat.show_hit_effect()

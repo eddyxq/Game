@@ -1,17 +1,16 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://tilemap/frozen_tiles.tres" type="TileSet" id=1]
 [ext_resource path="res://images/tileset/backgrounds/sky.png" type="Texture" id=2]
 [ext_resource path="res://tilemap/frozen_prop_tiles.tres" type="TileSet" id=3]
 [ext_resource path="res://scenes/environment/Portal.tscn" type="PackedScene" id=4]
 [ext_resource path="res://tilemap/frozen_bg_tiles.tres" type="TileSet" id=5]
-[ext_resource path="res://audio/music/winter_day.ogg" type="AudioStream" id=6]
 
 [node name="FrozenStage" type="Node2D"]
 
 [node name="sky" type="Sprite" parent="."]
-position = Vector2( 1500, 168 )
-scale = Vector2( 300, 5 )
+position = Vector2( 1500, 468 )
+scale = Vector2( 300, 9.6875 )
 z_index = -2
 texture = ExtResource( 2 )
 
@@ -48,8 +47,3 @@ target_scene = "res://scenes/environment/Map2_Boss_Room.tscn"
 [node name="Portal3" parent="." instance=ExtResource( 4 )]
 position = Vector2( 2776, 368 )
 target_scene = "res://scenes/environment/Map2_Boss_Room.tscn"
-
-[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
-stream = ExtResource( 6 )
-autoplay = true
-max_distance = 10000.0

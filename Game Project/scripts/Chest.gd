@@ -31,13 +31,12 @@ func _input(_event):
 		var bodies = $Area2D.get_overlapping_bodies()
 		for body in bodies:
 			if body.name == "Player":
-				play_chest_sfx()
-				$AnimatedSprite.play("open")
+				$AnimationPlayer.play("open")
 
 # plays a chest opening sfx
 func play_chest_sfx():
 	SoundManager.play("res://audio/sfx/chest.ogg")
 
-
+# removes chest from scene after it is opened
 func _on_DespawnTimer_timeout():
 	queue_free()

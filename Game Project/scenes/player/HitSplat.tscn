@@ -1,0 +1,33 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://images/skill_sprites/arrow_skill_hit_splat_44x43.png" type="Texture" id=1]
+[ext_resource path="res://images/skill_sprites/hit_splat.png" type="Texture" id=2]
+[ext_resource path="res://scripts/HitSplat.gd" type="Script" id=3]
+
+[sub_resource type="AtlasTexture" id=1]
+flags = 4
+atlas = ExtResource( 1 )
+region = Rect2( 44, 0, 44, 43 )
+
+[sub_resource type="AtlasTexture" id=2]
+flags = 4
+atlas = ExtResource( 1 )
+region = Rect2( 0, 0, 44, 43 )
+
+[sub_resource type="SpriteFrames" id=3]
+animations = [ {
+"frames": [ SubResource( 1 ), SubResource( 2 ), ExtResource( 2 ) ],
+"loop": false,
+"name": "hit_splat",
+"speed": 10.0
+} ]
+
+[node name="AnimatedSprite" type="AnimatedSprite"]
+scale = Vector2( 0.6, 1 )
+frames = SubResource( 3 )
+animation = "hit_splat"
+frame = 2
+playing = true
+flip_h = true
+script = ExtResource( 3 )
+[connection signal="animation_finished" from="." to="." method="_on_AnimatedSprite_animation_finished"]

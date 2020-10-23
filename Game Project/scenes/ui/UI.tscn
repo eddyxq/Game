@@ -1,16 +1,15 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://scripts/UI.gd" type="Script" id=1]
 [ext_resource path="res://scenes/player/HealthBar.tscn" type="PackedScene" id=2]
 [ext_resource path="res://images/ui/Player_Portrait/portrait3.png" type="Texture" id=3]
 [ext_resource path="res://images/ui/UI_borders.png" type="Texture" id=4]
 [ext_resource path="res://scenes/player/ManaBar.tscn" type="PackedScene" id=5]
-[ext_resource path="res://scenes/ui/SkillSlot.tscn" type="PackedScene" id=6]
-[ext_resource path="res://images/ui/UI_borders_single.png" type="Texture" id=7]
+[ext_resource path="res://scenes/ui/SkillBar.tscn" type="PackedScene" id=6]
+[ext_resource path="res://scenes/ui/ItemBar.tscn" type="PackedScene" id=7]
 [ext_resource path="res://images/ui/Player_Portrait/portrait1.png" type="Texture" id=9]
 [ext_resource path="res://images/ui/Player_Portrait/portrait2 .png" type="Texture" id=10]
 [ext_resource path="res://images/ui/Player_Portrait/portrait4.png" type="Texture" id=11]
-[ext_resource path="res://images/ui/UI_borders_small.png" type="Texture" id=12]
 
 [sub_resource type="SpriteFrames" id=1]
 animations = [ {
@@ -28,29 +27,11 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="UI_borders_single" type="Sprite" parent="."]
-modulate = Color( 1, 1, 1, 0.588235 )
-position = Vector2( 30.1776, 82.1644 )
-scale = Vector2( 0.931946, 0.945 )
-texture = ExtResource( 7 )
-
 [node name="UI_borders" type="Sprite" parent="."]
 modulate = Color( 1, 1, 1, 0.588235 )
 position = Vector2( 132, 38 )
 scale = Vector2( 1.26316, 1.36842 )
 texture = ExtResource( 4 )
-
-[node name="UI_borders2" type="Sprite" parent="."]
-modulate = Color( 1, 1, 1, 0.588235 )
-position = Vector2( 115.742, 81.9836 )
-scale = Vector2( 0.691395, 0.947368 )
-texture = ExtResource( 4 )
-
-[node name="UI_borders_small" type="Sprite" parent="."]
-modulate = Color( 1, 1, 1, 0.588235 )
-position = Vector2( 218, 82 )
-scale = Vector2( 0.894737, 0.947 )
-texture = ExtResource( 12 )
 
 [node name="HealthBar" parent="." instance=ExtResource( 2 )]
 margin_left = 83.0002
@@ -78,67 +59,20 @@ __meta__ = {
 position = Vector2( 20, 7 )
 scale = Vector2( 2.5, 2.5 )
 frames = SubResource( 1 )
-frame = 2
 playing = true
 __meta__ = {
 "_edit_lock_": true
 }
 
-[node name="Skill_Slot0" parent="." instance=ExtResource( 6 )]
-margin_left = 15.7313
-margin_top = 68.4079
-margin_right = 47.7313
-margin_bottom = 100.408
-skill_slot_num = 0
-cooldown = 3.0
+[node name="SkillBar" parent="." instance=ExtResource( 6 )]
+margin_left = 14.8651
+margin_top = 67.7848
+margin_right = 14.8651
+margin_bottom = 67.7848
 
-[node name="Skill_Slot1" parent="." instance=ExtResource( 6 )]
-margin_left = 53.4239
-margin_top = 67.9836
-margin_right = 85.4239
-margin_bottom = 99.9836
-cooldown = 2.0
-
-[node name="Skill_Slot2" parent="." instance=ExtResource( 6 )]
-margin_left = 85.4241
-margin_top = 67.9836
-margin_right = 117.424
-margin_bottom = 99.9836
-skill_slot_num = 2
-cooldown = 2.0
-
-[node name="Skill_Slot3" parent="." instance=ExtResource( 6 )]
-anchor_left = 1.19209e-08
-anchor_top = 0.000367864
-anchor_right = 1.19209e-08
-anchor_bottom = 0.000367864
-margin_left = 117.424
-margin_top = 67.9836
-margin_right = 149.424
-margin_bottom = 99.9836
-skill_slot_num = 3
-cooldown = 5.0
-
-[node name="Skill_Slot4" parent="." instance=ExtResource( 6 )]
-margin_left = 149.424
-margin_top = 67.9836
-margin_right = 181.424
-margin_bottom = 99.9836
-skill_slot_num = 4
-
-[node name="Item_Slot1" parent="." instance=ExtResource( 6 )]
-margin_left = 188.0
-margin_top = 68.0
-margin_right = 220.0
-margin_bottom = 100.0
-skill_slot_num = 5
-cooldown = 10.0
-
-[node name="Item_Slot2" parent="." instance=ExtResource( 6 )]
-margin_left = 220.0
-margin_top = 68.0
-margin_right = 252.0
-margin_bottom = 100.0
-skill_slot_num = 6
-cooldown = 10.0
+[node name="ItemBar" parent="." instance=ExtResource( 7 )]
+margin_left = 16.0
+margin_top = 268.202
+margin_right = 16.0
+margin_bottom = 268.202
 [connection signal="pressed" from="TextureButton" to="." method="_on_TextureButton_pressed"]

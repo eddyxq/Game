@@ -4,7 +4,12 @@ extends Label
 # displays damage numbers
 ###############################################################################
 
-func show_value(value, travel, duration, spread, crit=false):
+func show_value(value, travel, duration, spread, crit, text_color):
+	if text_color == "green":
+		modulate = Color(0, 1, 0)
+	else: # text_color == "default"
+		pass
+		
 	text = value
 	# for scaling, set the pivot offset to the center
 	rect_pivot_offset = rect_size / 2

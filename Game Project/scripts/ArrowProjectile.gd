@@ -32,7 +32,7 @@ func _on_Projectile_body_entered(body):
 	if "Enemy" in body.name:
 		var base_damage = 25
 		var knockback_intensity = 25
-		body.hurt(base_damage, knockback_intensity)
+		body.hurt(base_damage, knockback_intensity, 30, "default")
 		play_explosion_sfx()
 
 # shoots the projectile

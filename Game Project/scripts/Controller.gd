@@ -17,13 +17,21 @@ var skill2 # 2 number key
 var skill3 # 3 number key
 var skill4 # 4 number key
 
-var item1  # q
-var item2  # e
+var skill
+var item
+
+var switch # tab
 
 # references to child nodes
 onready var player = $Player
 onready var ui = $HUD/UI
 onready var scene_changer = $HUD/SceneChanger/AnimationPlayer
+
+enum STANCE {
+	FIST, 
+	SWORD, 
+	BOW
+}
 
 func _ready():
 	scene_changer.play_backwards("fade")
@@ -37,30 +45,39 @@ func _physics_process(_delta):
 	right = Input.is_action_pressed("ui_right")
 	attack = Input.is_action_pressed("ui_attack")
 
-	skill0 = Input.is_action_pressed("ui_skill_slot0")
-	skill1 = Input.is_action_pressed("ui_skill_slot1")
-	skill2 = Input.is_action_pressed("ui_skill_slot2")
-	skill3 = Input.is_action_pressed("ui_skill_slot3")
-	skill4 = Input.is_action_pressed("ui_skill_slot4")
+	skill = [Input.is_action_pressed("ui_skill_slot0"),
+			 Input.is_action_pressed("ui_skill_slot1"),
+			 Input.is_action_pressed("ui_skill_slot2"),
+			 Input.is_action_pressed("ui_skill_slot3"),
+			 Input.is_action_pressed("ui_skill_slot4"),
+			 Input.is_action_pressed("ui_skill_slot5"),
+			 Input.is_action_pressed("ui_skill_slot6")]
 
-	item1 = Input.is_action_pressed("ui_item_slot1")
-	item2 = Input.is_action_pressed("ui_item_slot2")
+	item = [Input.is_action_pressed("ui_item_slot1"),
+			Input.is_action_pressed("ui_item_slot2")]
 
-	if $HUD/DialogBox.visible == false:
+	switch = Input.is_action_pressed("ui_switch")
+
+	if !$HUD/DialogBox.visible:
 		# update player state
-		player.animation_loop(attack, skill0, skill1, skill2, skill3, skill4, item1, item2)
-		player.movement_loop(attack, up, left, right, skill3)
+		player.animation_loop(attack, skill, item, switch)
+		player.movement_loop(attack, up, left, right)
+		if Input.is_action_just_pressed("ui_special_movement"):
+			player.activate_special_movement_skill(left, right)
 	else:
-		player.play_animation("idle")
-	
+		if player.stance == STANCE.FIST:
+			player.play_animation("idle_fist")
+		elif player.stance == STANCE.SWORD:
+			player.play_animation("idle_sword")
+			
 	# player dies when he falls down
-	if player.get_global_position().y > 440:
+	if player.get_global_position().y > 442:
 		player.health = 0
 	
 	# disable controller when player dies
 	if player.health < 1:
 		player.play_death_sfx()
-		player.play_animation("dead")
+		player.play_animation("die")
 		set_physics_process(false) 
 		yield(get_tree().create_timer(2.0), "timeout")
 		var _scene = get_tree().reload_current_scene()
@@ -70,4 +87,3 @@ func _physics_process(_delta):
 #		player.set_light_enabled(true)
 #	else:
 #		player.set_light_enabled(false)
-

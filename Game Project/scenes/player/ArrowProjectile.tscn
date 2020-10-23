@@ -4,22 +4,18 @@
 [ext_resource path="res://images/skill_sprites/arrow_projectile.png" type="Texture" id=2]
 
 [sub_resource type="AtlasTexture" id=1]
-flags = 4
 atlas = ExtResource( 2 )
 region = Rect2( 0, 0, 45, 17 )
 
 [sub_resource type="AtlasTexture" id=2]
-flags = 4
 atlas = ExtResource( 2 )
 region = Rect2( 45, 0, 45, 17 )
 
 [sub_resource type="AtlasTexture" id=3]
-flags = 4
 atlas = ExtResource( 2 )
 region = Rect2( 0, 17, 45, 17 )
 
 [sub_resource type="AtlasTexture" id=4]
-flags = 4
 atlas = ExtResource( 2 )
 region = Rect2( 45, 17, 45, 17 )
 
@@ -57,7 +53,6 @@ scale = Vector2( 1.75, 1.75 )
 z_index = 4
 frames = SubResource( 5 )
 animation = "shoot_right"
-frame = 1
 playing = true
 
 [node name="CPUParticles2D" type="CPUParticles2D" parent="."]
@@ -81,7 +76,7 @@ scale = Vector2( 2, 2 )
 shape = SubResource( 8 )
 
 [node name="Timer" type="Timer" parent="."]
-wait_time = 0.6
+wait_time = 0.55
 one_shot = true
 autostart = true
 [connection signal="body_entered" from="." to="." method="_on_Projectile_body_entered"]

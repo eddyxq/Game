@@ -12,16 +12,21 @@ var dialog1 = [
 	'Perhaps you should explore the area.'
 ]
 var dialog2= [
-	'Watch out! There is a small pit in front of you.',
-	'You do not want to fall in, consider jumping over it.'
+	'Watch out! There is a ledge in front of you.',
+	'Consider jumping over it.',
+	'Those who fall will lose all their memories and be sent to the beginning.'
 ]
 var dialog3 = [
-	'Press Shift to active your speed skill.',
-	'That should help you get over this massive pit.'
+	'Press Shift to activate your speed skill.',
+	'That should help you get over this river.'
 ]
 var dialog4 = [
 	'Watch out! There is a dangerous monster ahead.',
-	'You must overcome this enemy with your sword!'
+	'You must overcome this enemy with your sword!',
+	'Hold Tab to draw your sword. Equipping a weapon will grant you access to new skills.', 
+	'Activate sword skills with the number keys.',
+	'The effects of your shift key speed skill changes based on your weapon.',
+	'Skills require mana, use them wisely!'
 ]
 var dialog5 = [
 	'Your health and mana had depleted from battle and skill usage.',

@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://scripts/Chest.gd" type="Script" id=1]
 [ext_resource path="res://images/enemies/chest/Individual Sprites/normal-chest-open-01.png" type="Texture" id=2]
@@ -6,6 +6,7 @@
 [ext_resource path="res://images/enemies/chest/Individual Sprites/normal-chest-open-00.png" type="Texture" id=4]
 [ext_resource path="res://images/enemies/chest/Individual Sprites/normal-chest-open-02.png" type="Texture" id=5]
 [ext_resource path="res://images/keyboard_sprites/kb_dark_all.png" type="Texture" id=6]
+[ext_resource path="res://images/enemies/chest/normal-chest-Sheet.png" type="Texture" id=7]
 
 [sub_resource type="SpriteFrames" id=1]
 animations = [ {
@@ -34,7 +35,51 @@ animations = [ {
 "speed": 1.5
 } ]
 
+[sub_resource type="Animation" id=6]
+resource_name = "open"
+length = 4.0
+step = 0.05
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.15, 0.3, 0.45 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 0, 1, 2, 3 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("Sprite:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 2.5, 4 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
+}
+tracks/2/type = "method"
+tracks/2/path = NodePath(".")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [  ],
+"method": "play_chest_sfx"
+} ]
+}
+
 [node name="RigidBody2D" type="RigidBody2D"]
+z_index = -1
 z_as_relative = false
 collision_layer = 0
 collision_mask = 4
@@ -45,9 +90,15 @@ __meta__ = {
 "_edit_group_": true
 }
 
+[node name="Sprite" type="Sprite" parent="."]
+texture = ExtResource( 7 )
+hframes = 4
+
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
+visible = false
 frames = SubResource( 1 )
 animation = "open"
+frame = 3
 __meta__ = {
 "_edit_group_": true
 }
@@ -74,11 +125,14 @@ __meta__ = {
 }
 
 [node name="KeyPress" type="AnimatedSprite" parent="."]
-position = Vector2( 0, -10 )
+position = Vector2( 0, -12 )
 frames = SubResource( 5 )
 playing = true
 
 [node name="DespawnTimer" type="Timer" parent="."]
-wait_time = 2.0
+wait_time = 4.0
 one_shot = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+anims/open = SubResource( 6 )
 [connection signal="timeout" from="DespawnTimer" to="." method="_on_DespawnTimer_timeout"]
