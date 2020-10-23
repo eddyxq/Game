@@ -17,12 +17,14 @@ var dialog2= [
 	'Those who fall will lose all their memories and be sent to the beginning.'
 ]
 var dialog3 = [
-	'Press Shift to active your speed skill.',
+	'Press Shift to activate your speed skill.',
 	'That should help you get over this river.'
 ]
 var dialog4 = [
 	'Watch out! There is a dangerous monster ahead.',
-	'You must overcome this enemy with your sword!'
+	'You must overcome this enemy with your sword!',
+	'Hold Tab to draw your sword.',
+	'The effects of your shift key speed skill changes based on your weapon.'
 ]
 var dialog5 = [
 	'Your health and mana had depleted from battle and skill usage.',

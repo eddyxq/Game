@@ -8,11 +8,11 @@ font_data = ExtResource( 2 )
 
 [sub_resource type="AtlasTexture" id=2]
 atlas = ExtResource( 1 )
-region = Rect2( 128, 128, 16, 16 )
+region = Rect2( 128, 32, 16, 16 )
 
 [sub_resource type="AtlasTexture" id=3]
 atlas = ExtResource( 1 )
-region = Rect2( 160, 128, 16, 16 )
+region = Rect2( 160, 32, 16, 16 )
 
 [sub_resource type="SpriteFrames" id=4]
 animations = [ {
@@ -62,13 +62,29 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="Label3" type="Label" parent="."]
+margin_left = -55.9451
+margin_top = 2.55714
+margin_right = 10.0549
+margin_bottom = 16.5571
+custom_fonts/font = SubResource( 1 )
+text = "Draw/Sheath Sword"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="space" type="AnimatedSprite" parent="."]
 position = Vector2( 0, 32 )
 frames = SubResource( 4 )
-frame = 1
+playing = true
+
+[node name="tab" type="AnimatedSprite" parent="."]
+position = Vector2( 65.4316, 11.346 )
+frames = SubResource( 4 )
 playing = true
 
 [node name="z" type="AnimatedSprite" parent="."]
 position = Vector2( 64, 32 )
 frames = SubResource( 7 )
+frame = 1
 playing = true

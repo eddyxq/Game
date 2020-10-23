@@ -16,7 +16,7 @@ _global_script_class_icons={
 [application]
 
 config/name="Prototype"
-run/main_scene="res://scenes/environment/Map1_Frozen.tscn"
+run/main_scene="res://scenes/environment/Map0_Tutorial.tscn"
 config/icon="res://images/thumbnail/icon.png"
 
 [autoload]
