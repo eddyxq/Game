@@ -10,32 +10,6 @@ onready var item_bar = get_tree().get_root().get_node("/root/Controller/HUD/UI/I
 onready var http : HTTPRequest = $HTTPRequest
 onready var tree_state = $SwordAnimationTree.get("parameters/playback")
 
-# player direction
-enum DIRECTION {
-	N, # north/up
-	S, # south/down
-	W, # west/left
-	E, # east/right
-}
-
-# possible weapons and stances
-enum STANCE {
-	FIST, 
-	SWORD, 
-	BOW
-}
-
-# user profile sstructure
-var profile = {
-	"player_name": {},
-	"player_lv": {},
-	"player_health": {},
-	"player_strength": {},
-	"player_defense": {},
-	"player_critical": {},
-	"player_exp": {}
-} 
-
 # combat stats
 const max_hp = 100
 const min_hp = 0
@@ -59,13 +33,13 @@ var acceleration_rate = 14
 var movement_speed # final actual speed after calculations
 
 # player orientation
-var dir = DIRECTION.E # default right facing 
+var dir = Global.DIRECTION.E # default right facing 
 
 # player stance
-var stance = STANCE.FIST # default stance
+var stance = Global.STANCE.FIST # default stance
 
 # world constants
-var DEFAULT_GRAVITY = 18
+const DEFAULT_GRAVITY = 18
 var gravity = 18
 
 # flags for player states
@@ -140,21 +114,21 @@ func hurt(dmg):
 
 # ensures the hitbox is always in front
 func update_hitbox_location():
-	if $HitBox.position.x < 0 && dir == DIRECTION.E:
+	if $HitBox.position.x < 0 && dir == Global.DIRECTION.E:
 		$HitBox.position.x *= -1
-	elif $HitBox.position.x > 0 && dir == DIRECTION.W:
+	elif $HitBox.position.x > 0 && dir == Global.DIRECTION.W:
 		$HitBox.position.x *= -1
 
 # update player's direction and sprite orientation
 var flip = false
 func update_sprite_direction(right, left):
 	if right:
-		dir = DIRECTION.E 
+		dir = Global.DIRECTION.E 
 		if flip:
 			scale.x = -1
 			flip = false
 	elif left:
-		dir = DIRECTION.W
+		dir = Global.DIRECTION.W
 		if not flip:
 			scale.x = -1
 			flip = true
@@ -201,7 +175,7 @@ func whiirlwind_slash():
 func bleed_slash():
 	dash()
 	var hitBox = preload("res://scenes/player/DashHitBox.tscn").instance()
-	if dir == DIRECTION.W:
+	if dir == Global.DIRECTION.W:
 		hitBox.scale.x = -1
 	hitBox.has_bleed_effect()
 	get_parent().add_child(hitBox)
@@ -211,7 +185,7 @@ func bleed_slash():
 func dash_slash():
 	dash()
 	var hitBox2 = preload("res://scenes/player/DashHitBox.tscn").instance()
-	if dir == DIRECTION.W:
+	if dir == Global.DIRECTION.W:
 		hitBox2.scale.x = -1
 	hitBox2.has_stun_effect()
 	get_parent().add_child(hitBox2)
@@ -285,9 +259,9 @@ func _on_HitBox_body_entered(body):
 		recentHit = true
 		var is_crit
 		# fists have lower damage and crit rate
-		if stance == STANCE.FIST:
+		if stance == Global.STANCE.FIST:
 			is_crit = body.hurt(1, 0, 20, "default")
-		elif stance == STANCE.SWORD:
+		elif stance == Global.STANCE.SWORD:
 			is_crit = body.hurt(5, 0, 30, "default")
 		if is_crit:
 			$Camera2D/ScreenShaker.start()
@@ -337,9 +311,9 @@ func toggle_stance():
 	if weapon_change_off_cooldown and is_on_floor():
 		$WeaponChangeCD.start()
 		weapon_change_off_cooldown = false
-		if stance == STANCE.FIST and movement_enabled and !isTouchingLedge:
+		if stance == Global.STANCE.FIST and movement_enabled and !isTouchingLedge:
 			draw_sword()
-		elif stance == STANCE.SWORD and movement_enabled and !isTouchingLedge:
+		elif stance == Global.STANCE.SWORD and movement_enabled and !isTouchingLedge:
 			sheath_sword()
 
 # draws sword weapon
@@ -349,7 +323,7 @@ func draw_sword():
 	state_machine = current_animation_tree.get("parameters/playback")
 	skillAnimationNode = get_skill_animation_node()
 	current_animation_tree.active = true
-	stance = STANCE.SWORD
+	stance = Global.STANCE.SWORD
 	play_animation("idle_sword")
 
 # put away sword
@@ -359,7 +333,7 @@ func sheath_sword():
 	state_machine = current_animation_tree.get("parameters/playback")
 	skillAnimationNode = get_skill_animation_node()
 	current_animation_tree.active = true
-	stance = STANCE.FIST
+	stance = Global.STANCE.FIST
 	play_animation("idle_fist")
 
 # left and right movement
@@ -369,9 +343,9 @@ func move():
 			play_animation("sprint")
 			emit_foot_dust()
 		else:
-			if stance == STANCE.FIST:
+			if stance == Global.STANCE.FIST:
 				play_animation("run")
-			elif stance == STANCE.SWORD:
+			elif stance == Global.STANCE.SWORD:
 				play_animation("sword_run")
 
 # player jumps in air 
@@ -387,9 +361,9 @@ func fall():
 # player is in idle state when they are not moving
 func idle():
 	if velocity.length() == 0: 
-		if stance == STANCE.FIST:
+		if stance == Global.STANCE.FIST:
 			play_animation("idle_fist")
-		elif stance == STANCE.SWORD:
+		elif stance == Global.STANCE.SWORD:
 			play_animation("idle_sword")
 
 # regular attacking skills
@@ -397,14 +371,14 @@ func attack(attack):
 	if !attack:
 		toggle_hitbox_off()
 	if attack && is_on_floor():
-		if stance == STANCE.FIST:
+		if stance == Global.STANCE.FIST:
 			play_animation("fist_attack4")
-		elif stance == STANCE.SWORD:
+		elif stance == Global.STANCE.SWORD:
 			play_animation("sword_attack3")
 
 # send skill inputs
 func detect_skill_activation(skill):	
-	if stance == STANCE.SWORD:
+	if stance == Global.STANCE.SWORD:
 		skill0(skill[0])
 		skill1(skill[1])
 		skill2(skill[2])
@@ -481,9 +455,9 @@ func detect_item_usage(item):
 # changes the stance and weapon of the player
 func stance_update(switch):
 	if switch and weapon_change_off_cooldown and movement_enabled and !isTouchingLedge and is_on_floor():
-		if stance == STANCE.FIST:
+		if stance == Global.STANCE.FIST:
 			play_animation("sword_draw")
-		elif stance == STANCE.SWORD:
+		elif stance == Global.STANCE.SWORD:
 			play_animation("sword_sheath")
 
 # translates the player downwards every frame at the rate of gravity
@@ -515,7 +489,7 @@ func apply_translation(left, right, attack):
 	velocity.x = (-int(left) + int(right)) * movement_speed
 	# restrict movement during certain attack/skill
 	if dashing:
-		velocity.x = 500 if dir == DIRECTION.E else -500
+		velocity.x = 500 if dir == Global.DIRECTION.E else -500
 	if attack:
 		velocity.x = 0
 
@@ -592,9 +566,9 @@ func freeze_hit_frame():
 func emit_foot_dust():
 	var dust_particles = preload("res://scenes/player/DustParticle.tscn").instance()
 	dust_particles.set_as_toplevel(true)
-	if dir == DIRECTION.E:
+	if dir == Global.DIRECTION.E:
 		dust_particles.scale.x = 1
-	elif dir == DIRECTION.W:
+	elif dir == Global.DIRECTION.W:
 		dust_particles.scale.x = -1
 	dust_particles.global_position = $FeetPosition.global_position
 	add_child(dust_particles)
@@ -627,13 +601,13 @@ func _on_SprintTimer_timeout():
 	movement_speed = max_speed * run_speed_modifier
 	
 func activate_special_movement_skill(left, right):
-	if stance == STANCE.FIST:
+	if stance == Global.STANCE.FIST:
 		sprint()
-	elif stance == STANCE.SWORD and (left or right):
+	elif stance == Global.STANCE.SWORD and (left or right):
 		dash()
 
 func detect_ledge():
-	if not isTouchingLedge and stance == STANCE.FIST:
+	if not isTouchingLedge and stance == Global.STANCE.FIST:
 		isTouchingLedge = is_ledge_detected()
 		if isTouchingLedge:
 			start_ledge_grab()
@@ -666,7 +640,7 @@ func start_ledge_grab():
 		# pushes player to the closest left block
 		var new_x = int_x - (int_x % 16)
 		
-		if dir == DIRECTION.E:
+		if dir == Global.DIRECTION.E:
 			new_x -= 1
 		else:
 			new_x += 1
@@ -681,7 +655,7 @@ func start_ledge_grab():
 func end_ledge_grab():
 	var new_pos = self.position
 	new_pos.y -= 31
-	if dir == DIRECTION.E:
+	if dir == Global.DIRECTION.E:
 		new_pos.x += 7
 	else:
 		new_pos.x -= 7
@@ -690,11 +664,11 @@ func end_ledge_grab():
 	movement_enabled = true
 	
 func grab_ledge():
-	if isTouchingLedge and stance == STANCE.FIST:
+	if isTouchingLedge and stance == Global.STANCE.FIST:
 		play_animation("ledge_grab")
 
 func default_player_parameters():
-	dir = DIRECTION.E
+	dir = Global.DIRECTION.E
 	self.scale = Vector2(1, 1)
 	default_player_sprite_parameters()
 	default_player_hitbox_parameters()

@@ -27,12 +27,6 @@ onready var player = $Player
 onready var ui = $HUD/UI
 onready var scene_changer = $HUD/SceneChanger/AnimationPlayer
 
-enum STANCE {
-	FIST, 
-	SWORD, 
-	BOW
-}
-
 func _ready():
 	scene_changer.play_backwards("fade")
 
@@ -65,9 +59,9 @@ func _physics_process(_delta):
 		if Input.is_action_just_pressed("ui_special_movement"):
 			player.activate_special_movement_skill(left, right)
 	else:
-		if player.stance == STANCE.FIST:
+		if player.stance == Global.STANCE.FIST:
 			player.play_animation("idle_fist")
-		elif player.stance == STANCE.SWORD:
+		elif player.stance == Global.STANCE.SWORD:
 			player.play_animation("idle_sword")
 			
 	# player dies when he falls down
