@@ -29,7 +29,6 @@ func _exit_state():
 	pass
 	
 func set_state(new_state):
-	
 	if current_state != null:
 		_exit_state()
 	

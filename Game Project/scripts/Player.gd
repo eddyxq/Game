@@ -99,6 +99,10 @@ var movement_enabled = true
 var current_animation_tree = null
 var skillAnimationNode = null
 
+var is_attacking = false
+var is_using_skill = false
+var is_switching_stance = false
+
 #var jumpEnabled = true
 # called when the node enters the scene tree for the first time
 func _ready():
@@ -418,7 +422,6 @@ func draw_sword():
 	skillAnimationNode = get_skill_animation_node()
 	current_animation_tree.active = true
 	stance = STANCE.SWORD
-	play_animation("idle_sword")
 
 # put away sword
 func sheath_sword():
@@ -428,7 +431,6 @@ func sheath_sword():
 	skillAnimationNode = get_skill_animation_node()
 	current_animation_tree.active = true
 	stance = STANCE.FIST
-	play_animation("idle_fist")
 
 # left and right movement
 func move():
@@ -485,14 +487,25 @@ func play_idle_animation():
 	elif stance == STANCE.SWORD:
 		play_animation("idle_sword")
 
-# regular attacking skills
-func attack():
-	if is_on_floor():
-		if stance == STANCE.FIST:
-			play_animation("fist_attack4")
-		elif stance == STANCE.SWORD:
-			play_animation("sword_attack3")
+func set_attack_flag(flag):
+	is_attacking = flag
 
+func set_skill_flag(flag):
+	is_using_skill = flag
+
+# regular attack
+func attack():
+	if stance == STANCE.FIST:
+		play_animation("fist_attack4")
+	elif stance == STANCE.SWORD:
+		play_animation("sword_attack3")
+
+func is_attacking():
+	return is_attacking
+	
+func is_using_skill():
+	return is_using_skill
+	
 # send skill inputs
 func detect_skill_activation():	
 	pass
@@ -551,26 +564,6 @@ func skill0():
 #	var _placeholder = skill0
 	pass
 
-## item consumables for status recovery
-#func detect_item_usage(item):
-#	var item1 = item[0]
-#	var item2 = item[1]
-#	if item1 && item_slot_off_cooldown[0]:
-#		item_bar.item_slot1.start_cooldown()
-#		item_slot_off_cooldown[0] = false
-#		play_potion_sfx()
-#		# potion fully heals the player's health
-#		UI.health_bar.increase(health, max_hp - health)
-#		health = max_hp
-#
-#	elif item2 && item_slot_off_cooldown[1]:
-#		item_bar.item_slot2.start_cooldown()
-#		item_slot_off_cooldown[1] = false
-#		play_potion_sfx()
-#		# potion fully heals the player's mana
-#		mana = max_mp
-#		UI.mana_bar.update_bar(mana)
-
 # restore player health when not in cooldown
 func use_health_potion():
 	
@@ -612,18 +605,44 @@ func switch_to_fist():
 		if weapon_change_off_cooldown and movement_enabled and !isTouchingLedge and is_on_floor():
 			play_animation("sword_sheath")
 
+func switch_stance():
+	if stance == STANCE.FIST:
+		play_animation("sword_draw")
+	else:
+		play_animation("sword_sheath")
 
+func is_switching_stance():
+	return is_switching_stance
+	
+func set_switch_stance_flag(flag):
+	is_switching_stance = flag
+	print("switch stance flag:", is_switching_stance)
+	
 # translates the player downwards every frame at the rate of gravity
 func apply_gravity():
 	velocity.y += gravity
 
+func is_sword_stance():
+	return stance == STANCE.SWORD
+
+func is_fist_stance():
+	return stance == STANCE.SWORD
+		
+		
 func apply_horizontal_deceleration():
 #	base_speed -= acceleration_rate *2
 #	if base_speed < min_speed:
 #	if base_speed < min_speed:
 #		base_speed = min_speed
-	
-	base_speed = min_speed
+	if velocity.x > 0:
+		velocity.x -= acceleration_rate * 2
+		if velocity.x < 0:
+			velocity.x = 0
+	elif velocity.x < 0:
+		velocity.x += acceleration_rate * 2
+		if velocity.x > 0:
+			velocity.x = 0
+
 		
 # applies a acceleration and deceeleration effect
 func apply_accel_decel(left, right):
@@ -635,7 +654,8 @@ func apply_accel_decel(left, right):
 		base_speed += acceleration_rate
 		if base_speed > max_speed:
 			base_speed = max_speed
-
+	
+	
 # restricts the movement ability of the player depending on actions
 func update_speed_modifier(attack):
 	if !sprinting:
@@ -653,7 +673,6 @@ func apply_translation(left, right, attack):
 		velocity.x = 500 if dir == DIRECTION.E else -500
 	if attack:
 		velocity.x = 0
-
 		
 	# apply translations to the player
 	velocity = move_and_slide(velocity, Vector2(0,-1))
@@ -879,7 +898,5 @@ func set_label(label):
 func get_animation_state_machine():
 	return state_machine
 	
-#func _on_JumpCooldown_timeout():
-#	print("jump timer timed out")
-#	jumpEnabled = true
-
+func get_stance():
+	return stance

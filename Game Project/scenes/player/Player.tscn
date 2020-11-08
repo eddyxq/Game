@@ -1,4 +1,4 @@
-[gd_scene load_steps=134 format=2]
+[gd_scene load_steps=136 format=2]
 
 [ext_resource path="res://images/warrior_sprites/sprite_sheet.png" type="Texture" id=1]
 [ext_resource path="res://scripts/Player.gd" type="Script" id=2]
@@ -6,6 +6,8 @@
 [ext_resource path="res://images/effects/2DLight.png" type="Texture" id=4]
 [ext_resource path="res://scenes/misc/ScreenShaker.tscn" type="PackedScene" id=5]
 [ext_resource path="res://scripts/PlayerFSM.gd" type="Script" id=6]
+[ext_resource path="res://scripts/StateLogic.gd" type="Script" id=7]
+[ext_resource path="res://scripts/temp.gd" type="Script" id=8]
 
 [sub_resource type="Shader" id=1]
 code = "shader_type canvas_item;
@@ -448,6 +450,26 @@ tracks/1/loop_wrap = true
 tracks/1/imported = false
 tracks/1/enabled = true
 tracks/1/keys = {
+"times": PoolRealArray( 0, 0.18, 0.26 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"values": [ {
+"args": [ true ],
+"method": "set_attack_flag"
+}, {
+"args": [  ],
+"method": "freeze_hit_frame"
+}, {
+"args": [ false ],
+"method": "set_attack_flag"
+} ]
+}
+tracks/2/type = "method"
+tracks/2/path = NodePath(".")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
 "times": PoolRealArray( 0.12, 0.22 ),
 "transitions": PoolRealArray( 1, 1 ),
 "values": [ {
@@ -458,20 +480,6 @@ tracks/1/keys = {
 "method": "toggle_hitbox_off"
 } ]
 }
-tracks/2/type = "method"
-tracks/2/path = NodePath(".")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/keys = {
-"times": PoolRealArray( 0.12 ),
-"transitions": PoolRealArray( 1 ),
-"values": [ {
-"args": [  ],
-"method": "play_punch_sfx"
-} ]
-}
 tracks/3/type = "method"
 tracks/3/path = NodePath(".")
 tracks/3/interp = 1
@@ -479,19 +487,16 @@ tracks/3/loop_wrap = true
 tracks/3/imported = false
 tracks/3/enabled = true
 tracks/3/keys = {
-"times": PoolRealArray( 0.18, 0.26 ),
-"transitions": PoolRealArray( 1, 1 ),
+"times": PoolRealArray( 0.12 ),
+"transitions": PoolRealArray( 1 ),
 "values": [ {
 "args": [  ],
-"method": "freeze_hit_frame"
-}, {
-"args": [  ],
-"method": "animation_done"
+"method": "play_punch_sfx"
 } ]
 }
 
 [sub_resource type="Animation" id=13]
-length = 0.23
+length = 0.25
 step = 0.01
 tracks/0/type = "value"
 tracks/0/path = NodePath("Sprite:frame")
@@ -500,7 +505,7 @@ tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 0.08, 0.17, 0.2 ),
+"times": PoolRealArray( 0, 0.08, 0.17, 0.23 ),
 "transitions": PoolRealArray( 1, 1, 1, 1 ),
 "update": 1,
 "values": [ 114, 115, 116, 117 ]
@@ -543,14 +548,17 @@ tracks/3/loop_wrap = true
 tracks/3/imported = false
 tracks/3/enabled = true
 tracks/3/keys = {
-"times": PoolRealArray( 0.16, 0.23 ),
-"transitions": PoolRealArray( 1, 1 ),
+"times": PoolRealArray( 0, 0.16, 0.25 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
 "values": [ {
+"args": [ true ],
+"method": "set_attack_flag"
+}, {
 "args": [  ],
 "method": "freeze_hit_frame"
 }, {
-"args": [  ],
-"method": "animation_done"
+"args": [ false ],
+"method": "set_attack_flag"
 } ]
 }
 
@@ -613,8 +621,8 @@ tracks/3/keys = {
 "args": [  ],
 "method": "freeze_hit_frame"
 }, {
-"args": [  ],
-"method": "animation_done"
+"args": [ false ],
+"method": "set_attack_flag"
 } ]
 }
 
@@ -677,8 +685,8 @@ tracks/3/keys = {
 "args": [  ],
 "method": "freeze_hit_frame"
 }, {
-"args": [  ],
-"method": "animation_done"
+"args": [ false ],
+"method": "set_attack_flag"
 } ]
 }
 
@@ -1011,14 +1019,11 @@ tracks/3/loop_wrap = true
 tracks/3/imported = false
 tracks/3/enabled = true
 tracks/3/keys = {
-"times": PoolRealArray( 0.14, 0.35 ),
-"transitions": PoolRealArray( 1, 1 ),
+"times": PoolRealArray( 0.14 ),
+"transitions": PoolRealArray( 1 ),
 "values": [ {
 "args": [  ],
 "method": "freeze_hit_frame"
-}, {
-"args": [  ],
-"method": "animation_done"
 } ]
 }
 
@@ -1075,14 +1080,11 @@ tracks/3/loop_wrap = true
 tracks/3/imported = false
 tracks/3/enabled = true
 tracks/3/keys = {
-"times": PoolRealArray( 0.14, 0.35 ),
-"transitions": PoolRealArray( 1, 1 ),
+"times": PoolRealArray( 0.14 ),
+"transitions": PoolRealArray( 1 ),
 "values": [ {
 "args": [  ],
 "method": "freeze_hit_frame"
-}, {
-"args": [  ],
-"method": "animation_done"
 } ]
 }
 
@@ -1139,19 +1141,17 @@ tracks/3/loop_wrap = true
 tracks/3/imported = false
 tracks/3/enabled = true
 tracks/3/keys = {
-"times": PoolRealArray( 0.19, 0.4 ),
-"transitions": PoolRealArray( 1, 1 ),
+"times": PoolRealArray( 0.19 ),
+"transitions": PoolRealArray( 1 ),
 "values": [ {
 "args": [  ],
 "method": "freeze_hit_frame"
-}, {
-"args": [  ],
-"method": "animation_done"
 } ]
 }
 
 [sub_resource type="Animation" id=26]
 length = 0.4
+step = 0.01
 tracks/0/type = "value"
 tracks/0/path = NodePath("Sprite:frame")
 tracks/0/interp = 1
@@ -1171,11 +1171,28 @@ tracks/1/loop_wrap = true
 tracks/1/imported = false
 tracks/1/enabled = true
 tracks/1/keys = {
+"times": PoolRealArray( 0, 0.4 ),
+"transitions": PoolRealArray( 1, 1 ),
+"values": [ {
+"args": [ true ],
+"method": "set_switch_stance_flag"
+}, {
+"args": [ false ],
+"method": "set_switch_stance_flag"
+} ]
+}
+tracks/2/type = "method"
+tracks/2/path = NodePath(".")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
 "times": PoolRealArray( 0.4 ),
 "transitions": PoolRealArray( 1 ),
 "values": [ {
 "args": [  ],
-"method": "toggle_stance"
+"method": "draw_sword"
 } ]
 }
 
@@ -1253,6 +1270,7 @@ tracks/3/keys = {
 
 [sub_resource type="Animation" id=28]
 length = 0.4
+step = 0.01
 tracks/0/type = "value"
 tracks/0/path = NodePath("Sprite:frame")
 tracks/0/interp = 1
@@ -1272,11 +1290,28 @@ tracks/1/loop_wrap = true
 tracks/1/imported = false
 tracks/1/enabled = true
 tracks/1/keys = {
+"times": PoolRealArray( 0, 0.4 ),
+"transitions": PoolRealArray( 1, 1 ),
+"values": [ {
+"args": [ true ],
+"method": "set_switch_stance_flag"
+}, {
+"args": [ false ],
+"method": "set_switch_stance_flag"
+} ]
+}
+tracks/2/type = "method"
+tracks/2/path = NodePath(".")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
 "times": PoolRealArray( 0.4 ),
 "transitions": PoolRealArray( 1 ),
 "values": [ {
 "args": [  ],
-"method": "toggle_stance"
+"method": "sheath_sword"
 } ]
 }
 
@@ -1517,7 +1552,7 @@ states/skill_placeholder/position = Vector2( 688, 1048.02 )
 states/sprint/node = SubResource( 39 )
 states/sprint/position = Vector2( 975.43, 600.287 )
 states/sword_attack1/node = SubResource( 40 )
-states/sword_attack1/position = Vector2( 1292.43, 893.015 )
+states/sword_attack1/position = Vector2( 1292.43, 914.015 )
 states/sword_attack2/node = SubResource( 41 )
 states/sword_attack2/position = Vector2( 1292.43, 801.287 )
 states/sword_attack3/node = SubResource( 42 )
@@ -1529,7 +1564,7 @@ states/sword_sheath/position = Vector2( 739.565, 600.287 )
 transitions = [ "jump", "fall", SubResource( 45 ), "sword_attack1", "sword_attack2", SubResource( 46 ), "sword_attack2", "sword_attack3", SubResource( 47 ), "idle_sword", "sprint", SubResource( 48 ), "sprint", "idle_sword", SubResource( 49 ), "sword_attack3", "idle_sword", SubResource( 50 ), "sword_attack2", "idle_sword", SubResource( 51 ), "sword_attack1", "idle_sword", SubResource( 52 ), "idle_sword", "sword_attack1", SubResource( 53 ), "sword_run", "idle_sword", SubResource( 54 ), "idle_sword", "sword_run", SubResource( 55 ), "fall", "idle_sword", SubResource( 56 ), "idle_sword", "jump", SubResource( 57 ), "skill_placeholder", "idle_sword", SubResource( 58 ), "idle_sword", "skill_placeholder", SubResource( 59 ), "idle_sword", "die", SubResource( 60 ), "jump", "ledge_grab", SubResource( 61 ), "fall", "ledge_grab", SubResource( 62 ), "ledge_grab", "idle_sword", SubResource( 63 ), "idle_sword", "buff", SubResource( 64 ), "buff", "idle_sword", SubResource( 65 ), "sword_run", "skill_placeholder", SubResource( 66 ), "skill_placeholder", "sword_run", SubResource( 67 ), "jump", "dash_placeholder", SubResource( 68 ), "fall", "dash_placeholder", SubResource( 69 ), "sword_attack1", "skill_placeholder", SubResource( 70 ), "sword_attack2", "skill_placeholder", SubResource( 71 ), "sword_attack3", "skill_placeholder", SubResource( 72 ), "dash_placeholder", "idle_sword", SubResource( 73 ), "idle_sword", "sword_sheath", SubResource( 74 ) ]
 start_node = "idle_sword"
 end_node = "die"
-graph_offset = Vector2( -227.813, 570.902 )
+graph_offset = Vector2( -86.7603, 594.248 )
 
 [sub_resource type="AnimationNodeStateMachinePlayback" id=76]
 
@@ -1559,6 +1594,7 @@ animation = "fist_attack4"
 
 [sub_resource type="AnimationNodeAnimation" id=85]
 animation = "idle_fist"
+script = ExtResource( 8 )
 
 [sub_resource type="AnimationNodeAnimation" id=86]
 animation = "jump"
@@ -1600,7 +1636,6 @@ switch_mode = 2
 
 [sub_resource type="AnimationNodeStateMachineTransition" id=99]
 switch_mode = 2
-auto_advance = true
 
 [sub_resource type="AnimationNodeStateMachineTransition" id=100]
 
@@ -1617,12 +1652,16 @@ auto_advance = true
 [sub_resource type="AnimationNodeStateMachineTransition" id=106]
 
 [sub_resource type="AnimationNodeStateMachineTransition" id=107]
+switch_mode = 2
 
 [sub_resource type="AnimationNodeStateMachineTransition" id=108]
+switch_mode = 2
 
 [sub_resource type="AnimationNodeStateMachineTransition" id=109]
+switch_mode = 2
 
 [sub_resource type="AnimationNodeStateMachineTransition" id=110]
+switch_mode = 2
 
 [sub_resource type="AnimationNodeStateMachineTransition" id=111]
 
@@ -1637,11 +1676,9 @@ auto_advance = true
 [sub_resource type="AnimationNodeStateMachineTransition" id=115]
 
 [sub_resource type="AnimationNodeStateMachineTransition" id=116]
-auto_advance = true
 
 [sub_resource type="AnimationNodeStateMachineTransition" id=117]
 switch_mode = 2
-auto_advance = true
 
 [sub_resource type="AnimationNodeStateMachineTransition" id=118]
 
@@ -1655,23 +1692,23 @@ auto_advance = true
 
 [sub_resource type="AnimationNodeStateMachine" id=123]
 states/buff/node = SubResource( 77 )
-states/buff/position = Vector2( 460.599, 348 )
+states/buff/position = Vector2( 494.599, 416 )
 states/dash_placeholder/node = SubResource( 78 )
-states/dash_placeholder/position = Vector2( -160, 285.894 )
+states/dash_placeholder/position = Vector2( -182, 278.894 )
 states/die/node = SubResource( 79 )
 states/die/position = Vector2( 387, -19 )
 states/fall/node = SubResource( 80 )
-states/fall/position = Vector2( 41, 348 )
+states/fall/position = Vector2( 32, 376 )
 states/fist_attack1/node = SubResource( 81 )
-states/fist_attack1/position = Vector2( 885, -19 )
+states/fist_attack1/position = Vector2( 1120, 7 )
 states/fist_attack2/node = SubResource( 82 )
-states/fist_attack2/position = Vector2( 885, 77 )
+states/fist_attack2/position = Vector2( 1120, 123 )
 states/fist_attack3/node = SubResource( 83 )
-states/fist_attack3/position = Vector2( 885, 164 )
+states/fist_attack3/position = Vector2( 1120, 257.894 )
 states/fist_attack4/node = SubResource( 84 )
-states/fist_attack4/position = Vector2( 885, 256 )
+states/fist_attack4/position = Vector2( 1120, 376 )
 states/idle_fist/node = SubResource( 85 )
-states/idle_fist/position = Vector2( 503, 171 )
+states/idle_fist/position = Vector2( 505, 182 )
 states/jump/node = SubResource( 86 )
 states/jump/position = Vector2( 41, 99 )
 states/ledge_grab/node = SubResource( 87 )
@@ -1679,15 +1716,15 @@ states/ledge_grab/position = Vector2( -160, 159 )
 states/run/node = SubResource( 88 )
 states/run/position = Vector2( 159, -19 )
 states/skill_placeholder/node = SubResource( 89 )
-states/skill_placeholder/position = Vector2( 662, 371 )
+states/skill_placeholder/position = Vector2( 766, 416 )
 states/sprint/node = SubResource( 90 )
-states/sprint/position = Vector2( 275.599, 348 )
+states/sprint/position = Vector2( 266.599, 401 )
 states/sword_draw/node = SubResource( 91 )
 states/sword_draw/position = Vector2( 620.599, -19 )
 transitions = [ "idle_fist", "fist_attack1", SubResource( 92 ), "fist_attack1", "fist_attack2", SubResource( 93 ), "fist_attack2", "fist_attack3", SubResource( 94 ), "fist_attack3", "fist_attack4", SubResource( 95 ), "fist_attack1", "idle_fist", SubResource( 96 ), "fist_attack2", "idle_fist", SubResource( 97 ), "fist_attack3", "idle_fist", SubResource( 98 ), "fist_attack4", "idle_fist", SubResource( 99 ), "idle_fist", "run", SubResource( 100 ), "idle_fist", "die", SubResource( 101 ), "idle_fist", "jump", SubResource( 102 ), "jump", "fall", SubResource( 103 ), "fall", "idle_fist", SubResource( 104 ), "run", "idle_fist", SubResource( 105 ), "idle_fist", "skill_placeholder", SubResource( 106 ), "fist_attack1", "skill_placeholder", SubResource( 107 ), "fist_attack2", "skill_placeholder", SubResource( 108 ), "fist_attack3", "skill_placeholder", SubResource( 109 ), "fist_attack4", "skill_placeholder", SubResource( 110 ), "jump", "ledge_grab", SubResource( 111 ), "fall", "ledge_grab", SubResource( 112 ), "ledge_grab", "idle_fist", SubResource( 113 ), "jump", "dash_placeholder", SubResource( 114 ), "fall", "dash_placeholder", SubResource( 115 ), "dash_placeholder", "idle_fist", SubResource( 116 ), "skill_placeholder", "idle_fist", SubResource( 117 ), "idle_fist", "sprint", SubResource( 118 ), "sprint", "idle_fist", SubResource( 119 ), "idle_fist", "buff", SubResource( 120 ), "buff", "idle_fist", SubResource( 121 ), "idle_fist", "sword_draw", SubResource( 122 ) ]
 start_node = "idle_fist"
 end_node = "die"
-graph_offset = Vector2( -378.401, -66.1213 )
+graph_offset = Vector2( -313.205, -123.544 )
 
 [sub_resource type="AnimationNodeStateMachinePlayback" id=124]
 
@@ -1713,9 +1750,10 @@ visible = false
 light_mask = 0
 material = SubResource( 2 )
 texture = ExtResource( 1 )
+offset = Vector2( -3, 0 )
 vframes = 34
 hframes = 8
-frame = 2
+frame = 73
 region_rect = Rect2( 271, 114, 14, 34 )
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
@@ -1748,7 +1786,7 @@ anims/sword_sheath = SubResource( 28 )
 anims/whirlwind_slash = SubResource( 29 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2( 0, 6 )
+scale = Vector2( 1, 0.6 )
 shape = SubResource( 30 )
 __meta__ = {
 "_edit_group_": true
@@ -1847,21 +1885,29 @@ wait_time = 2.0
 one_shot = true
 
 [node name="MovementFSM" type="Node2D" parent="."]
+position = Vector2( 3, 0 )
 script = ExtResource( 6 )
 
 [node name="JumpCooldown" type="Timer" parent="MovementFSM"]
 wait_time = 0.1
 one_shot = true
 
+[node name="NextAttackWait" type="Timer" parent="MovementFSM"]
+wait_time = 0.3
+one_shot = true
+
 [node name="Label" type="Label" parent="."]
-margin_left = -8.0
-margin_top = -22.0
-margin_right = 10.0
-margin_bottom = -8.0
+margin_left = -23.0
+margin_top = -32.0
+margin_right = 6.0
+margin_bottom = -18.0
 align = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="StateLogic" type="Node2D" parent="."]
+script = ExtResource( 7 )
 [connection signal="timeout" from="HealthRecovery" to="." method="_on_HealthRecovery_timeout"]
 [connection signal="timeout" from="ManaRecovery" to="." method="_on_ManaRecovery_timeout"]
 [connection signal="timeout" from="IFrame" to="." method="_on_IFrame_timeout"]
