@@ -103,6 +103,7 @@ var is_attacking = false
 var is_using_skill = false
 var is_switching_stance = false
 
+var attack_animation_map = {}
 #var jumpEnabled = true
 # called when the node enters the scene tree for the first time
 func _ready():
@@ -123,7 +124,16 @@ func animation_loop(attack, skill, item, switch):
 	grab_ledge()
 #	stance_update(switch) # stance change
 
-
+func _init_attack_animation_dict():
+	attack_animation_map = {
+		"fist_attack1": true,
+		"fist_attack2": true,
+		"fist_attack3": true,
+		"fist_attack4": true,
+		"sword_attack1": true,
+		"sword_attack2": true,
+		"sword_attack3": true,
+	}
 # movement logic
 func movement_loop(attack, up, left, right):
 	pass
@@ -626,7 +636,7 @@ func is_sword_stance():
 	return stance == STANCE.SWORD
 
 func is_fist_stance():
-	return stance == STANCE.SWORD
+	return stance == STANCE.FIST
 		
 		
 func apply_horizontal_deceleration():
@@ -900,3 +910,35 @@ func get_animation_state_machine():
 	
 func get_stance():
 	return stance
+
+#func _on_AnimationPlayer_animation_started(anim_name):
+#	print("animatioon started: " + anim_name)
+#	var is_attack_animation_playing = attack_animation_map[anim_name]
+#	if is_attack_animation_playing:
+#		print(anim_name + " is playing")
+##	else:
+##		set_attack_flag(false)
+#
+#func _on_AnimationPlayer_animation_finished(anim_name):
+#	print(anim_name)
+#	var is_attack_animation_playing = attack_animation_map[anim_name]
+#	if is_attack_animation_playing:
+#		print(anim_name + " is playing")
+##	else:
+##		set_attack_flag(false)
+
+
+func _on_AnimationPlayer_animation_started(anim_name):
+	print("animation started: " + anim_name)
+
+
+func _on_AnimationPlayer_animation_finished(anim_name):
+	print("animation finished: " + anim_name)
+
+
+func _on_AnimationPlayer_animation_changed(old_name, new_name):
+	print("old animation: " + old_name)
+	print("new animation: " + new_name)
+
+func get_animation_node(animation_node):
+	return $AnimationPlayer.get_animation(animation_node)

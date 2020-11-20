@@ -36,6 +36,7 @@ func update_input():
 
 	special_movement = Input.is_action_just_pressed("ui_special_movement")
 	
+var attack_wait_is_done = false
 # initialize possible states for the state machine
 func _ready():
 	# movement states
@@ -52,6 +53,9 @@ func _ready():
 	add_state("fist_attack2")
 	add_state("fist_attack3")
 	add_state("fist_attack4")
+	add_state("sword_attack1")
+	add_state("sword_attack2")
+	add_state("sword_attack3")
 	add_state("skill0")
 	add_state("skill1")
 	add_state("skill2")
@@ -170,9 +174,7 @@ func _get_transition(delta):
 			return possible_states.idle if not is_dashing else null
 		
 		possible_states.attack_wait:
-			if $NextAttackWait.is_stopped():
-				return possible_states.idle
-			elif attack:
+			if attack:
 				if previous_state == possible_states.fist_attack1:
 					return possible_states.fist_attack2
 				elif previous_state == possible_states.fist_attack2:
@@ -181,40 +183,37 @@ func _get_transition(delta):
 					return possible_states.fist_attack4
 				elif previous_state == possible_states.fist_attack4:
 					return possible_states.fist_attack1
+				elif previous_state == possible_states.sword_attack1:
+					return possible_states.sword_attack2
+				elif previous_state == possible_states.sword_attack2:
+					return possible_states.sword_attack3
+				elif previous_state == possible_states.sword_attack3:
+					return possible_states.sword_attack1
+			elif attack_wait_is_done:
+				return possible_states.idle
 			else:
 				return null
 			
 		possible_states.fist_attack1:
-			if body.is_attacking():
-				return null
-			elif attack:
-				return possible_states.fist_attack2
-			else:
-				return possible_states.attack_wait
+			return possible_states.attack_wait
 			
 		possible_states.fist_attack2:
-			if body.is_attacking():
-				return null
-			elif attack:
-				return possible_states.fist_attack3
-			else:
-				return possible_states.attack_wait
+			return possible_states.attack_wait
 				
 		possible_states.fist_attack3:
-			if body.is_attacking():
-				return null
-			elif attack:
-				return possible_states.fist_attack4
-			else:
-				return possible_states.attack_wait
+			return possible_states.attack_wait
 				
 		possible_states.fist_attack4:
-			if body.is_attacking():
-				return null
-			elif attack:
-				return possible_states.fist_attack1
-			else:
-				return possible_states.attack_wait
+			return possible_states.attack_wait
+				
+		possible_states.sword_attack1:
+			return possible_states.attack_wait
+				
+		possible_states.sword_attack2:
+			return possible_states.attack_wait
+				
+		possible_states.sword_attack3:
+			return possible_states.attack_wait
 				
 		possible_states.switch_stance:
 			var current_animation = body.get_animation_state_machine().get_current_node()
@@ -266,28 +265,39 @@ func _enter_state(new_state):
 			print("state: dash")
 			
 		possible_states.attack_wait:
+			body.set_label("attack wait")
+			attack_wait_is_done = false
 			$NextAttackWait.start()
 			
 		possible_states.fist_attack1:
-			body.play_animation("fist_attack1")
+			pause_until_animation_finishes("fist_attack1")
 			body.set_label("fist attack 1")
 			print("state: fist attack1")
+			
 		possible_states.fist_attack2:
-			body.play_animation("fist_attack2")
+			pause_until_animation_finishes("fist_attack2")
 			body.set_label("fist attack 2")
 			print("state: fist attack2")
 			
 		possible_states.fist_attack3:
-#			body.set_attack_flag(true)
-			body.play_animation("fist_attack3")
-			body.set_label("fist attack 3")
+			pause_until_animation_finishes("fist_attack3")
 			print("state: fist attack3")
 			
 		possible_states.fist_attack4:
-#			body.set_attack_flag(true)
-			body.play_animation("fist_attack4")
-			body.set_label("fist attack 4")
+			pause_until_animation_finishes("fist_attack4")
 			print("state: fist attack4")
+		
+		possible_states.sword_attack1:
+			pause_until_animation_finishes("sword_attack1")
+			print("state: sword attack1")
+			
+		possible_states.sword_attack2:
+			pause_until_animation_finishes("sword_attack2")
+			print("state: sword attack2")
+			
+		possible_states.sword_attack3:
+			pause_until_animation_finishes("sword_attack3")
+			print("state: sword attack3")
 			
 		possible_states.skill0:
 			body.skill0()
@@ -351,7 +361,7 @@ func jump_transition_handler():
 	elif special_movement and not body.is_dashing():
 		return possible_states.dash
 	if attack:
-		return possible_states.fist_attack1
+		return get_first_attack_state()
 	elif body.is_on_floor():
 		return possible_states.idle
 	elif body.velocity.y > 0:
@@ -377,7 +387,7 @@ func _attack_transition_handler():
 			return possible_states.skill6
 		elif attack:
 			# TODO implement conditional for different forms of attack
-			return possible_states.fist_attack1
+			return get_first_attack_state()
 
 func _movement_transition_handler():
 	if body.is_touching_ledge() and current_state != possible_states.ledge_grab:
@@ -406,7 +416,7 @@ func fall_transition_handler():
 	elif body.is_touching_ledge():
 		return possible_states.ledge_grab
 	elif attack:
-		return possible_states.fist_attack1
+		return get_first_attack_state()
 	elif special_movement:
 		return possible_states.dash
 	else:
@@ -422,7 +432,12 @@ func _on_JumpCooldown_timeout():
 	jump_enabled = true
 	print("jump enabled")
 	
-	
+func get_first_attack_state():
+	if body.is_sword_stance():
+		return possible_states.sword_attack1
+	elif body.is_fist_stance():
+		return possible_states.fist_attack1
+
 # should be called every tick
 #func _get_transition(delta):
 #	match current_state:
@@ -486,3 +501,15 @@ func _on_JumpCooldown_timeout():
 #					return possible_states.idle
 #	return null
 
+func _on_NextAttackWait_timeout():
+	attack_wait_is_done = true
+
+# pauses the state machine until animation length finishes
+func pause_until_animation_finishes(animation):
+	body.play_animation(animation)
+	set_pause_flag(true)
+	var animation_node = body.get_animation_node(animation)
+	$PauseFlagTimer.start(animation_node.get_length())
+
+func _on_PauseFlagTimer_timeout():
+	set_pause_flag(false)
