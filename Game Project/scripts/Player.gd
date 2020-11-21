@@ -73,34 +73,117 @@ var movement_enabled = true
 var current_animation_tree = null
 var skillAnimationNode = null
 
+var is_attacking = false
+var is_using_skill = false
+var is_switching_stance = false
+
 # called when the node enters the scene tree for the first time
 func _ready():
 	# Firebase.get_document("users/%s" % Firebase.user_info.id, http)
 	default_player_parameters()
 	setup_state_machine()
 
-# animation logic
-func animation_loop(attack, skill, item, switch):
-	move() # moving state
-	jump() # jumping state
-	fall() # falling state
-	idle() # idle state
-	attack(attack) # attacking state
-	detect_skill_activation(skill) # pass input
-	detect_item_usage(item) # item activation
-	grab_ledge()
-	stance_update(switch) # stance change
+## animation logic
+#func animation_loop(attack, skill, item, switch):
+#	move() # moving state
+#	jump() # jumping state
+#	fall() # falling state
+#	idle() # idle state
+#	attack(attack) # attacking state
+#	detect_skill_activation(skill) # pass input
+#	detect_item_usage(item) # item activation
+#	grab_ledge()
+#	stance_update(switch) # stance change
 
-# movement logic
-func movement_loop(attack, up, left, right):
-	detect_ledge()
-	if movement_enabled:
-		apply_gravity() # pull player downwards
-		update_sprite_direction(right, left) # flips sprite to corresponding direction
-		vertical_movement(up) # vertical translation
-		update_speed_modifier(attack) # restricts movement during certain actions
-		apply_accel_decel(left, right) # acceleration effect
-		apply_translation(left, right, attack)
+## movement logic
+#func movement_loop(attack, up, left, right):
+#	detect_ledge()
+#	if movement_enabled:
+#		apply_gravity() # pull player downwards
+#		update_sprite_direction(right, left) # flips sprite to corresponding direction
+#		vertical_movement(up) # vertical translation
+#		update_speed_modifier(attack) # restricts movement during certain actions
+#		apply_accel_decel(left, right) # acceleration effect
+#		apply_translation(left, right, attack)
+
+
+#new stuff starts here
+func move_left():
+	# change direction when necessary
+	if dir != Global.DIRECTION.W:
+		dir = Global.DIRECTION.W
+		base_speed = min_speed 
+			
+	# accelerate to the left
+	base_speed += acceleration_rate
+	if base_speed > max_speed:
+		base_speed = max_speed
+	
+	velocity.x = base_speed * run_speed_modifier * -1
+	
+	
+func move_right():
+	# change direction when necessary
+	if dir != Global.DIRECTION.E:
+		dir = Global.DIRECTION.E 
+		base_speed = min_speed
+	
+	# accelerate to the right
+	base_speed += acceleration_rate
+	if base_speed > max_speed:
+		base_speed = max_speed
+	
+	velocity.x = base_speed * run_speed_modifier 
+
+func switch_to_sword():
+	if stance != Global.STANCE.SWORD:
+		if weapon_change_off_cooldown and movement_enabled and !isTouchingLedge and is_on_floor():
+			play_animation("sword_draw")
+
+func switch_to_fist():
+	if stance != Global.STANCE.FIST:
+		if weapon_change_off_cooldown and movement_enabled and !isTouchingLedge and is_on_floor():
+			play_animation("sword_sheath")
+
+func switch_stance():
+	if stance == Global.STANCE.FIST:
+		play_animation("sword_draw")
+	else:
+		play_animation("sword_sheath")
+
+func is_switching_stance():
+	return is_switching_stance
+	
+func set_switch_stance_flag(flag):
+	is_switching_stance = flag
+	print("switch stance flag:", is_switching_stance)
+
+func is_sword_stance():
+	return stance == Global.STANCE.SWORD
+
+func is_fist_stance():
+	return stance == Global.STANCE.FIST
+		
+		
+func apply_horizontal_deceleration():
+#	base_speed -= acceleration_rate *2
+#	if base_speed < min_speed:
+#	if base_speed < min_speed:
+#		base_speed = min_speed
+	if velocity.x > 0:
+		velocity.x -= acceleration_rate * 2
+		if velocity.x < 0:
+			velocity.x = 0
+	elif velocity.x < 0:
+		velocity.x += acceleration_rate * 2
+		if velocity.x > 0:
+			velocity.x = 0
+######
+
+
+
+
+
 
 # applies a blinking damage effect to the player
 func hurt(dmg):
@@ -348,6 +431,12 @@ func move():
 			elif stance == Global.STANCE.SWORD:
 				play_animation("sword_run")
 
+func play_run_animation():
+	if stance == Global.STANCE.FIST:
+		play_animation("run")
+	elif stance == Global.STANCE.SWORD:
+		play_animation("sword_run")
+
 # player jumps in air 
 func jump():
 	if velocity.y < 0 && !is_on_floor():
@@ -365,6 +454,12 @@ func idle():
 			play_animation("idle_fist")
 		elif stance == Global.STANCE.SWORD:
 			play_animation("idle_sword")
+
+func play_idle_animation():
+	if stance == Global.STANCE.FIST:
+		play_animation("idle_fist")
+	elif stance == Global.STANCE.SWORD:
+		play_animation("idle_sword")
 
 # regular attacking skills
 func attack(attack):
@@ -496,6 +591,19 @@ func apply_translation(left, right, attack):
 		
 	# apply translations to the player
 	velocity = move_and_slide(velocity, Vector2(0,-1))
+	
+var is_flip = false
+func update_horizontal_scale():
+	if dir == Global.DIRECTION.E and is_flip:
+		is_flip = false
+		scale.x = -1
+	elif dir == Global.DIRECTION.W and not is_flip:
+		is_flip = true
+		scale.x = -1
+		
+func apply_movement():
+	# apply translations to the player
+	velocity = move_and_slide(velocity, Vector2(0,-1))
 
 # upon receiving damage player sprite blinks
 func blinking_damage_effect():
@@ -506,6 +614,13 @@ func blinking_damage_effect():
 		yield(get_tree().create_timer(0.1), "timeout")
 		$Sprite.set_modulate(Color(1,1,1,1)) 
 		yield(get_tree().create_timer(0.1), "timeout")
+
+func is_attacking():
+	return is_attacking
+	
+func is_using_skill():
+	return is_using_skill
+
 
 ###############################################################################
 # sound effects
@@ -583,6 +698,32 @@ func dash():
 		dashing = true
 		$DashTimer.start()
 
+# new player dash
+func do_dash():
+	play_dash_sfx()
+	gravity = 0
+	velocity.y = 0
+	velocity.x = 500
+	if dir == Global.DIRECTION.W:
+		velocity.x *= -1
+	dashing = true
+	$DashTimer.start()
+
+func is_dashing():
+	return dashing
+
+func set_label(label):
+	$Label.set_text(label)
+	
+func get_animation_state_machine():
+	return state_machine
+	
+func get_stance():
+	return stance
+
+func get_animation_node(animation_node):
+	return $AnimationPlayer.get_animation(animation_node)
+
 func _on_DashTimer_timeout():
 	gravity = DEFAULT_GRAVITY
 	dashing = false
@@ -612,6 +753,9 @@ func detect_ledge():
 		if isTouchingLedge:
 			start_ledge_grab()
 			movement_enabled = false
+	
+func is_touching_ledge():
+	return $CollisionShape2D/LowerEdgeDetect.is_colliding() and not $CollisionShape2D/HigherEdgeDetect.is_colliding()
 	
 # TODO: needs a better way to identify blocks in the stage
 # TODO: refactor since this function does too much
