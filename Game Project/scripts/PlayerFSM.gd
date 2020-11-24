@@ -221,6 +221,22 @@ func _get_transition(delta):
 				return null
 			else:
 				return possible_states.idle
+				
+		possible_states.skill0:
+			return possible_states.idle
+		possible_states.skill1:
+			return possible_states.idle
+		possible_states.skill2:
+			return possible_states.idle
+		possible_states.skill3:
+			return possible_states.idle
+		possible_states.skill4:
+			return possible_states.idle
+		possible_states.skill5:
+			return possible_states.idle
+		possible_states.skill6:
+			return possible_states.idle
+			
 
 func _enter_state(new_state):
 	match new_state:

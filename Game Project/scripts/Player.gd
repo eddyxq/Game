@@ -493,61 +493,44 @@ func attack(attack):
 		elif stance == Global.STANCE.SWORD:
 			play_animation("sword_attack3")
 
-# send skill inputs
-func detect_skill_activation(skill):	
-	if stance == Global.STANCE.SWORD:
-		skill0(skill[0])
-		skill1(skill[1])
-		skill2(skill[2])
-		skill3(skill[3])
-		skill4(skill[4])
-		skill5(skill[5])
-		skill6(skill[6])
 
 # distance blade
-func skill1(skill1):
-	if skill1 && skill_slot_off_cooldown[1]:
+func skill1():
 		if mana >= skill_mana_cost[1]:
 			skill_bar.skill_slot1.start_cooldown()
 			skill_slot_off_cooldown[1] = false
 			skillAnimationNode.set_animation("distance_blade")
 			play_animation("skill_placeholder")
 
-func skill2(skill2):
-	if skill2 && skill_slot_off_cooldown[2]:
+func skill2():
 		if mana >= skill_mana_cost[2]:
 			skill_bar.skill_slot2.start_cooldown()
 			skill_slot_off_cooldown[2] = false
 			skillAnimationNode.set_animation("whirlwind_slash")
 			play_animation("skill_placeholder")
 
-func skill3(skill3):
-	if skill3 && skill_slot_off_cooldown[3]:
+func skill3():
 		if mana >= skill_mana_cost[3]:
 			skill_bar.skill_slot3.start_cooldown()
 			skill_slot_off_cooldown[3] = false
 			skillAnimationNode.set_animation("bleed_slash")
 			play_animation("skill_placeholder")
 
-func skill4(skill4):
-	if skill4 && skill_slot_off_cooldown[4]:
+func skill4():
 		if mana >= skill_mana_cost[4]:
 			skill_bar.skill_slot4.start_cooldown()
 			skill_slot_off_cooldown[4] = false
 			skillAnimationNode.set_animation("dash_slash")
 			play_animation("skill_placeholder")
 
-func skill5(skill5):
-	var _placeholder = skill5
+func skill5():
 	pass
 
-func skill6(skill6):
-	var _placeholder = skill6
+func skill6():
 	pass
 
 # ultimate move
-func skill0(skill0):
-	var _placeholder = skill0
+func skill0():
 	pass
 
 # item consumables for status recovery
