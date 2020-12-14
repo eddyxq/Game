@@ -33,7 +33,7 @@ enum DIRECTION {
 	N, # north/up
 	S, # south/down
 	W, # west/left
-	E, # east/right
+	E # east/right
 }
 
 # possible weapons and stances

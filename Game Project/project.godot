@@ -10,12 +10,114 @@ config_version=4
 
 _global_script_classes=[ {
 "base": "Node",
+"class": "AttackWaitState",
+"language": "GDScript",
+"path": "res://scripts/state machine/attack_wait_state.gd"
+}, {
+"base": "Node",
+"class": "DashState",
+"language": "GDScript",
+"path": "res://scripts/state machine/dash_state.gd"
+}, {
+"base": "Node",
+"class": "FallState",
+"language": "GDScript",
+"path": "res://scripts/state machine/fall_state.gd"
+}, {
+"base": "Node",
 "class": "FiniteStateMachine",
 "language": "GDScript",
 "path": "res://scripts/FiniteStateMachine.gd"
+}, {
+"base": "Node",
+"class": "FistAttack1State",
+"language": "GDScript",
+"path": "res://scripts/state machine/fist_attack1_state.gd"
+}, {
+"base": "Node",
+"class": "FistAttack2State",
+"language": "GDScript",
+"path": "res://scripts/state machine/fist_attack2_state.gd"
+}, {
+"base": "Node",
+"class": "FistAttack3State",
+"language": "GDScript",
+"path": "res://scripts/state machine/fist_attack3_state.gd"
+}, {
+"base": "Node",
+"class": "FistAttack4State",
+"language": "GDScript",
+"path": "res://scripts/state machine/fist_attack4_state.gd"
+}, {
+"base": "Node",
+"class": "IdleState",
+"language": "GDScript",
+"path": "res://scripts/state machine/idle_state.gd"
+}, {
+"base": "Node",
+"class": "JumpState",
+"language": "GDScript",
+"path": "res://scripts/state machine/jump_state.gd"
+}, {
+"base": "Node",
+"class": "LedgeGrabState",
+"language": "GDScript",
+"path": "res://scripts/state machine/ledge_grab_state.gd"
+}, {
+"base": "Node",
+"class": "NodeState",
+"language": "GDScript",
+"path": "res://scripts/state machine/state.gd"
+}, {
+"base": "Node",
+"class": "RunState",
+"language": "GDScript",
+"path": "res://scripts/state machine/run_state.gd"
+}, {
+"base": "Node",
+"class": "SkillState",
+"language": "GDScript",
+"path": "res://scripts/state machine/skill_state.gd"
+}, {
+"base": "Node",
+"class": "SwitchStanceState",
+"language": "GDScript",
+"path": "res://scripts/state machine/switch_stance_state.gd"
+}, {
+"base": "Node",
+"class": "SwordAttack1State",
+"language": "GDScript",
+"path": "res://scripts/state machine/sword_attack1_state.gd"
+}, {
+"base": "Node",
+"class": "SwordAttack2State",
+"language": "GDScript",
+"path": "res://scripts/state machine/sword_attack2_state.gd"
+}, {
+"base": "Node",
+"class": "SwordAttack3State",
+"language": "GDScript",
+"path": "res://scripts/state machine/sword_attack3_state.gd"
 } ]
 _global_script_class_icons={
-"FiniteStateMachine": ""
+"AttackWaitState": "",
+"DashState": "",
+"FallState": "",
+"FiniteStateMachine": "",
+"FistAttack1State": "",
+"FistAttack2State": "",
+"FistAttack3State": "",
+"FistAttack4State": "",
+"IdleState": "",
+"JumpState": "",
+"LedgeGrabState": "",
+"NodeState": "",
+"RunState": "",
+"SkillState": "",
+"SwitchStanceState": "",
+"SwordAttack1State": "",
+"SwordAttack2State": "",
+"SwordAttack3State": ""
 }
 
 [application]
