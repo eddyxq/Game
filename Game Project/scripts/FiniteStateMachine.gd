@@ -1,52 +1,46 @@
-class_name FiniteStateMachine
 extends Node
-
+class_name FiniteStateMachine
 
 var current_state = null setget set_state
 var previous_state = null
-
 var possible_states = {}
-# possible_states[state_name] = state_object
-var state_objects = {}
 var pause_flag = false
 
 onready var body = get_parent()
 
-#func _ready():
-#	body = get_parent()
-	
 func main(delta):
-	if current_state != null:
-#		print("state machine working")
-		var current_state_object = state_objects[current_state]
-		current_state_object._state_logic(delta)
-		body.apply_movement()
-		
-		if current_state_object.is_ready_to_transition():
-#			print("ready to transtion")
-			var new_state = _get_transition(delta)
-#			print("new state transition:", new_state)
-			if new_state != null:
-				set_state(new_state)
-			
+	if current_state != null and not pause_flag:
+		_state_logic(delta)
+		var transition = _get_transition(delta)
+		if transition != null:
+			set_state(transition)
+
+# should be called every tick
+func _state_logic(delta):
+	pass
+	
 # should be called every tick
 func _get_transition(delta):
 	return null
 	
+func _enter_state(new_state):
+	pass
+	
+func _exit_state():
+	pass
+	
 func set_state(new_state):
 	if current_state != null:
-		var current_state_object = state_objects[current_state]
-		current_state_object._exit()
+		_exit_state()
 	
 	if new_state != null:
-		var new_state_object = state_objects[new_state]
-		new_state_object._enter()
-				
+		_enter_state(new_state)
+		
 	previous_state = current_state
 	current_state = new_state
-#	print(previous_state)
-#	print(current_state)
 	
-func add_state(state_name, state_object):
-	possible_states[state_name] = state_name
-	state_objects[state_name] = state_object
+func add_state(state_name):
+	possible_states[state_name] = possible_states.size()
+
+func set_pause_flag(flag):
+	pause_flag = flag
