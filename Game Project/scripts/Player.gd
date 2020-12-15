@@ -178,29 +178,6 @@ func apply_horizontal_deceleration():
 		velocity.x += acceleration_rate * 2
 		if velocity.x > 0:
 			velocity.x = 0
-
-# restore player health when not in cooldown
-func use_health_potion():
-	
-	if item_slot_off_cooldown[0]:
-		item_bar.item_slot1.start_cooldown()
-		item_slot_off_cooldown[0] = false
-		play_potion_sfx()
-		# potion fully heals the player's health
-		UI.health_bar.increase(health, max_hp - health)
-		health = max_hp
-	
-# restore player mana when not in cooldown	
-func use_mana_potion():
-	
-	if item_slot_off_cooldown[1]:
-		item_bar.item_slot2.start_cooldown()
-		item_slot_off_cooldown[1] = false
-		play_potion_sfx()
-		# potion fully heals the player's mana
-		mana = max_mp
-		UI.mana_bar.update_bar(mana)
-		
 ######
 
 
@@ -414,12 +391,13 @@ func reset_skill_cooldown(skill_slot_num):
 
 # toggles the player's stance between fist and sword
 func toggle_stance():
-	if stance == Global.STANCE.FIST:
-		draw_sword()
-	elif stance == Global.STANCE.SWORD:
-		sheath_sword()
-			
-	set_switch_stance_flag(false)
+	if weapon_change_off_cooldown and is_on_floor():
+		$WeaponChangeCD.start()
+		weapon_change_off_cooldown = false
+		if stance == Global.STANCE.FIST and movement_enabled and !isTouchingLedge:
+			draw_sword()
+		elif stance == Global.STANCE.SWORD and movement_enabled and !isTouchingLedge:
+			sheath_sword()
 
 # draws sword weapon
 func draw_sword():
@@ -461,8 +439,8 @@ func play_run_animation():
 
 # player jumps in air 
 func jump():
-	if is_on_floor():
-		velocity.y = -jump_speed
+	if velocity.y < 0 && !is_on_floor():
+		play_animation("jump")
 
 # player enters fall state while mid air
 func fall():
