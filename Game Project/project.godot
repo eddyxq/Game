@@ -8,20 +8,15 @@
 
 config_version=4
 
-_global_script_classes=[ {
-"base": "Node",
-"class": "FiniteStateMachine",
-"language": "GDScript",
-"path": "res://scripts/FiniteStateMachine.gd"
-} ]
+_global_script_classes=[  ]
 _global_script_class_icons={
-"FiniteStateMachine": ""
+
 }
 
 [application]
 
 config/name="Prototype"
-run/main_scene="res://scenes/environment/Map1_Frozen.tscn"
+run/main_scene="res://scenes/environment/Map0_Tutorial.tscn"
 config/icon="res://images/thumbnail/icon.png"
 
 [autoload]
