@@ -4,6 +4,7 @@ extends KinematicBody2D
 # goblin enemy class
 ###############################################################################
 
+const IdleState = preload("res://scripts/Goblin_fsm.gd")
 onready var UI = get_tree().get_root().get_node("/root/Controller/HUD")
 onready var player = get_parent().get_node("Player")
 onready var health_bar = $HealthBar
