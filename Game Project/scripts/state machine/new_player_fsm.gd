@@ -19,6 +19,8 @@ const SwordAttack1State = preload("res://scripts/state machine//sword_attack1_st
 const SwordAttack2State = preload("res://scripts/state machine//sword_attack2_state.gd")
 const SwordAttack3State = preload("res://scripts/state machine//sword_attack3_state.gd")
 
+const DistanceBladeState = preload("res://scripts/state machine//distance_blade_state.gd")
+
 # user keyboard input flags
 var up     # w / up arrow
 var down   # s / down arrrow
@@ -56,6 +58,7 @@ func _ready():
 	add_state("sword_attack1", SwordAttack1State.new(body, $TransitionTimer))
 	add_state("sword_attack2", SwordAttack2State.new(body, $TransitionTimer))
 	add_state("sword_attack3", SwordAttack3State.new(body, $TransitionTimer))
+	add_state("distance_blade", DistanceBladeState.new(body, $TransitionTimer))
 	
 	call_deferred("set_state", possible_states.idle)
 
@@ -117,9 +120,7 @@ func _get_transition(delta):
 			return possible_states.attack_wait
 			
 		possible_states.switch_stance:
-			if body.is_switching_stance():
-				return null
-			else:
+			if not body.is_switching_stance():
 				return possible_states.idle
 		
 		# sword attack transitions
@@ -131,7 +132,11 @@ func _get_transition(delta):
 				
 		possible_states.sword_attack3:
 			return possible_states.attack_wait
-	
+		
+		# skill transitions
+		possible_states.distance_blade:
+			return possible_states.idle
+			
 	return null
 
 func _movement_and_attack_transition_handler():
@@ -141,11 +146,11 @@ func _movement_and_attack_transition_handler():
 		return _movement_transition_handler()
 
 func _attack_transition_handler():
-	if not body.is_using_skill():
+	if body.is_sword_stance():
 		if skills[0]:
 			return possible_states.skill0
-		elif skills[1]:
-			return possible_states.skill1
+		elif skills[1] and body.mana >= body.skill_mana_cost[1]:
+			return possible_states.distance_blade
 		elif skills[2]:
 			return possible_states.skill2
 		elif skills[3]:
@@ -156,7 +161,8 @@ func _attack_transition_handler():
 			return possible_states.skill5
 		elif skills[6]:
 			return possible_states.skill6
-		elif attack:
+				
+	if attack:
 			# TODO implement conditional for different forms of attack
 			return get_first_attack_state()
 
@@ -193,24 +199,25 @@ func jump_transition_handler():
 		return possible_states.ledge_grab
 	elif special_movement and not body.is_dashing():
 		return possible_states.dash
-	if attack:
-		return get_first_attack_state()
 	elif body.is_on_floor():
 		return possible_states.idle
 	elif body.velocity.y > 0:
 		return possible_states.fall
+	elif attack or skills.has(true):
+		return _attack_transition_handler()
 	else:
 		return null
+	
 		
 func fall_transition_handler():
 	if body.is_on_floor():
 		return possible_states.idle
 	elif body.is_touching_ledge():
 		return possible_states.ledge_grab
-	elif attack:
-		return get_first_attack_state()
 	elif special_movement:
 		return possible_states.dash
+	elif attack or skills.has(true):
+		return _attack_transition_handler()
 	else:
 		return null
 
@@ -225,7 +232,7 @@ func update_input():
 	attack = Input.is_action_just_pressed("ui_attack")
 
 	skills = [Input.is_action_pressed("ui_skill_slot0"),
-			 Input.is_action_pressed("ui_skill_slot1"),
+			 Input.is_action_just_pressed("ui_skill_slot1"),
 			 Input.is_action_pressed("ui_skill_slot2"),
 			 Input.is_action_pressed("ui_skill_slot3"),
 			 Input.is_action_pressed("ui_skill_slot4"),
