@@ -8,7 +8,11 @@ func _state_logic(delta):
 	pass
 
 func _enter():
-	pass
+	body.velocity.x = 0
+	body.set_switch_stance_flag(true)
+	body.switch_stance()
+	print("state: switch stance")
+	body.set_label("switching stance")
 	
 func _exit():
 	pass

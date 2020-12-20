@@ -1667,7 +1667,7 @@ texture = ExtResource( 1 )
 offset = Vector2( -5, 0 )
 vframes = 34
 hframes = 8
-frame = 69
+frame = 76
 region_rect = Rect2( 271, 114, 14, 34 )
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
@@ -1808,7 +1808,7 @@ one_shot = true
 wait_time = 0.2
 one_shot = true
 
-[node name="PauseFlagTimer" type="Timer" parent="MovementFSM"]
+[node name="TransitionTimer" type="Timer" parent="MovementFSM"]
 
 [node name="RunNode" type="Node" parent="MovementFSM"]
 
@@ -1833,4 +1833,4 @@ __meta__ = {
 [connection signal="timeout" from="WeaponChangeCD" to="." method="_on_WeaponChangeCD_timeout"]
 [connection signal="timeout" from="MovementFSM/JumpCooldown" to="MovementFSM" method="_on_JumpCooldown_timeout"]
 [connection signal="timeout" from="MovementFSM/NextAttackWait" to="MovementFSM" method="_on_NextAttackWait_timeout"]
-[connection signal="timeout" from="MovementFSM/PauseFlagTimer" to="MovementFSM" method="_on_PauseFlagTimer_timeout"]
+[connection signal="timeout" from="MovementFSM/TransitionTimer" to="MovementFSM" method="_on_TransitionTimer_timeout"]
