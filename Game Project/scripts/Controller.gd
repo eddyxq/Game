@@ -93,11 +93,7 @@ func check_input():
 #			 Input.is_action_pressed("ui_skill_slot4"),
 #			 Input.is_action_pressed("ui_skill_slot5"),
 #			 Input.is_action_pressed("ui_skill_slot6")]
-
+	pass
 	item = [Input.is_action_pressed("ui_item_slot1"),
 			Input.is_action_pressed("ui_item_slot2")]
 
-#	switch = Input.is_action_pressed("ui_switch")
-#
-#	special_movement = Input.is_action_just_pressed("ui_special_movement")
-	
