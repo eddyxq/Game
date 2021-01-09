@@ -92,16 +92,15 @@ __meta__ = {
 [node name="tab" type="AnimatedSprite" parent="."]
 position = Vector2( 66.118, 11.346 )
 frames = SubResource( 4 )
+frame = 1
 playing = true
 
 [node name="z" type="AnimatedSprite" parent="."]
 position = Vector2( 64, 32.118 )
 frames = SubResource( 7 )
-frame = 1
 playing = true
 
 [node name="space" type="AnimatedSprite" parent="."]
 position = Vector2( 0, 31.7898 )
 frames = SubResource( 12 )
-frame = 1
 playing = true

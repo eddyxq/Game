@@ -125,10 +125,6 @@ func _get_transition(_delta):
 				
 		possible_states.fist_attack4:
 			return possible_states.attack_wait
-			
-		possible_states.switch_stance:
-			if not body.is_switching_stance():
-				return possible_states.idle
 		
 		# sword attack transitions
 		possible_states.sword_attack1:
@@ -140,6 +136,11 @@ func _get_transition(_delta):
 		possible_states.sword_attack3:
 			return possible_states.attack_wait
 		
+		# stance transitions
+		possible_states.switch_stance:
+			if not body.is_switching_stance():
+				return possible_states.idle
+				
 		# skill transitions
 		possible_states.distance_blade:
 			return possible_states.idle
@@ -164,11 +165,11 @@ func _attack_transition_handler():
 			return possible_states.skill0
 		elif skills[1] and body.mana >= body.skill_mana_cost[1]:
 			return possible_states.distance_blade
-		elif skills[2] and body.mana >= body.skill_mana_cost[1]:
+		elif skills[2] and body.mana >= body.skill_mana_cost[2]:
 			return possible_states.whirlwind_slash
-		elif skills[3] and body.mana >= body.skill_mana_cost[1]:
+		elif skills[3] and body.mana >= body.skill_mana_cost[3]:
 			return possible_states.bleed_slash
-		elif skills[4] and body.mana >= body.skill_mana_cost[1]:
+		elif skills[4] and body.mana >= body.skill_mana_cost[4]:
 			return possible_states.dash_slash
 		elif skills[5]:
 			return possible_states.skill5
@@ -184,8 +185,8 @@ func get_first_attack_state():
 		return possible_states.sword_attack1
 	elif body.is_fist_stance():
 		return possible_states.fist_attack1
-		
-		
+
+
 func _movement_transition_handler():
 	if body.is_touching_ledge() and current_state != possible_states.ledge_grab:
 		return possible_states.ledge_grab
@@ -207,6 +208,7 @@ func _movement_transition_handler():
 	elif body.velocity.y > 0:
 		return possible_states.fall	
 
+
 func jump_transition_handler():
 	if body.is_touching_ledge() and current_state != possible_states.ledge_grab:
 		return possible_states.ledge_grab
@@ -220,8 +222,8 @@ func jump_transition_handler():
 		return _attack_transition_handler()
 	else:
 		return null
-	
-		
+
+
 func fall_transition_handler():
 	if body.is_on_floor():
 		return possible_states.idle
@@ -234,9 +236,8 @@ func fall_transition_handler():
 	else:
 		return null
 
-	
+# detect keyboard inputs
 func update_input():
-	# detect keyboard input
 	up = Input.is_action_pressed("ui_up")
 	down = Input.is_action_pressed("ui_down")
 	left = Input.is_action_pressed("ui_left")
@@ -244,13 +245,13 @@ func update_input():
 
 	attack = Input.is_action_just_pressed("ui_attack")
 
-	skills = [Input.is_action_pressed("ui_skill_slot0"),
+	skills = [Input.is_action_just_pressed("ui_skill_slot0"),
 			 Input.is_action_just_pressed("ui_skill_slot1"),
 			 Input.is_action_just_pressed("ui_skill_slot2"),
 			 Input.is_action_just_pressed("ui_skill_slot3"),
 			 Input.is_action_just_pressed("ui_skill_slot4"),
-			 Input.is_action_pressed("ui_skill_slot5"),
-			 Input.is_action_pressed("ui_skill_slot6")]
+			 Input.is_action_just_pressed("ui_skill_slot5"),
+			 Input.is_action_just_pressed("ui_skill_slot6")]
 
 	switch = Input.is_action_just_pressed("ui_switch")
 
