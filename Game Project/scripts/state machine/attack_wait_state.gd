@@ -4,11 +4,11 @@ extends "res://scripts/state machine//state.gd"
 var transition_timer
 var attack_delay
 
-func _init(body, transition_timer, attack_delay).(body):
-	self.transition_timer = transition_timer
-	self.attack_delay = attack_delay
+func _init(body, tt, ad).(body):
+	self.transition_timer = tt
+	self.attack_delay = ad
 	
-func _state_logic(delta):
+func _state_logic(_delta):
 	update_input()
 	if attack:
 		transition_timer.set_paused(true)

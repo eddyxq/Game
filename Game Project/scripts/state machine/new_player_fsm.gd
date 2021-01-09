@@ -62,7 +62,7 @@ func _ready():
 	
 	call_deferred("set_state", possible_states.idle)
 
-func _get_transition(delta):
+func _get_transition(_delta):
 	update_input()
 	match current_state:
 		possible_states.idle:

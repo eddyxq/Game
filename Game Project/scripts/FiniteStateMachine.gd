@@ -25,7 +25,7 @@ func main(delta):
 				set_state(new_state)
 			
 # should be called every tick
-func _get_transition(delta):
+func _get_transition(_delta):
 	return null
 	
 func set_state(new_state):

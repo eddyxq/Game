@@ -17,11 +17,8 @@ var skill2 # 2 number key
 var skill3 # 3 number key
 var skill4 # 4 number key
 
-var skill
 var item
-
 var switch # tab
-
 var special_movement # shift
 
 # references to child nodes
@@ -37,14 +34,10 @@ func _ready():
 # called every delta
 func _physics_process(_delta):
 	# updates input variables
-	check_input()
+	item = [Input.is_action_pressed("ui_item_slot1"),
+			Input.is_action_pressed("ui_item_slot2")]
 	
 	if !$HUD/DialogBox.visible:
-		var movement_input
-		var attack_input
-		
-		#player_attack_fsm.update(attack, skill, _delta)
-#		player_movement_fsm.update(up, down, left, right, special_movement, attack, skill, _delta)
 		player_movement_fsm.main(_delta)
 		
 		if item[0]:
@@ -52,10 +45,6 @@ func _physics_process(_delta):
 		
 		if item[1]:
 			player.use_mana_potion()
-		
-#	
-#		if Input.is_action_just_pressed("ui_special_movement"):
-#			player.activate_special_movement_skill(left, right)
 #	else:
 #		player.play_animation("idle")
 	
@@ -76,24 +65,3 @@ func _physics_process(_delta):
 #		player.set_light_enabled(true)
 #	else:
 #		player.set_light_enabled(false)
-
-func check_input():
-#	# detect keyboard input
-#	up = Input.is_action_pressed("ui_up")
-#	down = Input.is_action_pressed("ui_down")
-#	left = Input.is_action_pressed("ui_left")
-#	right = Input.is_action_pressed("ui_right")
-#
-#	attack = Input.is_action_pressed("ui_attack")
-#
-#	skill = [Input.is_action_pressed("ui_skill_slot0"),
-#			 Input.is_action_pressed("ui_skill_slot1"),
-#			 Input.is_action_pressed("ui_skill_slot2"),
-#			 Input.is_action_pressed("ui_skill_slot3"),
-#			 Input.is_action_pressed("ui_skill_slot4"),
-#			 Input.is_action_pressed("ui_skill_slot5"),
-#			 Input.is_action_pressed("ui_skill_slot6")]
-	pass
-	item = [Input.is_action_pressed("ui_item_slot1"),
-			Input.is_action_pressed("ui_item_slot2")]
-

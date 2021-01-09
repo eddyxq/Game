@@ -18,8 +18,8 @@ var switch # tab
 var special_movement # shift
 
 
-func _init(body):
-	self.body = body
+func _init(bod):
+	self.body = bod
 	ready_to_transition = true
 
 func is_ready_to_transition():
@@ -30,7 +30,7 @@ func set_ready_to_transition_flag(flag):
 
 # ** virtual functions **
 # continuously executed while state is active
-func _state_logic(delta):
+func _state_logic(_delta):
 	pass
 	
 # exected once when state is entered

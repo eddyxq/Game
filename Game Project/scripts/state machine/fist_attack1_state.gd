@@ -3,10 +3,10 @@ extends "res://scripts/state machine//state.gd"
 
 var transition_timer
 
-func _init(body, transition_timer).(body):
-	self.transition_timer = transition_timer
+func _init(body, tt).(body):
+	self.transition_timer = tt
 	
-func _state_logic(delta):
+func _state_logic(_delta):
 	if body.velocity.x != 0 and body.is_on_floor():
 		body.velocity.x = 0
 	body.apply_gravity()

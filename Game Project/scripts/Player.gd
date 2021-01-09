@@ -73,9 +73,9 @@ var movement_enabled = true
 var current_animation_tree = null
 var skillAnimationNode = null
 
-var is_attacking = false
-var is_using_skill = false
-var is_switching_stance = false
+var attacking = false
+var using_skill = false
+var switching_stance = false
 
 # called when the node enters the scene tree for the first time
 func _ready():
@@ -120,11 +120,17 @@ func switch_stance():
 
 # returns true during stance change
 func is_switching_stance():
-	return is_switching_stance
+	return switching_stance
 
 # sets stance switch flag
 func set_switch_stance_flag(flag):
-	is_switching_stance = flag
+	switching_stance = flag
+
+func is_sword_stance():
+	return stance == Global.STANCE.SWORD
+
+func is_fist_stance():
+	return stance == Global.STANCE.FIST
 
 # decelerate player
 func apply_horizontal_deceleration():
@@ -572,10 +578,10 @@ func blinking_damage_effect():
 		yield(get_tree().create_timer(0.1), "timeout")
 
 func is_attacking():
-	return is_attacking
+	return attacking
 	
 func is_using_skill():
-	return is_using_skill
+	return using_skill
 
 
 ###############################################################################
