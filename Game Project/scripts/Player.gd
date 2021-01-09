@@ -73,9 +73,9 @@ var movement_enabled = true
 var current_animation_tree = null
 var skillAnimationNode = null
 
-var is_attacking = false
-var is_using_skill = false
-var is_switching_stance = false
+var attacking = false
+var using_skill = false
+var switching_stance = false
 
 # called when the node enters the scene tree for the first time
 func _ready():
@@ -83,37 +83,13 @@ func _ready():
 	default_player_parameters()
 	setup_state_machine()
 
-## animation logic
-#func animation_loop(attack, skill, item, switch):
-#	move() # moving state
-#	jump() # jumping state
-#	fall() # falling state
-#	idle() # idle state
-#	attack(attack) # attacking state
-#	detect_skill_activation(skill) # pass input
-#	detect_item_usage(item) # item activation
-#	grab_ledge()
-#	stance_update(switch) # stance change
-
-## movement logic
-#func movement_loop(attack, up, left, right):
-#	detect_ledge()
-#	if movement_enabled:
-#		apply_gravity() # pull player downwards
-#		update_sprite_direction(right, left) # flips sprite to corresponding direction
-#		vertical_movement(up) # vertical translation
-#		update_speed_modifier(attack) # restricts movement during certain actions
-#		apply_accel_decel(left, right) # acceleration effect
-#		apply_translation(left, right, attack)
-
-
-#new stuff starts here
+# move player left
 func move_left():
 	# change direction when necessary
 	if dir != Global.DIRECTION.W:
 		dir = Global.DIRECTION.W
 		base_speed = min_speed 
-			
+	
 	# accelerate to the left
 	base_speed += acceleration_rate
 	if base_speed > max_speed:
@@ -121,7 +97,7 @@ func move_left():
 	
 	velocity.x = base_speed * run_speed_modifier * -1
 	
-	
+# move player right
 func move_right():
 	# change direction when necessary
 	if dir != Global.DIRECTION.E:
@@ -135,41 +111,29 @@ func move_right():
 	
 	velocity.x = base_speed * run_speed_modifier 
 
-func switch_to_sword():
-	if stance != Global.STANCE.SWORD:
-		if weapon_change_off_cooldown and movement_enabled and !isTouchingLedge and is_on_floor():
-			play_animation("sword_draw")
-
-func switch_to_fist():
-	if stance != Global.STANCE.FIST:
-		if weapon_change_off_cooldown and movement_enabled and !isTouchingLedge and is_on_floor():
-			play_animation("sword_sheath")
-
+# draws or shealths sword
 func switch_stance():
 	if stance == Global.STANCE.FIST:
 		play_animation("sword_draw")
 	else:
 		play_animation("sword_sheath")
 
+# returns true during stance change
 func is_switching_stance():
-	return is_switching_stance
-	
+	return switching_stance
+
+# sets stance switch flag
 func set_switch_stance_flag(flag):
-	is_switching_stance = flag
-	print("switch stance flag:", is_switching_stance)
+	switching_stance = flag
 
 func is_sword_stance():
 	return stance == Global.STANCE.SWORD
 
 func is_fist_stance():
 	return stance == Global.STANCE.FIST
-		
-		
+
+# decelerate player
 func apply_horizontal_deceleration():
-#	base_speed -= acceleration_rate *2
-#	if base_speed < min_speed:
-#	if base_speed < min_speed:
-#		base_speed = min_speed
 	if velocity.x > 0:
 		velocity.x -= acceleration_rate * 2
 		if velocity.x < 0:
@@ -200,13 +164,6 @@ func use_mana_potion():
 		# potion fully heals the player's mana
 		mana = max_mp
 		UI.mana_bar.update_bar(mana)
-		
-######
-
-
-
-
-
 
 # applies a blinking damage effect to the player
 func hurt(dmg):
@@ -621,10 +578,10 @@ func blinking_damage_effect():
 		yield(get_tree().create_timer(0.1), "timeout")
 
 func is_attacking():
-	return is_attacking
+	return attacking
 	
 func is_using_skill():
-	return is_using_skill
+	return using_skill
 
 
 ###############################################################################
@@ -768,7 +725,6 @@ func is_touching_ledge():
 # an edge is detected when lower raycast intersects with a block while upper ray cast does not
 func is_ledge_detected():
 	return $CollisionShape2D/LowerEdgeDetect.is_colliding() and not $CollisionShape2D/HigherEdgeDetect.is_colliding()
-
 
 # ** PRECONDITION: this function should only be called if a ledge has been detected **
 # teleports the player to the edge of a platform then initiates the ledge grab animation

@@ -4,7 +4,7 @@ extends "res://scripts/state machine//state.gd"
 func _init(body).(body):
 	pass
 	
-func _state_logic(delta):
+func _state_logic(_delta):
 	pass
 
 func _enter():

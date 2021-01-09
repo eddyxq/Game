@@ -1,4 +1,4 @@
-class_name SwordAttack1State
+class_name DistanceBladeState
 extends "res://scripts/state machine//state.gd"
 
 var transition_timer
@@ -12,11 +12,11 @@ func _state_logic(_delta):
 	body.apply_gravity()
 
 func _enter():
-	var animation = "sword_attack1"
+	var animation = "distance_blade"
 	var animation_duration = body.get_animation_node(animation).get_length()
 	
 	set_ready_to_transition_flag(false)
-	body.play_animation(animation)
+	body.skill1()
 	transition_timer.start(animation_duration)
 	
 	body.set_label(animation)
@@ -24,4 +24,3 @@ func _enter():
 	
 func _exit():
 	pass
-	
