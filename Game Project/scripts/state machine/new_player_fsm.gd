@@ -20,6 +20,9 @@ const SwordAttack2State = preload("res://scripts/state machine//sword_attack2_st
 const SwordAttack3State = preload("res://scripts/state machine//sword_attack3_state.gd")
 
 const DistanceBladeState = preload("res://scripts/state machine//distance_blade_state.gd")
+const WhirlwindSlashState = preload("res://scripts/state machine//whirlwind_slash_state.gd")
+const BleedSlashState = preload("res://scripts/state machine//dash_slash_state.gd")
+const DashSlashState = preload("res://scripts/state machine//dash_slash_state.gd")
 
 # user keyboard input flags
 var up     # w / up arrow
@@ -58,7 +61,11 @@ func _ready():
 	add_state("sword_attack1", SwordAttack1State.new(body, $TransitionTimer))
 	add_state("sword_attack2", SwordAttack2State.new(body, $TransitionTimer))
 	add_state("sword_attack3", SwordAttack3State.new(body, $TransitionTimer))
+	# sword skill states
 	add_state("distance_blade", DistanceBladeState.new(body, $TransitionTimer))
+	add_state("whirlwind_slash", WhirlwindSlashState.new(body, $TransitionTimer))
+	add_state("bleed_slash", DistanceBladeState.new(body, $TransitionTimer))
+	add_state("dash_slash", WhirlwindSlashState.new(body, $TransitionTimer))
 	
 	call_deferred("set_state", possible_states.idle)
 
@@ -136,6 +143,12 @@ func _get_transition(_delta):
 		# skill transitions
 		possible_states.distance_blade:
 			return possible_states.idle
+		possible_states.whirlwind_slash:
+			return possible_states.idle
+		possible_states.bleed_slash:
+			return possible_states.idle
+		possible_states.dash_slash:
+			return possible_states.idle
 			
 	return null
 
@@ -151,12 +164,12 @@ func _attack_transition_handler():
 			return possible_states.skill0
 		elif skills[1] and body.mana >= body.skill_mana_cost[1]:
 			return possible_states.distance_blade
-		elif skills[2]:
-			return possible_states.skill2
-		elif skills[3]:
-			return possible_states.skill3
-		elif skills[4]:
-			return possible_states.skill4
+		elif skills[2] and body.mana >= body.skill_mana_cost[1]:
+			return possible_states.whirlwind_slash
+		elif skills[3] and body.mana >= body.skill_mana_cost[1]:
+			return possible_states.bleed_slash
+		elif skills[4] and body.mana >= body.skill_mana_cost[1]:
+			return possible_states.dash_slash
 		elif skills[5]:
 			return possible_states.skill5
 		elif skills[6]:
@@ -233,9 +246,9 @@ func update_input():
 
 	skills = [Input.is_action_pressed("ui_skill_slot0"),
 			 Input.is_action_just_pressed("ui_skill_slot1"),
-			 Input.is_action_pressed("ui_skill_slot2"),
-			 Input.is_action_pressed("ui_skill_slot3"),
-			 Input.is_action_pressed("ui_skill_slot4"),
+			 Input.is_action_just_pressed("ui_skill_slot2"),
+			 Input.is_action_just_pressed("ui_skill_slot3"),
+			 Input.is_action_just_pressed("ui_skill_slot4"),
 			 Input.is_action_pressed("ui_skill_slot5"),
 			 Input.is_action_pressed("ui_skill_slot6")]
 

@@ -15,6 +15,16 @@ _global_script_classes=[ {
 "path": "res://scripts/state machine/attack_wait_state.gd"
 }, {
 "base": "Reference",
+"class": "BleedSlashState",
+"language": "GDScript",
+"path": "res://scripts/state machine/bleed_slash_state.gd"
+}, {
+"base": "Reference",
+"class": "DashSlashState",
+"language": "GDScript",
+"path": "res://scripts/state machine/dash_slash_state.gd"
+}, {
+"base": "Reference",
 "class": "DashState",
 "language": "GDScript",
 "path": "res://scripts/state machine/dash_state.gd"
@@ -103,9 +113,16 @@ _global_script_classes=[ {
 "class": "SwordAttack3State",
 "language": "GDScript",
 "path": "res://scripts/state machine/sword_attack3_state.gd"
+}, {
+"base": "Reference",
+"class": "WhirlwindSlashState",
+"language": "GDScript",
+"path": "res://scripts/state machine/whirlwind_slash_state.gd"
 } ]
 _global_script_class_icons={
 "AttackWaitState": "",
+"BleedSlashState": "",
+"DashSlashState": "",
 "DashState": "",
 "DistanceBladeState": "",
 "FallState": "",
@@ -123,7 +140,8 @@ _global_script_class_icons={
 "SwitchStanceState": "",
 "SwordAttack1State": "",
 "SwordAttack2State": "",
-"SwordAttack3State": ""
+"SwordAttack3State": "",
+"WhirlwindSlashState": ""
 }
 
 [application]

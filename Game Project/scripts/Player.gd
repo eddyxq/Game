@@ -228,7 +228,7 @@ func distance_blade():
 	projectile.set_projectile_direction(dir)
 	
 # activates sword skill 2 doing a tornado attack
-func whiirlwind_slash():
+func whirlwind_slash():
 	var projectile = preload("res://scenes/player/WindProjectile.tscn").instance()
 	get_parent().add_child(projectile)
 	projectile.position = $PositionCenter.global_position

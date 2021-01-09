@@ -20,6 +20,3 @@ func _enter():
 func _exit():
 	pass
 	
-#func _update_input():
-#	_left = Input.is_action_pressed("ui_left")
-#	_right = Input.is_action_pressed("ui_right")

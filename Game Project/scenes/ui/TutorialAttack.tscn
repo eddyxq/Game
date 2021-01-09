@@ -97,6 +97,7 @@ playing = true
 [node name="z" type="AnimatedSprite" parent="."]
 position = Vector2( 64, 32.118 )
 frames = SubResource( 7 )
+frame = 1
 playing = true
 
 [node name="space" type="AnimatedSprite" parent="."]
