@@ -1,28 +1,28 @@
 extends "res://scripts/FiniteStateMachine.gd"
 
-const IdleState = preload("res://scripts/state machine//idle_state.gd")
-const RunState = preload("res://scripts/state machine//run_state.gd")
-const JumpState = preload("res://scripts/state machine//jump_state.gd")
-const FallState = preload("res://scripts/state machine//fall_state.gd")
-const LedgeGrabState = preload("res://scripts/state machine//ledge_grab_state.gd")
-const DashState = preload("res://scripts/state machine//dash_state.gd")
+const IdleState = preload("res://scripts/state machine/idle_state.gd")
+const RunState = preload("res://scripts/state machine/run_state.gd")
+const JumpState = preload("res://scripts/state machine/jump_state.gd")
+const FallState = preload("res://scripts/state machine/fall_state.gd")
+const LedgeGrabState = preload("res://scripts/state machine/ledge_grab_state.gd")
+const DashState = preload("res://scripts/state machine/dash_state.gd")
 
-const SwitchStanceState = preload("res://scripts/state machine//switch_stance_state.gd")
-const AttackWaitState = preload("res://scripts/state machine//attack_wait_state.gd")
+const SwitchStanceState = preload("res://scripts/state machine/switch_stance_state.gd")
+const AttackWaitState = preload("res://scripts/state machine/attack_wait_state.gd")
 
-const FistAttack1State = preload("res://scripts/state machine//fist_attack1_state.gd")
-const FistAttack2State = preload("res://scripts/state machine//fist_attack2_state.gd")
-const FistAttack3State = preload("res://scripts/state machine//fist_attack3_state.gd")
-const FistAttack4State = preload("res://scripts/state machine//fist_attack4_state.gd")
+const FistAttack1State = preload("res://scripts/state machine/fist_attack1_state.gd")
+const FistAttack2State = preload("res://scripts/state machine/fist_attack2_state.gd")
+const FistAttack3State = preload("res://scripts/state machine/fist_attack3_state.gd")
+const FistAttack4State = preload("res://scripts/state machine/fist_attack4_state.gd")
 
-const SwordAttack1State = preload("res://scripts/state machine//sword_attack1_state.gd")
-const SwordAttack2State = preload("res://scripts/state machine//sword_attack2_state.gd")
-const SwordAttack3State = preload("res://scripts/state machine//sword_attack3_state.gd")
+const SwordAttack1State = preload("res://scripts/state machine/sword_attack1_state.gd")
+const SwordAttack2State = preload("res://scripts/state machine/sword_attack2_state.gd")
+const SwordAttack3State = preload("res://scripts/state machine/sword_attack3_state.gd")
 
-const DistanceBladeState = preload("res://scripts/state machine//distance_blade_state.gd")
-const WhirlwindSlashState = preload("res://scripts/state machine//whirlwind_slash_state.gd")
-const BleedSlashState = preload("res://scripts/state machine//dash_slash_state.gd")
-const DashSlashState = preload("res://scripts/state machine//dash_slash_state.gd")
+const DistanceBladeState = preload("res://scripts/state machine/distance_blade_state.gd")
+const WhirlwindSlashState = preload("res://scripts/state machine/whirlwind_slash_state.gd")
+const BleedSlashState = preload("res://scripts/state machine/bleed_slash_state.gd")
+const DashSlashState = preload("res://scripts/state machine/dash_slash_state.gd")
 
 # user keyboard input flags
 var up     # w / up arrow
@@ -64,8 +64,8 @@ func _ready():
 	# sword skill states
 	add_state("distance_blade", DistanceBladeState.new(body, $TransitionTimer))
 	add_state("whirlwind_slash", WhirlwindSlashState.new(body, $TransitionTimer))
-	add_state("bleed_slash", DistanceBladeState.new(body, $TransitionTimer))
-	add_state("dash_slash", WhirlwindSlashState.new(body, $TransitionTimer))
+	add_state("bleed_slash", BleedSlashState.new(body, $TransitionTimer))
+	add_state("dash_slash", DashSlashState.new(body, $TransitionTimer))
 	
 	call_deferred("set_state", possible_states.idle)
 

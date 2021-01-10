@@ -12,6 +12,7 @@ func _state_logic(_delta):
 	body.apply_gravity()
 
 func _enter():
+	print("enter bleed slash")
 	var animation = "bleed_slash"
 	var animation_duration = body.get_animation_node(animation).get_length()
 	

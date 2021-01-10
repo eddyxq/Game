@@ -452,32 +452,34 @@ func attack(attack):
 
 # distance blade
 func skill1():
-		if mana >= skill_mana_cost[1]:
-			skill_bar.skill_slot1.start_cooldown()
-			skill_slot_off_cooldown[1] = false
-			skillAnimationNode.set_animation("distance_blade")
-			play_animation("skill_placeholder")
+	print("ENTER SKILL1")
+	if mana >= skill_mana_cost[1]:
+		skill_bar.skill_slot1.start_cooldown()
+		skill_slot_off_cooldown[1] = false
+		skillAnimationNode.set_animation("distance_blade")
+		play_animation("skill_placeholder")
 # whirlwind slash
 func skill2():
-		if mana >= skill_mana_cost[2]:
-			skill_bar.skill_slot2.start_cooldown()
-			skill_slot_off_cooldown[2] = false
-			skillAnimationNode.set_animation("whirlwind_slash")
-			play_animation("skill_placeholder")
+	if mana >= skill_mana_cost[2]:
+		skill_bar.skill_slot2.start_cooldown()
+		skill_slot_off_cooldown[2] = false
+		skillAnimationNode.set_animation("whirlwind_slash")
+		play_animation("skill_placeholder")
 # bleed slash
 func skill3():
-		if mana >= skill_mana_cost[3]:
-			skill_bar.skill_slot3.start_cooldown()
-			skill_slot_off_cooldown[3] = false
-			skillAnimationNode.set_animation("bleed_slash")
-			play_animation("skill_placeholder")
+	print("ENTER SKILL3")
+	if mana >= skill_mana_cost[3]:
+		skill_bar.skill_slot3.start_cooldown()
+		skill_slot_off_cooldown[3] = false
+		skillAnimationNode.set_animation("bleed_slash")
+		play_animation("skill_placeholder")
 # dash slash
 func skill4():
-		if mana >= skill_mana_cost[4]:
-			skill_bar.skill_slot4.start_cooldown()
-			skill_slot_off_cooldown[4] = false
-			skillAnimationNode.set_animation("dash_slash")
-			play_animation("skill_placeholder")
+	if mana >= skill_mana_cost[4]:
+		skill_bar.skill_slot4.start_cooldown()
+		skill_slot_off_cooldown[4] = false
+		skillAnimationNode.set_animation("dash_slash")
+		play_animation("skill_placeholder")
 
 func skill5():
 	pass
@@ -650,6 +652,7 @@ func emit_foot_dust():
 	add_child(dust_particles)
 
 func dash():
+	print("eddy dash")
 	if mana > 0 and movement_enabled:
 		play_dash_sfx()
 		consume_mp(1)

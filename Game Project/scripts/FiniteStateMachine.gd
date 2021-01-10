@@ -1,18 +1,15 @@
 class_name FiniteStateMachine
 extends Node
 
-
 var current_state = null setget set_state
 var previous_state = null
 
 var possible_states = {}
-# possible_states[state_name] = state_object
 var state_objects = {}
 var pause_flag = false
 
 onready var body = get_parent()
 
-	
 func main(delta):
 	if current_state != null:
 		var current_state_object = state_objects[current_state]
@@ -23,7 +20,7 @@ func main(delta):
 			var new_state = _get_transition(delta)
 			if new_state != null:
 				set_state(new_state)
-			
+	
 # should be called every tick
 func _get_transition(_delta):
 	return null

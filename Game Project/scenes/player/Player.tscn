@@ -1335,7 +1335,7 @@ tracks/3/keys = {
 "transitions": PoolRealArray( 1 ),
 "values": [ {
 "args": [  ],
-"method": "whiirlwind_slash"
+"method": "whirlwind_slash"
 } ]
 }
 
