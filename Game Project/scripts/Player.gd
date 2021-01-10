@@ -236,7 +236,7 @@ func whirlwind_slash():
 	
 # activates sword skill 3 applying bleed to an enemy
 func bleed_slash():
-	dash()
+	do_dash()
 	var hitBox = preload("res://scenes/player/DashHitBox.tscn").instance()
 	if dir == Global.DIRECTION.W:
 		hitBox.scale.x = -1
@@ -246,7 +246,7 @@ func bleed_slash():
 	
 # activates sword skill 4 damaging enemies in dash path
 func dash_slash():
-	dash()
+	do_dash()
 	var hitBox2 = preload("res://scenes/player/DashHitBox.tscn").instance()
 	if dir == Global.DIRECTION.W:
 		hitBox2.scale.x = -1
@@ -452,7 +452,6 @@ func attack(attack):
 
 # distance blade
 func skill1():
-	print("ENTER SKILL1")
 	if mana >= skill_mana_cost[1]:
 		skill_bar.skill_slot1.start_cooldown()
 		skill_slot_off_cooldown[1] = false
@@ -467,7 +466,6 @@ func skill2():
 		play_animation("skill_placeholder")
 # bleed slash
 func skill3():
-	print("ENTER SKILL3")
 	if mana >= skill_mana_cost[3]:
 		skill_bar.skill_slot3.start_cooldown()
 		skill_slot_off_cooldown[3] = false
@@ -651,27 +649,18 @@ func emit_foot_dust():
 	dust_particles.global_position = $FeetPosition.global_position
 	add_child(dust_particles)
 
-func dash():
-	print("eddy dash")
-	if mana > 0 and movement_enabled:
+# player dash
+func do_dash():
+	if mana > 0:
 		play_dash_sfx()
 		consume_mp(1)
 		gravity = 0
 		velocity.y = 0
-		movement_speed = base_speed * dash_speed_modifier
+		velocity.x = 500
+		if dir == Global.DIRECTION.W:
+			velocity.x *= -1
 		dashing = true
 		$DashTimer.start()
-
-# new player dash
-func do_dash():
-	play_dash_sfx()
-	gravity = 0
-	velocity.y = 0
-	velocity.x = 500
-	if dir == Global.DIRECTION.W:
-		velocity.x *= -1
-	dashing = true
-	$DashTimer.start()
 
 func is_dashing():
 	return dashing
@@ -704,12 +693,6 @@ func _on_SprintTimer_timeout():
 	sprinting = false
 	$GhostInterval.stop()
 	movement_speed = max_speed * run_speed_modifier
-	
-func activate_special_movement_skill(left, right):
-	if stance == Global.STANCE.FIST:
-		sprint()
-	elif stance == Global.STANCE.SWORD and (left or right):
-		dash()
 
 func detect_ledge():
 	if not isTouchingLedge and stance == Global.STANCE.FIST:
