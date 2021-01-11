@@ -236,7 +236,7 @@ func whirlwind_slash():
 	
 # activates sword skill 3 applying bleed to an enemy
 func bleed_slash():
-	do_dash()
+	do_dash(0.1)
 	var hitBox = preload("res://scenes/player/DashHitBox.tscn").instance()
 	if dir == Global.DIRECTION.W:
 		hitBox.scale.x = -1
@@ -246,7 +246,7 @@ func bleed_slash():
 	
 # activates sword skill 4 damaging enemies in dash path
 func dash_slash():
-	do_dash()
+	do_dash(0.1)
 	var hitBox2 = preload("res://scenes/player/DashHitBox.tscn").instance()
 	if dir == Global.DIRECTION.W:
 		hitBox2.scale.x = -1
@@ -650,7 +650,7 @@ func emit_foot_dust():
 	add_child(dust_particles)
 
 # player dash
-func do_dash():
+func do_dash(distanceAsTime=0.1):
 	if mana > 0:
 		play_dash_sfx()
 		consume_mp(1)
@@ -660,7 +660,7 @@ func do_dash():
 		if dir == Global.DIRECTION.W:
 			velocity.x *= -1
 		dashing = true
-		$DashTimer.start()
+		$DashTimer.start(distanceAsTime)
 
 func is_dashing():
 	return dashing
@@ -678,6 +678,7 @@ func get_animation_node(animation_node):
 	return $AnimationPlayer.get_animation(animation_node)
 
 func _on_DashTimer_timeout():
+	velocity.x = 0
 	gravity = DEFAULT_GRAVITY
 	dashing = false
 	

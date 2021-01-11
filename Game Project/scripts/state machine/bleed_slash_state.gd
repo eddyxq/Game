@@ -7,10 +7,8 @@ func _init(body, tt).(body):
 	self.transition_timer = tt
 
 func _state_logic(_delta):
-	if body.velocity.x != 0 and body.is_on_floor():
-		body.velocity.x = 0
 	body.apply_gravity()
-
+	
 func _enter():
 	var animation = "bleed_slash"
 	var animation_duration = body.get_animation_node(animation).get_length()
