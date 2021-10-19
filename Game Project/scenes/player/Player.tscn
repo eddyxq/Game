@@ -1665,8 +1665,8 @@ light_mask = 0
 material = SubResource( 2 )
 texture = ExtResource( 1 )
 offset = Vector2( -5, 0 )
-vframes = 34
 hframes = 8
+vframes = 34
 frame = 53
 region_rect = Rect2( 271, 114, 14, 34 )
 
@@ -1813,6 +1813,7 @@ one_shot = true
 [node name="RunNode" type="Node" parent="MovementFSM"]
 
 [node name="Label" type="Label" parent="."]
+visible = false
 margin_left = -23.0
 margin_top = -32.0
 margin_right = 6.0
@@ -1821,6 +1822,7 @@ align = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
 [connection signal="timeout" from="HealthRecovery" to="." method="_on_HealthRecovery_timeout"]
 [connection signal="timeout" from="ManaRecovery" to="." method="_on_ManaRecovery_timeout"]
 [connection signal="timeout" from="IFrame" to="." method="_on_IFrame_timeout"]
