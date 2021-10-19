@@ -11,11 +11,9 @@ func _state_logic(_delta):
 	body.apply_gravity()
 	
 func _enter():
-#	if not jump_enabled:
-#		$JumpCooldown.start()
-	body.set_label("run")
 	body.play_run_animation()
-	print("state: run")	
+	#debug label
+	body.set_label("run")
 	
 func _exit():
 	pass

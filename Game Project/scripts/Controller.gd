@@ -59,9 +59,3 @@ func _physics_process(_delta):
 		set_physics_process(false) 
 		yield(get_tree().create_timer(2.0), "timeout")
 		var _scene = get_tree().reload_current_scene()
-	
-#	# turn on light if player is underground
-#	if(player.get_global_position().y > 445):
-#		player.set_light_enabled(true)
-#	else:
-#		player.set_light_enabled(false)

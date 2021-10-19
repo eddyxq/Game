@@ -11,7 +11,8 @@ func _enter():
 	body.velocity.x = 0
 	body.set_switch_stance_flag(true)
 	body.switch_stance()
-	print("state: switch stance")
+	
+	#debug label
 	body.set_label("switching stance")
 	
 func _exit():

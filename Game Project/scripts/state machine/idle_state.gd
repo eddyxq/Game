@@ -12,12 +12,11 @@ func _state_logic(_delta):
 	body.apply_gravity()
 	
 func _enter():
-#	if not jump_enabled:
-#		$JumpCooldown.start()
 	body.velocity = Vector2.ZERO
-	body.set_label("idle")
 	body.play_idle_animation()
-	print("state: idle")
+	#debug label
+	body.set_label("idle")
+	
 	
 func _exit():
 	pass

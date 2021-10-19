@@ -7,7 +7,6 @@ extends KinematicBody2D
 onready var UI = get_tree().get_root().get_node("/root/Controller/HUD/UI")
 onready var skill_bar = get_tree().get_root().get_node("/root/Controller/HUD/UI/SkillBar")
 onready var item_bar = get_tree().get_root().get_node("/root/Controller/HUD/UI/ItemBar")
-onready var http : HTTPRequest = $HTTPRequest
 onready var tree_state = $SwordAnimationTree.get("parameters/playback")
 
 # combat stats
@@ -23,9 +22,6 @@ var crit_rate = 30
 # speed stats
 const jump_speed = 330
 const run_speed_modifier = 1.3
-const boost_speed_modifier = 2.3
-const atkmove_speed_modifier = 0
-const dash_speed_modifier = 50
 var base_speed = 50
 var max_speed = 100
 var min_speed = 0
@@ -66,8 +62,6 @@ var recentHit = false
 
 # special movement states
 var dashing = false
-var sprinting = false
-
 
 var attacking = false
 var using_skill = false
@@ -75,7 +69,6 @@ var switching_stance = false
 
 # called when the node enters the scene tree for the first time
 func _ready():
-	# Firebase.get_document("users/%s" % Firebase.user_info.id, http)
 	default_player_parameters()
 	setup_state_machine()
 
@@ -250,13 +243,6 @@ func dash_slash():
 	get_parent().add_child(hitBox2)
 	hitBox2.position = $PositionCenter.global_position
 
-# activates bow skill 1 shooting a ranged projectile
-func piercing_arrow():
-	var projectile = preload("res://scenes/player/ArrowProjectile.tscn").instance()
-	get_parent().add_child(projectile)
-	projectile.position = $PositionCenter.global_position
-	projectile.set_projectile_direction(dir)
-
 # initializes the state machine for managing animation state transitions
 func setup_state_machine():
 	current_animation_tree = $FistAnimationTree
@@ -282,7 +268,6 @@ func restore_mp(amount):
 	if mana > max_mp:
 		mana = max_mp
 
-# ***temporarily disabled: might be adjusted or removed for game balance***
 # to enable to go HealthRecovery node and check off Autostart
 # auto health recovery over time
 func _on_HealthRecovery_timeout():
@@ -290,22 +275,12 @@ func _on_HealthRecovery_timeout():
 		UI.health_bar.increase(health, 1)
 		health += 1
 
-# ***temporarily disabled: might be adjusted or removed for game balance***
 # to enable to go ManaRecovery node and check off Autostart
 # auto mana recovery over time
 func _on_ManaRecovery_timeout():
 	if mana < max_mp && health > -1:
 		mana += 1
 		UI.mana_bar.update_bar(mana)
-
-# loads player profile from database
-func _on_HTTPRequest_request_completed(_result, response_code, _headers, body):
-	var result_body := JSON.parse(body.get_string_from_ascii()).result as Dictionary
-	match response_code:
-		404:
-			return
-		200:
-			Global.profile = result_body.fields
 
 # player becomes invicible for a moment after getting hurt
 func _on_IFrame_timeout():
@@ -324,18 +299,6 @@ func _on_HitBox_body_entered(body):
 			is_crit = body.hurt(5, 0, 30, "default")
 		if is_crit:
 			$Camera2D/ScreenShaker.start()
-
-# timer used to countdown the animation of sprint buff
-func _on_ghost_timer_timeout():
-	var ghost_sprite = preload("res://scenes/player/PlayerGhost.tscn").instance()
-	get_parent().add_child(ghost_sprite)
-	ghost_sprite.position = position
-	ghost_sprite.frame = $Sprite.frame
-	ghost_sprite.flip_h = $Sprite.flip_h
-
-# toggles a circular lighting effect around the player
-func set_light_enabled(status):
-	$Light2D.set_enabled(status)
 
 # moves coins towards player when it is within auto pick up range
 func _on_Area2D_body_entered(body):
@@ -397,14 +360,11 @@ func sheath_sword():
 # left and right movement
 func move():
 	if velocity.x != 0 && is_on_floor():
-		if sprinting:
-			play_animation("sprint")
-			emit_foot_dust()
-		else:
-			if stance == Global.STANCE.FIST:
-				play_animation("run")
-			elif stance == Global.STANCE.SWORD:
-				play_animation("sword_run")
+		if stance == Global.STANCE.FIST:
+			play_animation("run")
+		elif stance == Global.STANCE.SWORD:
+			play_animation("sword_run")
+		emit_foot_dust()
 
 func play_run_animation():
 	if stance == Global.STANCE.FIST:
@@ -527,14 +487,6 @@ func apply_accel_decel(left, right):
 		if base_speed > max_speed:
 			base_speed = max_speed
 
-# restricts the movement ability of the player depending on actions
-func update_speed_modifier(attack):
-	if !sprinting:
-		if attack and is_on_floor():
-			movement_speed = base_speed * atkmove_speed_modifier
-		else:
-			 movement_speed = base_speed * run_speed_modifier
-
 # update velocity and vectors
 func apply_translation(left, right, attack):
 	# translates player horizontally when left or right key is pressed
@@ -545,7 +497,6 @@ func apply_translation(left, right, attack):
 	if attack:
 		velocity.x = 0
 
-		
 	# apply translations to the player
 	velocity = move_and_slide(velocity, Vector2(0,-1))
 	
@@ -577,7 +528,6 @@ func is_attacking():
 	
 func is_using_skill():
 	return using_skill
-
 
 ###############################################################################
 # sound effects
@@ -662,7 +612,7 @@ func is_dashing():
 	return dashing
 
 func set_label(label):
-	$Label.set_text(label)
+	$StatemachineDebugLabel.set_text(label)
 	
 func get_animation_state_machine():
 	return state_machine
@@ -677,19 +627,6 @@ func _on_DashTimer_timeout():
 	velocity.x = 0
 	gravity = DEFAULT_GRAVITY
 	dashing = false
-	
-func sprint():
-	if !sprinting:
-		sprinting = true
-		$GhostInterval.start()
-		movement_speed = max_speed * boost_speed_modifier
-		play_animation("buff")
-		$SprintTimer.start()
- 
-func _on_SprintTimer_timeout():
-	sprinting = false
-	$GhostInterval.stop()
-	movement_speed = max_speed * run_speed_modifier
 
 func default_player_parameters():
 	dir = Global.DIRECTION.E

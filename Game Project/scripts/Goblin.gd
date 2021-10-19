@@ -11,7 +11,7 @@ onready var health_bar = $HealthBar
 export var is_boss = false
 
 # enemy speed and state variables
-export var max_health = 300.0
+export var max_health = 200.0
 var health = max_health
 var base_speed = 100
 export var strength = 10

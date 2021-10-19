@@ -30,10 +30,8 @@ var left   # a / left arrow
 var right  # d / right arrow
 var attack # space bar
 
-var skills
-
+var skills # number keys 1,2,3,4,5,6
 var switch # tab
-
 var special_movement # shift
 
 var jump_enabled = true
@@ -165,10 +163,10 @@ func _attack_transition_handler():
 			return possible_states.bleed_slash
 		elif skills[4] and body.mana >= body.skill_mana_cost[4]:
 			return possible_states.dash_slash
-		elif skills[5]:
-			return possible_states.skill5
-		elif skills[6]:
-			return possible_states.skill6
+		elif skills[5] and body.mana >= body.skill_mana_cost[5]:
+			return null
+		elif skills[6] and body.mana >= body.skill_mana_cost[6]:
+			return null
 				
 	if attack:
 			# TODO implement conditional for different forms of attack

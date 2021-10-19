@@ -19,8 +19,8 @@ func _enter():
 	body.skill2()
 	transition_timer.start(animation_duration)
 	
+	#debug label
 	body.set_label(animation)
-	print("state:", animation)
 	
 func _exit():
 	pass

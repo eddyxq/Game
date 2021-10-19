@@ -11,9 +11,10 @@ func _state_logic(_delta):
 	body.apply_gravity()
 
 func _enter():
-	body.set_label("fall")
 	body.play_animation("fall")
-	print("state: fall")
+	
+	#debug label
+	body.set_label("fall")
 	
 func _exit():
 	pass

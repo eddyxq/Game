@@ -12,11 +12,9 @@ func _state_logic(_delta):
 	
 func _enter():
 	body.jump()
-#	jump_enabled = false
-#	print("jump disabled")
 	body.play_animation("jump")
+	#debug label
 	body.set_label("jump")
-	print("state: jump")
 	
 func _exit():
 	pass

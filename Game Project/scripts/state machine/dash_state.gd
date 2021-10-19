@@ -9,8 +9,9 @@ func _state_logic(_delta):
 
 func _enter():
 	body.do_dash()
+	
+	#debug label
 	body.set_label("dash")
-	print("state: dash")
 	
 func _exit():
 	body.velocity = Vector2.ZERO
