@@ -41,6 +41,6 @@ func _on_SubmitButton_pressed():
 # once new profile is created redirect the player into the game
 func _on_HTTPRequest_request_completed(_result, response_code, _headers, _body):
 	if response_code == 200:
-		var _scene = get_tree().change_scene("res://scenes/Controller.tscn")
+		var _scene = get_tree().change_scene("res://scenes/environment/Map0_Tutorial.tscn")
 	else:
 		notification.text = "Error submitting request"

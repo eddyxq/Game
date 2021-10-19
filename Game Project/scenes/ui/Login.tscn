@@ -154,6 +154,7 @@ __meta__ = {
 }
 
 [node name="HTTPRequest" type="HTTPRequest" parent="."]
+
 [connection signal="pressed" from="LoginButton" to="." method="_on_LoginButton_pressed"]
 [connection signal="pressed" from="RegisterButton" to="." method="_on_RegisterButton_pressed"]
 [connection signal="pressed" from="ForgotPasswordButton" to="." method="_on_ForgotPasswordButton_pressed"]

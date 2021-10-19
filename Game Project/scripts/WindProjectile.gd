@@ -14,13 +14,6 @@ const SPEED = 120
 var velocity = Vector2()
 var projectile_dir
 
-enum DIRECTION{
-	N,
-	S,
-	W,
-	E,
-}
-
 func set_projectile_direction(dir):
 	projectile_dir = dir
 
@@ -38,10 +31,10 @@ func _on_Projectile_body_entered(body):
 
 # shoots the projectile
 func shoot_projectile(delta, dir):
-	if dir == DIRECTION.W:
+	if dir == Global.DIRECTION.W:
 		velocity.x = -(SPEED * delta)
 		$ProjectileSprite.play("shoot_left")
-	elif dir == DIRECTION.E:
+	elif dir == Global.DIRECTION.E:
 		velocity.x = SPEED * delta 
 		$ProjectileSprite.play("shoot_right")
 	translate(velocity)

@@ -4,23 +4,6 @@ extends Node2D
 # detects and handles user inputs          
 ###############################################################################
 
-# user keyboard input flags
-var up     # w / up arrow
-var down   # s / down arrrow
-var left   # a / left arrow
-var right  # d / right arrow
-var attack # space bar
-
-var skill0 # left/right shift 
-var skill1 # 1 number key
-var skill2 # 2 number key
-var skill3 # 3 number key
-var skill4 # 4 number key
-
-var item
-var switch # tab
-var special_movement # shift
-
 # references to child nodes
 onready var player = $Player
 onready var player_movement_fsm = $Player/MovementFSM
@@ -33,21 +16,13 @@ func _ready():
 
 # called every delta
 func _physics_process(_delta):
-	# updates input variables
-	item = [Input.is_action_pressed("ui_item_slot1"),
-			Input.is_action_pressed("ui_item_slot2")]
-	
 	if !$HUD/DialogBox.visible:
 		player_movement_fsm.main(_delta)
-		
-		if item[0]:
+		if Input.is_action_pressed("ui_item_slot1"):
 			player.use_health_potion()
-		
-		if item[1]:
+		if Input.is_action_pressed("ui_item_slot2"):
 			player.use_mana_potion()
-#	else:
-#		player.play_animation("idle")
-	
+			
 	# player dies when he falls down
 	if player.get_global_position().y > 442:
 		player.health = 0

@@ -41,7 +41,7 @@ func _on_HTTPRequest_request_completed(_result: int, response_code: int, _header
 			var _scene = get_tree().change_scene("res://scenes/ui/CreateCharacter.tscn")
 		# existing users go straight into the game
 		else:
-			var _scene = get_tree().change_scene("res://scenes/Controller.tscn")
+			var _scene = get_tree().change_scene("res://scenes/environment/Map1_Frozen.tscn")
 
 # redirects user to the registration page
 func _on_RegisterButton_pressed():

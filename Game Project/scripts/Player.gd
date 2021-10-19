@@ -134,7 +134,6 @@ func apply_horizontal_deceleration():
 
 # restore player health when not in cooldown
 func use_health_potion():
-	
 	if item_slot_off_cooldown[0]:
 		item_bar.item_slot1.start_cooldown()
 		item_slot_off_cooldown[0] = false
@@ -145,7 +144,6 @@ func use_health_potion():
 	
 # restore player mana when not in cooldown	
 func use_mana_potion():
-	
 	if item_slot_off_cooldown[1]:
 		item_bar.item_slot2.start_cooldown()
 		item_slot_off_cooldown[1] = false
