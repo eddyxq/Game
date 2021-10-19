@@ -8,9 +8,134 @@
 
 config_version=4
 
-_global_script_classes=[  ]
+_global_script_classes=[ {
+"base": "Reference",
+"class": "AttackWaitState",
+"language": "GDScript",
+"path": "res://scripts/state machine/attack_wait_state.gd"
+}, {
+"base": "Reference",
+"class": "BleedSlashState",
+"language": "GDScript",
+"path": "res://scripts/state machine/bleed_slash_state.gd"
+}, {
+"base": "Reference",
+"class": "DashSlashState",
+"language": "GDScript",
+"path": "res://scripts/state machine/dash_slash_state.gd"
+}, {
+"base": "Reference",
+"class": "DashState",
+"language": "GDScript",
+"path": "res://scripts/state machine/dash_state.gd"
+}, {
+"base": "Reference",
+"class": "DistanceBladeState",
+"language": "GDScript",
+"path": "res://scripts/state machine/distance_blade_state.gd"
+}, {
+"base": "Reference",
+"class": "FallState",
+"language": "GDScript",
+"path": "res://scripts/state machine/fall_state.gd"
+}, {
+"base": "Node",
+"class": "FiniteStateMachine",
+"language": "GDScript",
+"path": "res://scripts/FiniteStateMachine.gd"
+}, {
+"base": "Reference",
+"class": "FistAttack1State",
+"language": "GDScript",
+"path": "res://scripts/state machine/fist_attack1_state.gd"
+}, {
+"base": "Reference",
+"class": "FistAttack2State",
+"language": "GDScript",
+"path": "res://scripts/state machine/fist_attack2_state.gd"
+}, {
+"base": "Reference",
+"class": "FistAttack3State",
+"language": "GDScript",
+"path": "res://scripts/state machine/fist_attack3_state.gd"
+}, {
+"base": "Reference",
+"class": "FistAttack4State",
+"language": "GDScript",
+"path": "res://scripts/state machine/fist_attack4_state.gd"
+}, {
+"base": "Reference",
+"class": "IdleState",
+"language": "GDScript",
+"path": "res://scripts/state machine/idle_state.gd"
+}, {
+"base": "Reference",
+"class": "JumpState",
+"language": "GDScript",
+"path": "res://scripts/state machine/jump_state.gd"
+}, {
+"base": "Node",
+"class": "NodeState",
+"language": "GDScript",
+"path": "res://scripts/state machine/state.gd"
+}, {
+"base": "Reference",
+"class": "RunState",
+"language": "GDScript",
+"path": "res://scripts/state machine/run_state.gd"
+}, {
+"base": "Reference",
+"class": "SkillState",
+"language": "GDScript",
+"path": "res://scripts/state machine/skill_state.gd"
+}, {
+"base": "Reference",
+"class": "SwitchStanceState",
+"language": "GDScript",
+"path": "res://scripts/state machine/switch_stance_state.gd"
+}, {
+"base": "Reference",
+"class": "SwordAttack1State",
+"language": "GDScript",
+"path": "res://scripts/state machine/sword_attack1_state.gd"
+}, {
+"base": "Reference",
+"class": "SwordAttack2State",
+"language": "GDScript",
+"path": "res://scripts/state machine/sword_attack2_state.gd"
+}, {
+"base": "Reference",
+"class": "SwordAttack3State",
+"language": "GDScript",
+"path": "res://scripts/state machine/sword_attack3_state.gd"
+}, {
+"base": "Reference",
+"class": "WhirlwindSlashState",
+"language": "GDScript",
+"path": "res://scripts/state machine/whirlwind_slash_state.gd"
+} ]
 _global_script_class_icons={
-
+"AttackWaitState": "",
+"BleedSlashState": "",
+"DashSlashState": "",
+"DashState": "",
+"DistanceBladeState": "",
+"FallState": "",
+"FiniteStateMachine": "",
+"FistAttack1State": "",
+"FistAttack2State": "",
+"FistAttack3State": "",
+"FistAttack4State": "",
+"IdleState": "",
+"JumpState": "",
+"NodeState": "",
+"RunState": "",
+"SkillState": "",
+"SwitchStanceState": "",
+"SwordAttack1State": "",
+"SwordAttack2State": "",
+"SwordAttack3State": "",
+"WhirlwindSlashState": ""
 }
 
 [application]
@@ -135,6 +260,16 @@ ui_special_movement={
 "events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":16777237,"unicode":0,"echo":false,"script":null)
  ]
 }
+ui_skill_slot5={
+"deadzone": 0.5,
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":53,"unicode":0,"echo":false,"script":null)
+ ]
+}
+ui_skill_slot6={
+"deadzone": 0.5,
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":54,"unicode":0,"echo":false,"script":null)
+ ]
+}
 
 [layer_names]
 
@@ -146,5 +281,6 @@ ui_special_movement={
 [rendering]
 
 quality/driver/driver_name="GLES2"
-quality/2d/use_pixel_snap=true
+2d/snapping/use_gpu_pixel_snap=true
 environment/default_environment="res://default_env.tres"
+quality/2d/use_pixel_snap=true

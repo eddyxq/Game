@@ -4,13 +4,6 @@ extends KinematicBody2D
 # goblin enemy class
 ###############################################################################
 
-enum DIRECTION {
-	N, # north/up
-	S, # south/down
-	W, # west/left
-	E, # east/right
-}
-
 onready var UI = get_tree().get_root().get_node("/root/Controller/HUD")
 onready var player = get_parent().get_node("Player")
 onready var health_bar = $HealthBar
@@ -35,7 +28,7 @@ var next_jump_time = -1
 var target_player_dist = 35
 var eye_reach = 90
 var vision = 160
-var direction_facing = DIRECTION.W # default left facing
+var direction_facing = Global.DIRECTION.W # default left facing
 
 # animation states
 var state_machine = null
@@ -82,13 +75,13 @@ func animation_loop():
 		set_dir(-1)
 		$Sprite.flip_h = false
 		$Sprite.position.x = -17.5
-		direction_facing = DIRECTION.W
+		direction_facing = Global.DIRECTION.W
 		state_machine.travel("run")
 	elif player.get_global_position().x > $Position2D.get_global_position().x + target_player_dist and sees_player():
 		set_dir(1)
 		$Sprite.flip_h = true
 		$Sprite.position.x = 17.5
-		direction_facing = DIRECTION.E
+		direction_facing = Global.DIRECTION.E
 		state_machine.travel("run")
 	else:
 		set_dir(0)
@@ -233,10 +226,10 @@ func toggle_hitbox():
 
 # ensures the hitbox is always in front and back area is behind
 func update_hitbox_location():
-	if $HitBox.position.x < 0 && direction_facing == DIRECTION.E:
+	if $HitBox.position.x < 0 && direction_facing == Global.DIRECTION.E:
 		$HitBox.position.x *= -1
 		$Area2D.position.x *= -1
-	elif $HitBox.position.x > 0 && direction_facing == DIRECTION.W:
+	elif $HitBox.position.x > 0 && direction_facing == Global.DIRECTION.W:
 		$HitBox.position.x *= -1
 		$Area2D.position.x *= -1
 
@@ -244,12 +237,12 @@ func update_hitbox_location():
 func turn_around():
 	$Sprite.flip_h = not $Sprite.flip_h
 	$Sprite.position.x *= -1
-	if direction_facing == DIRECTION.W:
-		direction_facing = DIRECTION.E
+	if direction_facing == Global.DIRECTION.W:
+		direction_facing = Global.DIRECTION.E
 		$HitBox.position.x *= -1
 		$Area2D.position.x *= -1
-	elif direction_facing == DIRECTION.E:
-		direction_facing = DIRECTION.W
+	elif direction_facing == Global.DIRECTION.E:
+		direction_facing = Global.DIRECTION.W
 		$HitBox.position.x *= -1
 		$Area2D.position.x *= -1
 
