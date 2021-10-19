@@ -4,7 +4,6 @@ const IdleState = preload("res://scripts/state machine/idle_state.gd")
 const RunState = preload("res://scripts/state machine/run_state.gd")
 const JumpState = preload("res://scripts/state machine/jump_state.gd")
 const FallState = preload("res://scripts/state machine/fall_state.gd")
-const LedgeGrabState = preload("res://scripts/state machine/ledge_grab_state.gd")
 const DashState = preload("res://scripts/state machine/dash_state.gd")
 
 const SwitchStanceState = preload("res://scripts/state machine/switch_stance_state.gd")
@@ -46,7 +45,6 @@ func _ready():
 	add_state("run", RunState.new(body))
 	add_state("jump", JumpState.new(body))
 	add_state("fall", FallState.new(body))
-	add_state("ledge_grab", LedgeGrabState.new(body))
 	add_state("dash", DashState.new(body))
 	
 	# attack states
@@ -85,10 +83,6 @@ func _get_transition(_delta):
 
 		possible_states.fall:
 			return fall_transition_handler()
-			
-		possible_states.ledge_grab:
-			var current_animation = body.get_animation_state_machine().get_current_node()
-			return possible_states.idle if current_animation != "ledge_grab" else null
 
 		possible_states.dash:
 			var is_dashing = body.is_dashing()
@@ -188,10 +182,7 @@ func get_first_attack_state():
 
 
 func _movement_transition_handler():
-	if body.is_touching_ledge() and current_state != possible_states.ledge_grab:
-		return possible_states.ledge_grab
-		
-	elif special_movement and not body.is_dashing():
+	if special_movement and not body.is_dashing():
 		return possible_states.dash
 	
 	elif switch:
@@ -210,9 +201,7 @@ func _movement_transition_handler():
 
 
 func jump_transition_handler():
-	if body.is_touching_ledge() and current_state != possible_states.ledge_grab:
-		return possible_states.ledge_grab
-	elif special_movement and not body.is_dashing():
+	if special_movement and not body.is_dashing():
 		return possible_states.dash
 	elif body.is_on_floor():
 		return possible_states.idle
@@ -227,8 +216,6 @@ func jump_transition_handler():
 func fall_transition_handler():
 	if body.is_on_floor():
 		return possible_states.idle
-	elif body.is_touching_ledge():
-		return possible_states.ledge_grab
 	elif special_movement:
 		return possible_states.dash
 	elif attack or skills.has(true):

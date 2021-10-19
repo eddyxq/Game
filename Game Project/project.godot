@@ -74,11 +74,6 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://scripts/state machine/jump_state.gd"
 }, {
-"base": "Reference",
-"class": "LedgeGrabState",
-"language": "GDScript",
-"path": "res://scripts/state machine/ledge_grab_state.gd"
-}, {
 "base": "Node",
 "class": "NodeState",
 "language": "GDScript",
@@ -133,7 +128,6 @@ _global_script_class_icons={
 "FistAttack4State": "",
 "IdleState": "",
 "JumpState": "",
-"LedgeGrabState": "",
 "NodeState": "",
 "RunState": "",
 "SkillState": "",
@@ -147,7 +141,7 @@ _global_script_class_icons={
 [application]
 
 config/name="Prototype"
-run/main_scene="res://scenes/environment/Map1_Frozen.tscn"
+run/main_scene="res://scenes/environment/Map0_Tutorial.tscn"
 config/icon="res://images/thumbnail/icon.png"
 
 [autoload]

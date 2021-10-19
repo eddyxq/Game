@@ -57,6 +57,8 @@ var skill_mana_cost = [1,1,1,1,1,1,1]
 var velocity = Vector2()
 
 # animation tree
+var current_animation_tree = null
+var skillAnimationNode = null
 var state_machine
 
 # flag use to signal that the player hit an enemy
@@ -66,12 +68,6 @@ var recentHit = false
 var dashing = false
 var sprinting = false
 
-# variables used for ledge climbing
-var isTouchingLedge = false
-var movement_enabled = true
-
-var current_animation_tree = null
-var skillAnimationNode = null
 
 var attacking = false
 var using_skill = false
@@ -510,7 +506,7 @@ func detect_item_usage(item):
 
 # changes the stance and weapon of the player
 func stance_update(switch):
-	if switch and weapon_change_off_cooldown and movement_enabled and !isTouchingLedge and is_on_floor():
+	if switch and weapon_change_off_cooldown and is_on_floor():
 		if stance == Global.STANCE.FIST:
 			play_animation("sword_draw")
 		elif stance == Global.STANCE.SWORD:
@@ -694,69 +690,6 @@ func _on_SprintTimer_timeout():
 	sprinting = false
 	$GhostInterval.stop()
 	movement_speed = max_speed * run_speed_modifier
-
-func detect_ledge():
-	if not isTouchingLedge and stance == Global.STANCE.FIST:
-		isTouchingLedge = is_ledge_detected()
-		if isTouchingLedge:
-			start_ledge_grab()
-			movement_enabled = false
-	
-func is_touching_ledge():
-	return $CollisionShape2D/LowerEdgeDetect.is_colliding() and not $CollisionShape2D/HigherEdgeDetect.is_colliding()
-	
-# TODO: needs a better way to identify blocks in the stage
-# TODO: refactor since this function does too much
-# detects whether an player is close to an edge
-# an edge is detected when lower raycast intersects with a block while upper ray cast does not
-func is_ledge_detected():
-	return $CollisionShape2D/LowerEdgeDetect.is_colliding() and not $CollisionShape2D/HigherEdgeDetect.is_colliding()
-
-# ** PRECONDITION: this function should only be called if a ledge has been detected **
-# teleports the player to the edge of a platform then initiates the ledge grab animation
-func start_ledge_grab():
-	var lowerRC = $CollisionShape2D/LowerEdgeDetect
-	if lowerRC.get_collider().get_name() == "Blocks":
-		var lowerCollisionPoint = lowerRC.get_collision_point()
-		# y translation
-		var new_y = 0
-		var int_y = int(lowerCollisionPoint.y)
-		if lowerCollisionPoint.y >= 0:
-			new_y = int_y + 16 - (int_y % 16)
-		else:
-			var abs_y = abs(int_y)
-			new_y = int_y + (abs_y % 16)
-		# x translation
-		var int_x = int(lowerCollisionPoint.x)
-		# pushes player to the closest left block
-		var new_x = int_x - (int_x % 16)
-		
-		if dir == Global.DIRECTION.E:
-			new_x -= 1
-		else:
-			new_x += 1
-		
-		lowerCollisionPoint.y = new_y - 3
-		lowerCollisionPoint.x = new_x
-
-		self.position = lowerCollisionPoint 
-		velocity = Vector2.ZERO
-	
-# TODO: refactor since this function does too much 
-func end_ledge_grab():
-	var new_pos = self.position
-	new_pos.y -= 31
-	if dir == Global.DIRECTION.E:
-		new_pos.x += 7
-	else:
-		new_pos.x -= 7
-	position = new_pos
-	isTouchingLedge = false
-	movement_enabled = true
-	
-func grab_ledge():
-	if isTouchingLedge and stance == Global.STANCE.FIST:
-		play_animation("ledge_grab")
 
 func default_player_parameters():
 	dir = Global.DIRECTION.E
